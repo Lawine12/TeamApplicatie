@@ -1,0 +1,41 @@
+﻿<Window x:Class="TeamsApplicatie.TeamOverviewForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TeamsApplicatie"
+        mc:Ignorable="d"
+        Title="Team Overview" Height="450" Width="800">
+    <DockPanel x:Name="cplForm">
+
+        <Button Content="Cancel" DockPanel.Dock="Bottom" Click="cancel_Click" HorizontalAlignment="Right" Margin="5" RenderTransformOrigin="0.473,-1.263">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
+            <Button x:Name="buttonAddTeam" Content="Add Team" Click="addTeam_Click">
+                <Button.Effect>
+                    <DropShadowEffect/>
+                </Button.Effect>
+            </Button>
+            <Button x:Name="buttonEditTeam" Content="Edit Team" Click="editTeam_Click">
+                <Button.Effect>
+                    <DropShadowEffect/>
+                </Button.Effect>
+            </Button>
+            <Button x:Name="buttonDeleteTeam" Content="Delete Team" Click="deleteTeam_Click">
+                <Button.Effect>
+                    <DropShadowEffect/>
+                </Button.Effect>
+            </Button>
+        </StackPanel>
+
+        <DataGrid x:Name="teamDataGrid" DockPanel.Dock="Top" ItemsSource="{Binding}" Background="#FFB9B9B9" SelectionChanged="teamDataGrid_SelectionChanged" >
+            <DataGrid.Effect>
+                <DropShadowEffect/>
+            </DataGrid.Effect>
+        </DataGrid>
+    </DockPanel>
+</Window>
