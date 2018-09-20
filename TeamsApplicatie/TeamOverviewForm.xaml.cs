@@ -64,6 +64,8 @@ namespace TeamsApplicatie
 
                     itemSource.Delete(teamDataGrid.SelectedIndex);
                     teamDataGrid.ItemsSource = itemSource;
+                    buttonDeleteTeam.IsEnabled = false;
+                    buttonEditTeam.IsEnabled = false;
                 }
                 else
                 {
