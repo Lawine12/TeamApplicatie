@@ -97,7 +97,11 @@ namespace TeamsApplicatie
 
         private void textboxPoints_TextChanged(object sender, TextChangedEventArgs e)
         {
-
+            if (System.Text.RegularExpressions.Regex.IsMatch(textboxPoints.Text, "[^0-9]"))
+            {
+                MessageBox.Show("Please enter only numbers.");
+                textboxPoints.Text = textboxPoints.Text.Remove(textboxPoints.Text.Length - 1);
+            }
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)

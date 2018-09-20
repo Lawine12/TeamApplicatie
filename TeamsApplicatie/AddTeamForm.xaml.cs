@@ -32,15 +32,6 @@ namespace TeamsApplicatie
 
         }
 
-        private void TextBox_Points(object sender, TextChangedEventArgs e)
-        {
-            if (System.Text.RegularExpressions.Regex.IsMatch(textBoxPoints.Text, "[^0-9]"))
-            {
-                MessageBox.Show("Please enter only numbers.");
-                textBoxPoints.Text = textBoxPoints.Text.Remove(textBoxPoints.Text.Length - 1);
-            }
-        }
-
         private void AddTeamAndDriver()
         {
             if (textBoxTeamName.Text != string.Empty && textBoxTeamDriver.Text != string.Empty && textBoxTeamCoach.Text != string.Empty)
@@ -83,6 +74,15 @@ namespace TeamsApplicatie
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void textBoxPoints_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (System.Text.RegularExpressions.Regex.IsMatch(textBoxPoints.Text, "[^0-9]"))
+            {
+                MessageBox.Show("Please enter only numbers.");
+                textBoxPoints.Text = textBoxPoints.Text.Remove(textBoxPoints.Text.Length - 1);
+            }
         }
     }
 }
