@@ -15,6 +15,7 @@ namespace TeamsApplicatie
         {
             InitializeComponent();
             textBoxTeamName.Focus();
+            textBoxPoints.Text = "0";
         }
 
         private void TextBox_TeamName(object sender, TextChangedEventArgs e)
