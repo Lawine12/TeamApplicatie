@@ -37,7 +37,7 @@
             </Button>
         </StackPanel>
 
-        <DataGrid x:Name="teamDataGrid" DockPanel.Dock="Top" ItemsSource="{Binding}" Background="#FFB9B9B9" SelectionChanged="teamDataGrid_SelectionChanged" >
+        <DataGrid x:Name="teamDataGrid" DockPanel.Dock="Top" ItemsSource="{Binding}" Background="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}" SelectionChanged="teamDataGrid_SelectionChanged" >
             <DataGrid.Effect>
                 <DropShadowEffect/>
             </DataGrid.Effect>

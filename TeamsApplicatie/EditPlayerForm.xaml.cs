@@ -1,24 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace TeamsApplicatie
 {
-    /// <summary>
-    /// Interaction logic for EditPlayerForm.xaml
-    /// </summary>
     public partial class EditPlayerForm : Window
     {
         private readonly string _id;
@@ -32,7 +19,24 @@ namespace TeamsApplicatie
         public EditPlayerForm(string id) : this()
         {
             _id = id;
+            try
+            { 
             LoadData();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }
+        }
+
+        private void TextBox_Age(object sender, TextChangedEventArgs e)
+        {
+            if (System.Text.RegularExpressions.Regex.IsMatch(textBoxAge.Text, "[^0-9]"))
+            {
+                MessageBox.Show("Please enter only numbers.");
+                textBoxAge.Text = textBoxAge.Text.Remove(textBoxAge.Text.Length - 1);
+            }
         }
 
         private void LoadData()
@@ -62,15 +66,6 @@ namespace TeamsApplicatie
                 sqlAdapter.Fill(_playerInformation);
             }
             return _playerInformation;
-        }
-
-        private void TextBox_Age(object sender, TextChangedEventArgs e)
-        {
-            if (System.Text.RegularExpressions.Regex.IsMatch(textBoxAge.Text, "[^0-9]"))
-            {
-                MessageBox.Show("Please enter only numbers.");
-                textBoxAge.Text = textBoxAge.Text.Remove(textBoxAge.Text.Length - 1);
-            }
         }
     }
 }

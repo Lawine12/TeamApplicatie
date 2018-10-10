@@ -1,11 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace TeamsApplicatie
 {
-    /// <summary>
-    /// Interaction logic for AddPlayerForm.xaml
-    /// </summary>
     public partial class AddPlayerForm : Window
     {
         private readonly int _id;
@@ -27,7 +25,15 @@ namespace TeamsApplicatie
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
+            try
+            { 
             AddaPlayer(_id);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)

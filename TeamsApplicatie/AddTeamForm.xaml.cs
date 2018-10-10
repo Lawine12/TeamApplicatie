@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Data;
-using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace TeamsApplicatie
 {
-    /// <summary>
-    /// Interaction logic for AddTeam.xaml
-    /// </summary>
     public partial class AddTeam : Window
     {
         public AddTeam()
@@ -26,31 +21,6 @@ namespace TeamsApplicatie
         private void TextBox_TeamCoach(object sender, TextChangedEventArgs e)
         {
 
-        }
-
-        private void AddaTeam()
-        {
-            if (textBoxTeamName.Text != string.Empty && textBoxTeamCoach.Text != string.Empty)
-            {
-                using (var connection = DatabaseHelper.OpenDefaultConnection())
-                using (var sqlCommand = connection.CreateCommand())
-                {
-                    var teamNameParameter = sqlCommand.Parameters.AddWithValue("@teamName", textBoxTeamName.Text);
-                    var teamCoachParameter = sqlCommand.Parameters.AddWithValue("@teamCoach", textBoxTeamCoach.Text);
-                    var pointsParameter = sqlCommand.Parameters.AddWithValue("@Points", textBoxPoints.Text);
-
-                    sqlCommand.CommandText =
-                        $@"INSERT INTO [dbo].[TeamData]
-                    ([TeamName], [TeamCoach], [Points])
-                    VALUES ({teamNameParameter.ParameterName}, {teamCoachParameter}, {pointsParameter})";
-                    sqlCommand.ExecuteNonQuery();
-                }
-
-                MessageBox.Show("Success!", "", MessageBoxButton.OK, MessageBoxImage.Information);
-                this.Close();
-            }
-            else
-                MessageBox.Show("Veld mag niet leeg zijn!", "Velden moeten gevuld zijn", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void textBoxPoints_TextChanged(object sender, TextChangedEventArgs e)
@@ -78,6 +48,31 @@ namespace TeamsApplicatie
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void AddaTeam()
+        {
+            if (textBoxTeamName.Text != string.Empty && textBoxTeamCoach.Text != string.Empty)
+            {
+                using (var connection = DatabaseHelper.OpenDefaultConnection())
+                using (var sqlCommand = connection.CreateCommand())
+                {
+                    var teamNameParameter = sqlCommand.Parameters.AddWithValue("@teamName", textBoxTeamName.Text);
+                    var teamCoachParameter = sqlCommand.Parameters.AddWithValue("@teamCoach", textBoxTeamCoach.Text);
+                    var pointsParameter = sqlCommand.Parameters.AddWithValue("@Points", textBoxPoints.Text);
+
+                    sqlCommand.CommandText =
+                        $@"INSERT INTO [dbo].[TeamData]
+                    ([TeamName], [TeamCoach], [Points])
+                    VALUES ({teamNameParameter.ParameterName}, {teamCoachParameter}, {pointsParameter})";
+                    sqlCommand.ExecuteNonQuery();
+                }
+
+                MessageBox.Show("Success!", "", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.Close();
+            }
+            else
+                MessageBox.Show("Veld mag niet leeg zijn!", "Velden moeten gevuld zijn", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

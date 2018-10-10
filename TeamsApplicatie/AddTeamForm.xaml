@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TeamsApplicatie"
         mc:Ignorable="d"
-        Title="Add a Team" Height="450" Width="800">
+        Title="Add Team" Height="450" Width="800">
     <DockPanel>
         <StackPanel Orientation="Vertical" DockPanel.Dock="Top" Height="317">
             <Label Margin="350,50, 0, 0">Team name</Label>

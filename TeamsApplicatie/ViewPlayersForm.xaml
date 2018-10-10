@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TeamsApplicatie"
         mc:Ignorable="d"
-        Title="ViewPlayersForm" Height="450" Width="800">
+        Title="View Players" Height="450" Width="800">
     <DockPanel x:Name="cplForm">
 
         <Button Content="Cancel" DockPanel.Dock="Bottom" Click="cancel_Click" HorizontalAlignment="Right" Margin="5" RenderTransformOrigin="0.473,-1.263">

@@ -6,9 +6,6 @@ using System.Windows.Controls;
 
 namespace TeamsApplicatie
 {
-    /// <summary>
-    /// Interaction logic for TeamOverviewForm.xaml
-    /// </summary>
     public partial class TeamOverviewForm : Window
     {
         private DataTable _teamData;
@@ -94,25 +91,6 @@ namespace TeamsApplicatie
         }
 
         private void LoadTeamData()
-        {
-            teamDataGrid.CanUserAddRows = false;
-            teamDataGrid.SelectionMode = DataGridSelectionMode.Single;
-            teamDataGrid.IsReadOnly = true;
-
-            string querystring = "SELECT * FROM dbo.TeamData";
-
-            using (var connection = DatabaseHelper.OpenDefaultConnection())
-            {
-                var cmd = new SqlCommand(querystring, connection);
-                var dataAdapter = new SqlDataAdapter(cmd);
-                _teamData = new DataTable();
-                dataAdapter.Fill(_teamData);
-                teamDataGrid.DataContext = _teamData;
-                teamDataGrid.ItemsSource = _teamData.DefaultView;
-            }
-        }
-
-        private void LoadPlayerData()
         {
             teamDataGrid.CanUserAddRows = false;
             teamDataGrid.SelectionMode = DataGridSelectionMode.Single;

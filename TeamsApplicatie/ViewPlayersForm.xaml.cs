@@ -31,6 +31,7 @@ namespace TeamsApplicatie
             DeletePlayer();
         }
 
+        // Edit Player
         private void editPlayer_Click(object sender, RoutedEventArgs e)
         {
             Object selectedRow = playerDataGrid.SelectedItem;
@@ -46,6 +47,7 @@ namespace TeamsApplicatie
             }
         }
 
+        //Add Player
         private void addPlayer_Click(object sender, RoutedEventArgs e)
         {
 
@@ -81,7 +83,7 @@ namespace TeamsApplicatie
             }
         }
 
-        //Delete Team
+        //Delete Player
         private void DeletePlayer()
         {
 
