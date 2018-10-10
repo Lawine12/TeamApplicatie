@@ -7,19 +7,17 @@
         mc:Ignorable="d"
         Title="Add a Team" Height="450" Width="800">
     <DockPanel>
-        <StackPanel Orientation="Vertical" DockPanel.Dock="Top">
+        <StackPanel Orientation="Vertical" DockPanel.Dock="Top" Height="317">
             <Label Margin="350,50, 0, 0">Team name</Label>
             <TextBox x:Name="textBoxTeamName" Margin="180,0" TextChanged="TextBox_TeamName"/>
-            <Label Margin="350,0, 0, 0">Team Driver</Label>
-            <TextBox x:Name="textBoxTeamDriver" Margin="180,0" TextChanged="TextBox_TeamDriver"/>
             <Label Margin="350, 0, 0, 0">Team Coach</Label>
             <TextBox x:Name="textBoxTeamCoach" Margin="180,0" TextChanged="TextBox_TeamCoach"/>
             <Label Margin="350,0, 0, 0">Team Points</Label>
             <TextBox x:Name="textBoxPoints" Margin="180,0" TextChanged="textBoxPoints_TextChanged"/>
         </StackPanel>
         <Grid>
-            <Button Content="Cancel" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="Button_Click_1"/>
-            <Button Content="Toevoegen" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Button_Click"/>
+            <Button Content="Cancel" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="Cancel_Click"/>
+            <Button Content="Add" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Add_Click"/>
         </Grid>
     </DockPanel>
 </Window>

@@ -32,7 +32,6 @@ namespace TeamsApplicatie
             {
                 var row = _teamsInformation.Rows[0];
                 textboxTeamName.Text = (string)row["TeamName"];
-                textboxTeamDriver.Text = (string)row["TeamDriver"];
                 textboxTeamCoach.Text = (string)row["TeamCoach"];
                 textboxPoints.Text = row["Points"].ToString();
 
@@ -41,22 +40,20 @@ namespace TeamsApplicatie
 
         private void SaveTeam()
         {
-            if (textboxTeamName.Text != string.Empty && textboxTeamDriver.Text != string.Empty && textboxTeamCoach.Text != string.Empty)
+            if (textboxTeamName.Text != string.Empty && textboxTeamCoach.Text != string.Empty)
             {
                 using (var connection = DatabaseHelper.OpenDefaultConnection())
                 using (var sqlCommand = connection.CreateCommand())
                 {
                     var id = sqlCommand.Parameters.AddWithValue("@id", _id);
                     var teamNameParameter = sqlCommand.Parameters.AddWithValue("@teamname", textboxTeamName.Text);
-                    var teamDriverParameter = sqlCommand.Parameters.AddWithValue("@teamDriver", textboxTeamDriver.Text);
                     var teamCoachParameter = sqlCommand.Parameters.AddWithValue("@teamCoach", textboxTeamCoach.Text);
                     var pointsParameter = sqlCommand.Parameters.AddWithValue("@Points", textboxPoints.Text);
 
                     sqlCommand.CommandText =
                         $@"UPDATE [dbo].[TeamData]
                     SET
-                    [TeamName] = {teamNameParameter.ParameterName}, 
-                    [TeamDriver] = {teamDriverParameter.ParameterName},
+                    [TeamName] = {teamNameParameter.ParameterName},
                     [TeamCoach] = {teamCoachParameter.ParameterName},
                     [Points] = {pointsParameter.ParameterName}
                     WHERE [ID] = {id.ParameterName}

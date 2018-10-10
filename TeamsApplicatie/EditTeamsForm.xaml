@@ -10,8 +10,6 @@
         <StackPanel Orientation="Vertical" DockPanel.Dock="Top">
             <Label Margin="350,50, 0, 0">Team Name</Label>
             <TextBox x:Name="textboxTeamName" Margin="180,0"/>
-            <Label Margin="350,0">Team Driver</Label>
-            <TextBox x:Name="textboxTeamDriver" Margin="180,0"/>
             <Label Margin="350,0">Team Coach</Label>
             <TextBox x:Name="textboxTeamCoach" Margin="180,0" TextChanged="textboxTeamCoach_TextChanged" />
             <Label Margin="350,0">Team Points</Label>

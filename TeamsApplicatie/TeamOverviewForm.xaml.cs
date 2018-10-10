@@ -18,7 +18,8 @@ namespace TeamsApplicatie
             InitializeComponent();
             buttonDeleteTeam.IsEnabled = false;
             buttonEditTeam.IsEnabled = false;
-            LoadData();
+            buttonViewPlayers.IsEnabled = false;
+            LoadTeamData();
         }
 
         //Add Team
@@ -27,9 +28,10 @@ namespace TeamsApplicatie
             var addTeam = new AddTeam();
             addTeam.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             addTeam.ShowDialog();
-            LoadData();
+            LoadTeamData();
             buttonDeleteTeam.IsEnabled = false;
             buttonEditTeam.IsEnabled = false;
+            buttonViewPlayers.IsEnabled = false;
         }
 
         //Edit Team
@@ -42,9 +44,10 @@ namespace TeamsApplicatie
                 var team = teamDataGrid.SelectedCells[1].Item;
                 var editTeam = new EditTeamsForm(id);
                 editTeam.ShowDialog();
-                LoadData();
+                LoadTeamData();
                 buttonDeleteTeam.IsEnabled = false;
                 buttonEditTeam.IsEnabled = false;
+                buttonViewPlayers.IsEnabled = false;
             }
         }
 
@@ -66,6 +69,7 @@ namespace TeamsApplicatie
                     teamDataGrid.ItemsSource = itemSource;
                     buttonDeleteTeam.IsEnabled = false;
                     buttonEditTeam.IsEnabled = false;
+                    buttonViewPlayers.IsEnabled = false;
                 }
                 else
                 {
@@ -89,7 +93,26 @@ namespace TeamsApplicatie
             this.Close();
         }
 
-        private void LoadData()
+        private void LoadTeamData()
+        {
+            teamDataGrid.CanUserAddRows = false;
+            teamDataGrid.SelectionMode = DataGridSelectionMode.Single;
+            teamDataGrid.IsReadOnly = true;
+
+            string querystring = "SELECT * FROM dbo.TeamData";
+
+            using (var connection = DatabaseHelper.OpenDefaultConnection())
+            {
+                var cmd = new SqlCommand(querystring, connection);
+                var dataAdapter = new SqlDataAdapter(cmd);
+                _teamData = new DataTable();
+                dataAdapter.Fill(_teamData);
+                teamDataGrid.DataContext = _teamData;
+                teamDataGrid.ItemsSource = _teamData.DefaultView;
+            }
+        }
+
+        private void LoadPlayerData()
         {
             teamDataGrid.CanUserAddRows = false;
             teamDataGrid.SelectionMode = DataGridSelectionMode.Single;
@@ -112,6 +135,18 @@ namespace TeamsApplicatie
         {
             buttonEditTeam.IsEnabled = true;
             buttonDeleteTeam.IsEnabled = true;
+            buttonViewPlayers.IsEnabled = true;
+        }
+
+        private void buttonViewPlayers_Click(object sender, RoutedEventArgs e)
+        {
+            Object selectedRow = teamDataGrid.SelectedItem;
+            int id = Convert.ToInt32((teamDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)
+                .Text);
+
+            var playerOverview = new ViewPlayersForm(id);
+            playerOverview.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            playerOverview.ShowDialog();
         }
     }
 }

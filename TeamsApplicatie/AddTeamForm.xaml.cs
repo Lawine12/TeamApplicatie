@@ -23,32 +23,26 @@ namespace TeamsApplicatie
 
         }
 
-        private void TextBox_TeamDriver(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
         private void TextBox_TeamCoach(object sender, TextChangedEventArgs e)
         {
 
         }
 
-        private void AddTeamAndDriver()
+        private void AddaTeam()
         {
-            if (textBoxTeamName.Text != string.Empty && textBoxTeamDriver.Text != string.Empty && textBoxTeamCoach.Text != string.Empty)
+            if (textBoxTeamName.Text != string.Empty && textBoxTeamCoach.Text != string.Empty)
             {
                 using (var connection = DatabaseHelper.OpenDefaultConnection())
                 using (var sqlCommand = connection.CreateCommand())
                 {
                     var teamNameParameter = sqlCommand.Parameters.AddWithValue("@teamName", textBoxTeamName.Text);
-                    var teamDriverParameter = sqlCommand.Parameters.AddWithValue("@teamDriver", textBoxTeamDriver.Text);
                     var teamCoachParameter = sqlCommand.Parameters.AddWithValue("@teamCoach", textBoxTeamCoach.Text);
                     var pointsParameter = sqlCommand.Parameters.AddWithValue("@Points", textBoxPoints.Text);
 
                     sqlCommand.CommandText =
                         $@"INSERT INTO [dbo].[TeamData]
-                    ([TeamName], [TeamDriver], [TeamCoach], [Points])
-                    VALUES ({teamNameParameter.ParameterName}, {teamDriverParameter.ParameterName}, {teamCoachParameter}, {pointsParameter})";
+                    ([TeamName], [TeamCoach], [Points])
+                    VALUES ({teamNameParameter.ParameterName}, {teamCoachParameter}, {pointsParameter})";
                     sqlCommand.ExecuteNonQuery();
                 }
 
@@ -59,11 +53,20 @@ namespace TeamsApplicatie
                 MessageBox.Show("Veld mag niet leeg zijn!", "Velden moeten gevuld zijn", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void textBoxPoints_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (System.Text.RegularExpressions.Regex.IsMatch(textBoxPoints.Text, "[^0-9]"))
+            {
+                MessageBox.Show("Please enter only numbers.");
+                textBoxPoints.Text = textBoxPoints.Text.Remove(textBoxPoints.Text.Length - 1);
+            }
+        }
+
+        private void Add_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                AddTeamAndDriver();
+                AddaTeam();
             }
             catch (Exception ex)
             {
@@ -72,18 +75,9 @@ namespace TeamsApplicatie
             }
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
-        }
-
-        private void textBoxPoints_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (System.Text.RegularExpressions.Regex.IsMatch(textBoxPoints.Text, "[^0-9]"))
-            {
-                MessageBox.Show("Please enter only numbers.");
-                textBoxPoints.Text = textBoxPoints.Text.Remove(textBoxPoints.Text.Length - 1);
-            }
         }
     }
 }

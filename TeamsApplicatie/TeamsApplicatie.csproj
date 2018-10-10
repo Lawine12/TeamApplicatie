@@ -70,17 +70,34 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddPlayerForm.xaml.cs">
+      <DependentUpon>AddPlayerForm.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AddTeamForm.xaml.cs">
       <DependentUpon>AddTeamForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="DatabaseHelper.cs" />
+    <Compile Include="EditPlayerForm.xaml.cs">
+      <DependentUpon>EditPlayerForm.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EditTeamsForm.xaml.cs">
       <DependentUpon>EditTeamsForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="TeamOverviewForm.xaml.cs">
       <DependentUpon>TeamOverviewForm.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewPlayersForm.xaml.cs">
+      <DependentUpon>ViewPlayersForm.xaml</DependentUpon>
+    </Compile>
+    <Page Include="AddPlayerForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AddTeamForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditPlayerForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -101,6 +118,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="TeamOverviewForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ViewPlayersForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -136,8 +157,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="TeamData_log.ldf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <DependentUpon>TeamData.mdf</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
