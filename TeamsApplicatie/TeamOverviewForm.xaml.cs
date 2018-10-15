@@ -19,8 +19,49 @@ namespace TeamsApplicatie
             LoadTeamData();
         }
 
+        //View Players
+        private void buttonViewPlayers_Click(object sender, RoutedEventArgs e)
+        {
+            ViewPlayers();
+        }
+
         //Add Team
         private void addTeam_Click(object sender, RoutedEventArgs e)
+        {
+            AddTeam();
+        }
+
+        //Edit Team
+        private void editTeam_Click(object sender, RoutedEventArgs e)
+        {
+            EditTeam();
+        }
+
+        //Delete Team
+        private void deleteTeam_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteTeam();
+        }
+
+        private void cancel_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        //View Players
+        private void ViewPlayers()
+        {
+            Object selectedRow = teamDataGrid.SelectedItem;
+            int id = Convert.ToInt32((teamDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)
+                .Text);
+
+            var playerOverview = new ViewPlayersForm(id);
+            playerOverview.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            playerOverview.ShowDialog();
+        }
+
+        //Add Team
+        private void AddTeam()
         {
             var addTeam = new AddTeam();
             addTeam.WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -32,7 +73,7 @@ namespace TeamsApplicatie
         }
 
         //Edit Team
-        private void editTeam_Click(object sender, RoutedEventArgs e)
+        private void EditTeam()
         {
             Object selectedRow = teamDataGrid.SelectedItem;
             if (selectedRow != null)
@@ -48,11 +89,9 @@ namespace TeamsApplicatie
             }
         }
 
-
         //Delete Team
-        private void deleteTeam_Click(object sender, RoutedEventArgs e)
+        private void DeleteTeam()
         {
-
             Object selectedRow = teamDataGrid.SelectedItem;
             if (selectedRow != null)
             {
@@ -85,11 +124,6 @@ namespace TeamsApplicatie
             }
         }
 
-        private void cancel_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
         private void LoadTeamData()
         {
             teamDataGrid.CanUserAddRows = false;
@@ -114,17 +148,6 @@ namespace TeamsApplicatie
             buttonEditTeam.IsEnabled = true;
             buttonDeleteTeam.IsEnabled = true;
             buttonViewPlayers.IsEnabled = true;
-        }
-
-        private void buttonViewPlayers_Click(object sender, RoutedEventArgs e)
-        {
-            Object selectedRow = teamDataGrid.SelectedItem;
-            int id = Convert.ToInt32((teamDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)
-                .Text);
-
-            var playerOverview = new ViewPlayersForm(id);
-            playerOverview.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            playerOverview.ShowDialog();
         }
     }
 }

@@ -26,6 +26,13 @@ namespace TeamsApplicatie
             buttonDeletePlayer.IsEnabled = true;
         }
 
+        //Add Player
+        private void addPlayer_Click(object sender, RoutedEventArgs e)
+        {
+            AddPlayer();
+        }
+
+        //DeletePlayer
         private void deletePlayer_Click(object sender, RoutedEventArgs e)
         {
             DeletePlayer();
@@ -33,6 +40,26 @@ namespace TeamsApplicatie
 
         // Edit Player
         private void editPlayer_Click(object sender, RoutedEventArgs e)
+        {
+            EditPlayer();
+        }
+
+        private void cancel_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        //Add Player
+        private void AddPlayer()
+        {
+            var addPlayer = new AddPlayerForm(_id);
+            addPlayer.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            addPlayer.ShowDialog();
+            LoadData();
+        }
+
+        //Edit Player
+        private void EditPlayer()
         {
             Object selectedRow = playerDataGrid.SelectedItem;
             if (selectedRow != null)
@@ -47,46 +74,9 @@ namespace TeamsApplicatie
             }
         }
 
-        //Add Player
-        private void addPlayer_Click(object sender, RoutedEventArgs e)
-        {
-
-            var addPlayer = new AddPlayerForm(_id);
-            addPlayer.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            addPlayer.ShowDialog();
-            LoadData();
-        }
-
-        private void cancel_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
-        private void LoadData()
-        {
-            
-            playerDataGrid.CanUserAddRows = false;
-            playerDataGrid.SelectionMode = DataGridSelectionMode.Single;
-            playerDataGrid.IsReadOnly = true;
-
-            using (var connection = DatabaseHelper.OpenDefaultConnection())
-            {
-                var cmd = connection.CreateCommand();
-                var id = cmd.Parameters.AddWithValue("@TeamId", _id);
-                cmd.CommandText = "SELECT * FROM dbo.Players WHERE [TeamId] = @TeamId";
-
-                var dataAdapter = new SqlDataAdapter(cmd);
-                _playerData = new DataTable();
-                dataAdapter.Fill(_playerData);
-                playerDataGrid.DataContext = _playerData;
-                playerDataGrid.ItemsSource = _playerData.DefaultView;
-            }
-        }
-
         //Delete Player
         private void DeletePlayer()
         {
-
             Object selectedRow = playerDataGrid.SelectedItem;
             if (selectedRow != null)
             {
@@ -115,6 +105,26 @@ namespace TeamsApplicatie
 
                     dataAdapter.Update(_playerData);
                 }
+            }
+        }
+
+        private void LoadData()
+        {
+            playerDataGrid.CanUserAddRows = false;
+            playerDataGrid.SelectionMode = DataGridSelectionMode.Single;
+            playerDataGrid.IsReadOnly = true;
+
+            using (var connection = DatabaseHelper.OpenDefaultConnection())
+            {
+                var cmd = connection.CreateCommand();
+                var id = cmd.Parameters.AddWithValue("@TeamId", _id);
+                cmd.CommandText = "SELECT * FROM dbo.Players WHERE [TeamId] = @TeamId";
+
+                var dataAdapter = new SqlDataAdapter(cmd);
+                _playerData = new DataTable();
+                dataAdapter.Fill(_playerData);
+                playerDataGrid.DataContext = _playerData;
+                playerDataGrid.ItemsSource = _playerData.DefaultView;
             }
         }
     }
