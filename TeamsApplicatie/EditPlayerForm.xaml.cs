@@ -67,5 +67,50 @@ namespace TeamsApplicatie
             }
             return _playerInformation;
         }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            EditPlayer(_id);
+        }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void EditPlayer(string _Id)
+        {
+            if (textBoxFirstName.Text != string.Empty && textBoxLastName.Text != string.Empty && textBoxAdress.Text != string.Empty && textBoxCity.Text != string.Empty && textBoxAge.Text != string.Empty && textBoxPosition.Text != string.Empty)
+            {
+                using (var connection = DatabaseHelper.OpenDefaultConnection())
+                using (var sqlCommand = connection.CreateCommand())
+                {
+                    var teamId = sqlCommand.Parameters.AddWithValue("@TeamId", _id);
+                    var firstNameParameter = sqlCommand.Parameters.AddWithValue("@FirstName", textBoxFirstName.Text);
+                    var lastNameParameter = sqlCommand.Parameters.AddWithValue("@LastName", textBoxLastName.Text);
+                    var adressParameter = sqlCommand.Parameters.AddWithValue("@Adress", textBoxAdress.Text);
+                    var cityParameter = sqlCommand.Parameters.AddWithValue("@City", textBoxCity.Text);
+                    var ageParameter = sqlCommand.Parameters.AddWithValue("@Age", textBoxAge.Text);
+                    var positionParameter = sqlCommand.Parameters.AddWithValue("@Position", textBoxPosition.Text);
+
+                    sqlCommand.CommandText =
+                        $@"UPDATE [dbo].[Players]
+                    SET
+                    [First Name] = {firstNameParameter}, 
+                    [Last Name] = {lastNameParameter},
+                    [Adress] = {adressParameter},
+                    [City] =  {cityParameter},
+                    [Age] = {ageParameter},
+                    [Position] = {positionParameter}
+                    WHERE Id = {teamId}";
+                    sqlCommand.ExecuteNonQuery();
+                }
+
+                MessageBox.Show("Success!", "", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.Close();
+            }
+            else
+                MessageBox.Show("Veld mag niet leeg zijn!", "Velden moeten gevuld zijn", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 }
