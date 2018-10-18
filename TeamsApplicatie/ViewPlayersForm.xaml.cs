@@ -80,7 +80,7 @@ namespace TeamsApplicatie
             Object selectedRow = playerDataGrid.SelectedItem;
             if (selectedRow != null)
             {
-                string team = (playerDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock).Text;
+                string player = (playerDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock).Text;
 
                 if (MessageBox.Show("Weet u het zeker?", "", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
                 {
