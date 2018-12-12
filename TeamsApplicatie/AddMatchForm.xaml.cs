@@ -28,7 +28,8 @@ namespace TeamsApplicatie
         public AddMatchForm()
         {
             InitializeComponent();
-            loadCombo();
+            loadCombo1();
+            loadCombo2();
         }
 
         private void cancel_Click(object sender, RoutedEventArgs e)
@@ -41,7 +42,7 @@ namespace TeamsApplicatie
 
         }
 
-        public void loadCombo()
+        public void loadCombo1()
         {
             using (var connection = DatabaseHelper.OpenDefaultConnection())
             {
@@ -54,6 +55,26 @@ namespace TeamsApplicatie
                 comboBoxTeam1.DataContext = _teams.Tables[0].DefaultView;
                 comboBoxTeam1.DisplayMemberPath = _teams.Tables[0].Columns["TeamName"].ToString();
             }
+        }
+
+        public void loadCombo2()
+        {
+            using (var connection = DatabaseHelper.OpenDefaultConnection())
+            {
+                var querystring = "SELECT TeamName FROM TeamData";
+
+                var cmd = new SqlCommand(querystring, connection);
+                var dataAdapter = new SqlDataAdapter(cmd);
+                _teams = new DataSet();
+                dataAdapter.Fill(_teams, "TeamData");
+                comboBoxTeam2.DataContext = _teams.Tables[0].DefaultView;
+                comboBoxTeam2.DisplayMemberPath = _teams.Tables[0].Columns["TeamName"].ToString();
+            }
+        }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

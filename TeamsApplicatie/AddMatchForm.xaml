@@ -8,11 +8,12 @@
         Title="View Players" Height="450" Width="800">
     <DockPanel x:Name="cplForm">
         <Calendar Height="175" VerticalAlignment="Top" HorizontalAlignment="Left" Width="198"/>
+        <Button Content="Save" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Save_Click"/>
         <StackPanel Height="100" Margin="20">
             <ComboBox Height="20" Width="120" ItemsSource="{Binding}" SelectionChanged="ComboBox_SelectionChanged" Name="comboBoxTeam1"/>
         </StackPanel>
         <StackPanel Height="100" Margin="20">
-            <ComboBox Height="20" Width="120"/>
+            <ComboBox Height="20" Width="120" ItemsSource="{Binding}" SelectionChanged="ComboBox_SelectionChanged" Name="comboBoxTeam2"/>
         </StackPanel>
         <Button Content="Cancel" Click="cancel_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,5,5,5" RenderTransformOrigin="0.473,-1.263">
         </Button>
