@@ -75,7 +75,7 @@ namespace TeamsApplicatie
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-
+            Close();
         }
 
         private void EditPlayer(string _Id)

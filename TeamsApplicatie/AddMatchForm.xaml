@@ -1,0 +1,20 @@
+﻿<Window x:Class="TeamsApplicatie.AddMatchForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TeamsApplicatie"
+        mc:Ignorable="d"
+        Title="View Players" Height="450" Width="800">
+    <DockPanel x:Name="cplForm">
+        <Calendar Height="175" VerticalAlignment="Top" HorizontalAlignment="Left" Width="198"/>
+        <StackPanel Height="100" Margin="20">
+            <ComboBox Height="20" Width="120" ItemsSource="{Binding}" SelectionChanged="ComboBox_SelectionChanged" Name="comboBoxTeam1"/>
+        </StackPanel>
+        <StackPanel Height="100" Margin="20">
+            <ComboBox Height="20" Width="120"/>
+        </StackPanel>
+        <Button Content="Cancel" Click="cancel_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,5,5,5" RenderTransformOrigin="0.473,-1.263">
+        </Button>
+    </DockPanel>
+</Window>

@@ -70,6 +70,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddMatchForm.xaml.cs">
+      <DependentUpon>AddMatchForm.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AddPlayerForm.xaml.cs">
       <DependentUpon>AddPlayerForm.xaml</DependentUpon>
     </Compile>
@@ -83,12 +86,22 @@
     <Compile Include="EditTeamsForm.xaml.cs">
       <DependentUpon>EditTeamsForm.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MatchCalendarForm.xaml.cs">
+      <DependentUpon>MatchCalendarForm.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TeamOverviewForm.xaml.cs">
       <DependentUpon>TeamOverviewForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewPlayersForm.xaml.cs">
       <DependentUpon>ViewPlayersForm.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewResultsForm.xaml.cs">
+      <DependentUpon>ViewResultsForm.xaml</DependentUpon>
+    </Compile>
+    <Page Include="AddMatchForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AddPlayerForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -117,11 +130,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="MatchCalendarForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="TeamOverviewForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ViewPlayersForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ViewResultsForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

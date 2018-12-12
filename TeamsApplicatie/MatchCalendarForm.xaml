@@ -1,0 +1,41 @@
+﻿<Window x:Class="TeamsApplicatie.MatchCalendarForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TeamsApplicatie"
+        mc:Ignorable="d"
+        Title="Match Calendar" Height="450" Width="800">
+    <DockPanel x:Name="cplForm">
+
+        <Button Content="Cancel" DockPanel.Dock="Bottom" Click="cancel_Click" HorizontalAlignment="Right" Margin="5" RenderTransformOrigin="0.473,-1.263">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
+            <Button x:Name="buttonAddMatch" Content="Add Match" Click="addMatch_Click">
+                <Button.Effect>
+                    <DropShadowEffect/>
+                </Button.Effect>
+            </Button>
+            <Button x:Name="buttonEditMatch" Content="Edit Match" Click="editMatch_Click">
+                <Button.Effect>
+                    <DropShadowEffect/>
+                </Button.Effect>
+            </Button>
+            <Button x:Name="buttonDeleteMatch" Content="Delete Match" Click="deleteMatch_Click">
+                <Button.Effect>
+                    <DropShadowEffect/>
+                </Button.Effect>
+            </Button>
+        </StackPanel>
+
+        <DataGrid x:Name="matchDataGrid" DockPanel.Dock="Top" ItemsSource="{Binding}" Background="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}" SelectionChanged="matchDataGrid_SelectionChanged" >
+            <DataGrid.Effect>
+                <DropShadowEffect/>
+            </DataGrid.Effect>
+        </DataGrid>
+    </DockPanel>
+</Window>

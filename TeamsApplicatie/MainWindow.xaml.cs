@@ -15,15 +15,24 @@ namespace TeamsApplicatie
             teamOverview.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             teamOverview.ShowDialog();
         }
-        
-        private void deleteTeams_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
 
         private void exit_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void UitslagenBekijken_Click(object sender, RoutedEventArgs e)
+        {
+            var matchResults = new ViewResultsForm();
+            matchResults.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            matchResults.ShowDialog();
+        }
+
+        private void WedstrijdKalender_Click(object sender, RoutedEventArgs e)
+        {
+            var kalender = new MatchCalendarForm();
+            kalender.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            kalender.ShowDialog();
         }
     }
 }

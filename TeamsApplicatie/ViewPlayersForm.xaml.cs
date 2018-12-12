@@ -26,19 +26,16 @@ namespace TeamsApplicatie
             buttonDeletePlayer.IsEnabled = true;
         }
 
-        //Add Player
         private void addPlayer_Click(object sender, RoutedEventArgs e)
         {
             AddPlayer();
         }
 
-        //DeletePlayer
         private void deletePlayer_Click(object sender, RoutedEventArgs e)
         {
             DeletePlayer();
         }
 
-        // Edit Player
         private void editPlayer_Click(object sender, RoutedEventArgs e)
         {
             EditPlayer();
