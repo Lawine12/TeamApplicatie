@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +22,12 @@ namespace TeamsApplicatie
     /// </summary>
     public partial class MatchCalendarForm : Window
     {
+        private DataTable _matchData;
+
         public MatchCalendarForm()
         {
             InitializeComponent();
+            LoadMatchData();
         }
 
         private void cancel_Click(object sender, RoutedEventArgs e)
@@ -50,6 +55,25 @@ namespace TeamsApplicatie
         private void matchDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void LoadMatchData()
+        {
+            matchDataGrid.CanUserAddRows = false;
+            matchDataGrid.SelectionMode = DataGridSelectionMode.Single;
+            matchDataGrid.IsReadOnly = true;
+
+            string querystring = "SELECT * FROM dbo.MatchInfo";
+
+            using (var connection = DatabaseHelper.OpenDefaultConnection())
+            {
+                var cmd = new SqlCommand(querystring, connection);
+                var dataAdapter = new SqlDataAdapter(cmd);
+                _matchData = new DataTable();
+                dataAdapter.Fill(_matchData);
+                matchDataGrid.DataContext = _matchData;
+                matchDataGrid.ItemsSource = _matchData.DefaultView;
+            }
         }
     }
 }

@@ -7,15 +7,19 @@
         mc:Ignorable="d"
         Title="View Players" Height="450" Width="800">
     <DockPanel x:Name="cplForm">
-        <Calendar Height="175" VerticalAlignment="Top" HorizontalAlignment="Left" Width="198"/>
-        <Button Content="Save" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Save_Click"/>
+        <Button Content="Add" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Add_Click"/>
         <StackPanel Height="100" Margin="20">
-            <ComboBox Height="20" Width="120" ItemsSource="{Binding}" SelectionChanged="ComboBox_SelectionChanged" Name="comboBoxTeam1"/>
+            <ComboBox Height="20" Width="120" ItemsSource="{Binding}" SelectionChanged="ComboBox_SelectionChanged" x:Name="comboBoxTeam1"/>
+        </StackPanel>
+        <StackPanel Margin="0,106,0,188">
+            <DatePicker Height="25" VerticalAlignment="Top" Margin="10" Width="103" Name="MatchDatePicker"/>
+            <Label Content="Tegen" Width="49"/>
         </StackPanel>
         <StackPanel Height="100" Margin="20">
             <ComboBox Height="20" Width="120" ItemsSource="{Binding}" SelectionChanged="ComboBox_SelectionChanged" Name="comboBoxTeam2"/>
         </StackPanel>
         <Button Content="Cancel" Click="cancel_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,5,5,5" RenderTransformOrigin="0.473,-1.263">
         </Button>
+
     </DockPanel>
 </Window>

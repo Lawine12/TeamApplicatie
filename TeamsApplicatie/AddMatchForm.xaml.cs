@@ -72,9 +72,25 @@ namespace TeamsApplicatie
             }
         }
 
-        private void Save_Click(object sender, RoutedEventArgs e)
+        private void Add_Click(object sender, RoutedEventArgs e)
         {
+            if (comboBoxTeam1.Text != string.Empty && MatchDatePicker.Text != string.Empty &&
+                comboBoxTeam2.Text != string.Empty)
+            {
+                using (var connection = DatabaseHelper.OpenDefaultConnection())
+                using (var sqlCommand = connection.CreateCommand())
+                {
+                    var team1 = sqlCommand.Parameters.AddWithValue("@TeamName1", comboBoxTeam1.Text);
+                    var team2 = sqlCommand.Parameters.AddWithValue("@TeamName2", comboBoxTeam2.Text);
+                    var matchDate = sqlCommand.Parameters.AddWithValue("@MatchDate", MatchDatePicker.Text);
 
+                    sqlCommand.CommandText =
+                        $@"INSERT INTO [dbo].[MatchInfo]
+                    ([TeamName1], [TeamName2], [MatchDate])
+                    VALUES ({team1}, {team2}, {matchDate})";
+                    sqlCommand.ExecuteNonQuery();
+                }
+            }
         }
     }
 }
