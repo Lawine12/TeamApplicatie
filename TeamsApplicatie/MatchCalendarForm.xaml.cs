@@ -1,19 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace TeamsApplicatie
 {
@@ -28,6 +17,8 @@ namespace TeamsApplicatie
         {
             InitializeComponent();
             LoadMatchData();
+            buttonEditMatch.IsEnabled = false;
+            buttonDeleteMatch.IsEnabled = false;
         }
 
         private void cancel_Click(object sender, RoutedEventArgs e)
@@ -49,12 +40,13 @@ namespace TeamsApplicatie
 
         private void deleteMatch_Click(object sender, RoutedEventArgs e)
         {
-
+            DeleteMatch();
         }
 
         private void matchDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            buttonEditMatch.IsEnabled = true;
+            buttonDeleteMatch.IsEnabled = true;
         }
 
         private void LoadMatchData()
@@ -73,6 +65,39 @@ namespace TeamsApplicatie
                 dataAdapter.Fill(_matchData);
                 matchDataGrid.DataContext = _matchData;
                 matchDataGrid.ItemsSource = _matchData.DefaultView;
+            }
+        }
+
+        private void DeleteMatch()
+        {
+            Object selectedRow = matchDataGrid.SelectedItem;
+            if (selectedRow != null)
+            {
+                string team = (matchDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock).Text;
+
+                if (MessageBox.Show("Weet u het zeker?", "", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
+                {
+                    var itemSource = matchDataGrid.ItemsSource as DataView;
+
+                    itemSource.Delete(matchDataGrid.SelectedIndex);
+                    matchDataGrid.ItemsSource = itemSource;
+                    buttonDeleteMatch.IsEnabled = false;
+                    buttonEditMatch.IsEnabled = false;
+                }
+                else
+                {
+                    return;
+                }
+
+                var queryString = "SELECT * FROM dbo.MatchInfo";
+                using (var connection = DatabaseHelper.OpenDefaultConnection())
+                {
+                    var cmd = new SqlCommand(queryString, connection);
+                    var dataAdapter = new SqlDataAdapter(cmd);
+                    var cmdBuilder = new SqlCommandBuilder(dataAdapter);
+
+                    dataAdapter.Update(_matchData);
+                }
             }
         }
     }
