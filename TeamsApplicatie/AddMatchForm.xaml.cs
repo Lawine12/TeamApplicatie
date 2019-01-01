@@ -77,6 +77,7 @@ namespace TeamsApplicatie
                     VALUES ({team1}, {team2}, {matchDate})";
                     sqlCommand.ExecuteNonQuery();
                 }
+                Close();
             }
         }
     }

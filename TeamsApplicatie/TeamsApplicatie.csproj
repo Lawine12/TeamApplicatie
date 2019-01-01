@@ -80,6 +80,9 @@
       <DependentUpon>AddTeamForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="DatabaseHelper.cs" />
+    <Compile Include="EditMatchForm.xaml.cs">
+      <DependentUpon>EditMatchForm.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EditPlayerForm.xaml.cs">
       <DependentUpon>EditPlayerForm.xaml</DependentUpon>
     </Compile>
@@ -107,6 +110,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="AddTeamForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditMatchForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

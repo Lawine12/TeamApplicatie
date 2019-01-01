@@ -31,11 +31,12 @@ namespace TeamsApplicatie
             var addMatch = new AddMatchForm();
             addMatch.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             addMatch.ShowDialog();
+            LoadMatchData();
         }
 
         private void editMatch_Click(object sender, RoutedEventArgs e)
         {
-
+            ViewMatches();
         }
 
         private void deleteMatch_Click(object sender, RoutedEventArgs e)
@@ -99,6 +100,17 @@ namespace TeamsApplicatie
                     dataAdapter.Update(_matchData);
                 }
             }
+        }
+
+        private void ViewMatches()
+        {
+            Object selectedRow = matchDataGrid.SelectedItem;
+            int id = Convert.ToInt32((matchDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)
+                .Text);
+
+            var editMatch = new EditMatchForm(id.ToString());
+            editMatch.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            editMatch.ShowDialog();
         }
     }
 }
