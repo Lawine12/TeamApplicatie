@@ -30,6 +30,11 @@
                     <DropShadowEffect/>
                 </Button.Effect>
             </Button>
+            <Button x:Name="buttonPlayerStats" Content="Player Stats" Click="playerStats_Click">
+                <Button.Effect>
+                    <DropShadowEffect/>
+                </Button.Effect>
+            </Button>
         </StackPanel>
 
         <DataGrid x:Name="playerDataGrid" DockPanel.Dock="Top" ItemsSource="{Binding}" Background="#FFB9B9B9" SelectionChanged="playerDataGrid_SelectionChanged" >
@@ -37,5 +42,6 @@
                 <DropShadowEffect/>
             </DataGrid.Effect>
         </DataGrid>
+
     </DockPanel>
 </Window>

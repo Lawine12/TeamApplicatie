@@ -1,0 +1,26 @@
+﻿<Window x:Class="TeamsApplicatie.PlayerStatsForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TeamsApplicatie"
+        mc:Ignorable="d"
+        Title="PlayerStatsForm" Height="450" Width="800">
+    <Grid>
+        <Label Content="First Name: " HorizontalAlignment="Left" Margin="58,50,0,0" VerticalAlignment="Top"/>
+        <TextBox Name="textboxPlayerFirstName" HorizontalAlignment="Left" Height="23" Margin="168,53,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Last Name: " HorizontalAlignment="Left" Margin="58,81,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textboxPlayerLastName" HorizontalAlignment="Left" Height="23" Margin="167,84,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Adress: " HorizontalAlignment="Left" Margin="58,112,0,0" VerticalAlignment="Top"/>
+        <Label Content="City: " HorizontalAlignment="Left" Margin="58,143,0,0" VerticalAlignment="Top"/>
+        <Label Content="Age: " HorizontalAlignment="Left" Margin="58,174,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textboxPlayerAdress" HorizontalAlignment="Left" Height="23" Margin="167,115,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="textboxPlayerCity" HorizontalAlignment="Left" Height="23" Margin="168,146,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="textboxPlayerAge" HorizontalAlignment="Left" Height="23" Margin="168,177,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Position: " HorizontalAlignment="Left" Margin="58,205,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textboxPlayerPosition" HorizontalAlignment="Left" Height="23" Margin="167,208,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Current Team: " HorizontalAlignment="Left" Margin="58,236,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textboxCurrentTeam" HorizontalAlignment="Left" Height="23" Margin="167,239,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+
+    </Grid>
+</Window>

@@ -17,6 +17,7 @@ namespace TeamsApplicatie
             InitializeComponent();
             buttonDeletePlayer.IsEnabled = false;
             buttonEditPlayer.IsEnabled = false;
+            buttonPlayerStats.IsEnabled = false;
             LoadData();
         }
 
@@ -24,6 +25,7 @@ namespace TeamsApplicatie
         {
             buttonEditPlayer.IsEnabled = true;
             buttonDeletePlayer.IsEnabled = true;
+            buttonPlayerStats.IsEnabled = true;
         }
 
         private void addPlayer_Click(object sender, RoutedEventArgs e)
@@ -68,6 +70,7 @@ namespace TeamsApplicatie
                 LoadData();
                 buttonDeletePlayer.IsEnabled = false;
                 buttonEditPlayer.IsEnabled = false;
+                buttonPlayerStats.IsEnabled = false;
             }
         }
 
@@ -87,6 +90,7 @@ namespace TeamsApplicatie
                     playerDataGrid.ItemsSource = itemSource;
                     buttonDeletePlayer.IsEnabled = false;
                     buttonEditPlayer.IsEnabled = false;
+                    buttonPlayerStats.IsEnabled = false;
                 }
                 else
                 {
@@ -122,6 +126,18 @@ namespace TeamsApplicatie
                 dataAdapter.Fill(_playerData);
                 playerDataGrid.DataContext = _playerData;
                 playerDataGrid.ItemsSource = _playerData.DefaultView;
+            }
+        }
+
+        private void playerStats_Click(object sender, RoutedEventArgs e)
+        {
+            Object selectedRow = playerDataGrid.SelectedItem;
+            if (selectedRow != null)
+            {
+                string id = (playerDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock).Text;
+                var playerStats = new PlayerStatsForm(id);
+                playerStats.ShowDialog();
+                playerStats.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             }
         }
     }

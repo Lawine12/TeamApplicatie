@@ -99,7 +99,6 @@ namespace TeamsApplicatie
             }
         }
 
-
         public void loadCombo2()
         {
             using (var connection = DatabaseHelper.OpenDefaultConnection())

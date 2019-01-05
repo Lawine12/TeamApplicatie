@@ -93,6 +93,9 @@
     <Compile Include="MatchCalendarForm.xaml.cs">
       <DependentUpon>MatchCalendarForm.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PlayerStatsForm.xaml.cs">
+      <DependentUpon>PlayerStatsForm.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TeamOverviewForm.xaml.cs">
       <DependentUpon>TeamOverviewForm.xaml</DependentUpon>
     </Compile>
@@ -139,6 +142,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MatchCalendarForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PlayerStatsForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
