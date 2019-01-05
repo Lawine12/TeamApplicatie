@@ -7,6 +7,7 @@ namespace TeamsApplicatie
         public MainWindow()
         {
             InitializeComponent();
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
 
         private void teamsbekijken_Click(object sender, RoutedEventArgs e)
