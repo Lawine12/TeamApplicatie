@@ -9,19 +9,19 @@
     <DockPanel>
         <Button Content="Save" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Save_Click"/>
         <StackPanel Height="100" Margin="20">
-            <TextBlock Height="20" Width="120" x:Name="textBlockResultsTeam1"/>
-            <Label Content="Doelpunten"/>
-            <TextBox Name="textboxDoelpuntenTeam1" Height="23" TextWrapping="Wrap" Width="120" TextChanged="TextBoxDoelpuntenTeam1_TextChanged"/>
+            <TextBlock Height="20" Width="120" x:Name="textNameTeam1"/>
+            <TextBlock Text="Doelpunten" Margin="0,0,0,0"/>
+            <TextBox Name="textboxDoelpuntenTeam1" Height="20" TextWrapping="Wrap" Width="120" TextChanged="TextBoxDoelpuntenTeam1_TextChanged"/>
             
         </StackPanel>
         <StackPanel Margin="0,106,0,188">
-            <DatePicker Height="25" VerticalAlignment="Top" Margin="10" Width="103" Name="ResultsDatePicker"/>
+            <TextBlock Height="25" VerticalAlignment="Top" Margin="10" Width="103" Name="ResultsDatePicker"/>
             <Label Content="Tegen" Width="49"/>
         </StackPanel>
         <StackPanel Height="100" Margin="20">
-            <TextBlock Height="20" Width="120" Name="textBlockResultsTeam2"/>
-            <Label Content="Doelpunten"/>
-            <TextBox Name="textboxDoelpuntenTeam2" Height="23" TextWrapping="Wrap" Width="120" TextChanged="TextBoxDoelpuntenTeam2_TextChanged"/>
+            <TextBlock Height="20" Width="120" Name="textNameTeam2"/>
+            <TextBlock Text="Doelpunten" Margin="0,0,0,0"/>
+            <TextBox Name="textboxDoelpuntenTeam2" Height="20" TextWrapping="Wrap" Width="120" TextChanged="TextBoxDoelpuntenTeam2_TextChanged"/>
         </StackPanel>
         <Button Content="Cancel" Click="cancel_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,5,5,5" RenderTransformOrigin="0.473,-1.263">
         </Button>

@@ -29,8 +29,8 @@ namespace TeamsApplicatie
         public EnterResultsForm()
         {
             InitializeComponent();
-            textboxDoelpuntenTeam1.IsEnabled = false;
-            textboxDoelpuntenTeam2.IsEnabled = false;
+            textNameTeam1.IsEnabled = false;
+            textNameTeam2.IsEnabled = false;
             ResultsDatePicker.IsEnabled = false;
         }
 
@@ -58,8 +58,8 @@ namespace TeamsApplicatie
             if (matchData.Rows.Count == 1)
             {
                 var row = matchData.Rows[0];
-                textBlockResultsTeam1.Text = (string)row["TeamName1"];
-                textBlockResultsTeam2.Text = (string)row["TeamName2"];
+                textNameTeam1.Text = (string)row["TeamName1"];
+                textNameTeam2.Text = (string)row["TeamName2"];
                 ResultsDatePicker.Text = row["MatchDate"].ToString();
             }
         }
@@ -90,7 +90,7 @@ namespace TeamsApplicatie
                 var dataAdapter = new SqlDataAdapter(cmd);
                 _teams = new DataSet();
                 dataAdapter.Fill(_teams, "TeamData");
-                textBlockResultsTeam1.Text = (string)row["TeamName1"];
+                textNameTeam1.Text = (string)row["TeamName1"];
             }
         }
 
@@ -106,7 +106,7 @@ namespace TeamsApplicatie
                 var dataAdapter = new SqlDataAdapter(cmd);
                 _teams = new DataSet();
                 dataAdapter.Fill(_teams, "TeamData");
-                textBlockResultsTeam2.Text = (string)row["TeamName1"];
+                textNameTeam2.Text = (string)row["TeamName1"];
             }
         }
 
