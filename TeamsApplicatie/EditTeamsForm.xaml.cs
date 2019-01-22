@@ -33,7 +33,7 @@ namespace TeamsApplicatie
                 var row = _teamsInformation.Rows[0];
                 textboxTeamName.Text = (string)row["TeamName"];
                 textboxTeamCoach.Text = (string)row["TeamCoach"];
-                textboxPoints.Text = row["Points"].ToString();
+                textboxPoints.Text = row["TeamGoals"].ToString();
 
             }
         }
@@ -48,14 +48,14 @@ namespace TeamsApplicatie
                     var id = sqlCommand.Parameters.AddWithValue("@id", _id);
                     var teamNameParameter = sqlCommand.Parameters.AddWithValue("@teamname", textboxTeamName.Text);
                     var teamCoachParameter = sqlCommand.Parameters.AddWithValue("@teamCoach", textboxTeamCoach.Text);
-                    var pointsParameter = sqlCommand.Parameters.AddWithValue("@Points", textboxPoints.Text);
+                    var teamGoalsParameter = sqlCommand.Parameters.AddWithValue("@TeamGoals", textboxPoints.Text);
 
                     sqlCommand.CommandText =
                         $@"UPDATE [dbo].[TeamData]
                     SET
                     [TeamName] = {teamNameParameter.ParameterName},
                     [TeamCoach] = {teamCoachParameter.ParameterName},
-                    [Points] = {pointsParameter.ParameterName}
+                    [TeamGoals] = {teamGoalsParameter.ParameterName}
                     WHERE [ID] = {id.ParameterName}
                     ";
                     sqlCommand.ExecuteNonQuery();

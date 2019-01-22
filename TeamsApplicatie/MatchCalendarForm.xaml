@@ -30,6 +30,11 @@
                     <DropShadowEffect/>
                 </Button.Effect>
             </Button>
+            <Button x:Name="buttonEnterResults" Content="Enter Results" Click="enterResults_Click">
+                <Button.Effect>
+                    <DropShadowEffect/>
+                </Button.Effect>
+            </Button>
         </StackPanel>
 
         <DataGrid x:Name="matchDataGrid" DockPanel.Dock="Top" ItemsSource="{Binding}" Background="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}" SelectionChanged="matchDataGrid_SelectionChanged" >

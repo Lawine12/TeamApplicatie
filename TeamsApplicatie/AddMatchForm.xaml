@@ -12,7 +12,7 @@
             <ComboBox Height="20" Width="120" ItemsSource="{Binding}" SelectionChanged="ComboBox_SelectionChanged" x:Name="comboBoxTeam1"/>
         </StackPanel>
         <StackPanel Margin="0,106,0,188">
-            <DatePicker Height="25" VerticalAlignment="Top" Margin="10" Width="103" Name="MatchDatePicker"/>
+            <DatePicker Height="25" VerticalAlignment="Top" Margin="10" Width="118" Name="MatchDatePicker"/>
             <Label Content="Tegen" Width="49"/>
         </StackPanel>
         <StackPanel Height="100" Margin="20">

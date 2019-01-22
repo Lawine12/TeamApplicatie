@@ -13,12 +13,14 @@ namespace TeamsApplicatie
     {
         private DataTable _matchData;
 
+
         public MatchCalendarForm()
         {
             InitializeComponent();
             LoadMatchData();
             buttonEditMatch.IsEnabled = false;
             buttonDeleteMatch.IsEnabled = false;
+            buttonEnterResults.IsEnabled = false;
         }
 
         private void cancel_Click(object sender, RoutedEventArgs e)
@@ -48,6 +50,7 @@ namespace TeamsApplicatie
         {
             buttonEditMatch.IsEnabled = true;
             buttonDeleteMatch.IsEnabled = true;
+            buttonEnterResults.IsEnabled = true;
         }
 
         private void LoadMatchData()
@@ -84,6 +87,7 @@ namespace TeamsApplicatie
                     matchDataGrid.ItemsSource = itemSource;
                     buttonDeleteMatch.IsEnabled = false;
                     buttonEditMatch.IsEnabled = false;
+                    buttonEnterResults.IsEnabled = false;
                 }
                 else
                 {
@@ -111,6 +115,19 @@ namespace TeamsApplicatie
             var editMatch = new EditMatchForm(id.ToString());
             editMatch.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             editMatch.ShowDialog();
+            LoadMatchData();
+        }
+
+        private void enterResults_Click(object sender, RoutedEventArgs e)
+        {
+            Object selectedRow = matchDataGrid.SelectedItem;
+            int id = Convert.ToInt32((matchDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)
+                .Text);
+
+            var enterResults = new EnterResultsForm(id.ToString());
+            enterResults.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            enterResults.ShowDialog();
+            LoadMatchData();
         }
     }
 }

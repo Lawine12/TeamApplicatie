@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="EditMatchForm" Height="450" Width="800">
     <DockPanel x:Name="cplForm">
-        <Button Content="Edit" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Edit_Click"/>
+        <Button Content="Save" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Save_Click"/>
         <StackPanel Height="100" Margin="20">
             <ComboBox Height="20" Width="120" SelectionChanged="ComboBox_SelectionChanged" x:Name="comboBoxEditTeam1"/>
         </StackPanel>

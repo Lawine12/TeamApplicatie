@@ -59,11 +59,11 @@ namespace TeamsApplicatie
                 {
                     var teamNameParameter = sqlCommand.Parameters.AddWithValue("@teamName", textBoxTeamName.Text);
                     var teamCoachParameter = sqlCommand.Parameters.AddWithValue("@teamCoach", textBoxTeamCoach.Text);
-                    var pointsParameter = sqlCommand.Parameters.AddWithValue("@Points", textBoxPoints.Text);
+                    var pointsParameter = sqlCommand.Parameters.AddWithValue("@TeamGoals", textBoxPoints.Text);
 
                     sqlCommand.CommandText =
                         $@"INSERT INTO [dbo].[TeamData]
-                    ([TeamName], [TeamCoach], [Points])
+                    ([TeamName], [TeamCoach], [TeamGoals])
                     VALUES ({teamNameParameter.ParameterName}, {teamCoachParameter}, {pointsParameter})";
                     sqlCommand.ExecuteNonQuery();
                 }

@@ -1,0 +1,30 @@
+﻿<Window x:Class="TeamsApplicatie.EnterResultsForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TeamsApplicatie"
+        mc:Ignorable="d"
+        Title="EditMatchForm" Height="450" Width="800">
+    <DockPanel>
+        <Button Content="Save" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Save_Click"/>
+        <StackPanel Height="100" Margin="20">
+            <TextBlock Height="20" Width="120" x:Name="textBlockResultsTeam1"/>
+            <Label Content="Doelpunten"/>
+            <TextBox Name="textboxDoelpuntenTeam1" Height="23" TextWrapping="Wrap" Width="120" TextChanged="TextBoxDoelpuntenTeam1_TextChanged"/>
+            
+        </StackPanel>
+        <StackPanel Margin="0,106,0,188">
+            <DatePicker Height="25" VerticalAlignment="Top" Margin="10" Width="103" Name="ResultsDatePicker"/>
+            <Label Content="Tegen" Width="49"/>
+        </StackPanel>
+        <StackPanel Height="100" Margin="20">
+            <TextBlock Height="20" Width="120" Name="textBlockResultsTeam2"/>
+            <Label Content="Doelpunten"/>
+            <TextBox Name="textboxDoelpuntenTeam2" Height="23" TextWrapping="Wrap" Width="120" TextChanged="TextBoxDoelpuntenTeam2_TextChanged"/>
+        </StackPanel>
+        <Button Content="Cancel" Click="cancel_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,5,5,5" RenderTransformOrigin="0.473,-1.263">
+        </Button>
+
+    </DockPanel>
+</Window>

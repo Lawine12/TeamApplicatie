@@ -39,11 +39,6 @@ namespace TeamsApplicatie
             LoadData();
         }
 
-        private void Edit_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void cancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
@@ -110,6 +105,32 @@ namespace TeamsApplicatie
                 _teams = new DataSet();
                 dataAdapter.Fill(_teams, "TeamData");
                 comboBoxEditTeam2.ItemsSource = _teams.Tables[0].DefaultView.ToStringList();
+            }
+        }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            if (comboBoxEditTeam1.Text != string.Empty && EditMatchDatePicker.Text != string.Empty &&
+                comboBoxEditTeam2.Text != string.Empty)
+            {
+                using (var connection = DatabaseHelper.OpenDefaultConnection())
+                using (var sqlCommand = connection.CreateCommand())
+                {
+                    var id = sqlCommand.Parameters.AddWithValue("@id", _id);
+                    var team1 = sqlCommand.Parameters.AddWithValue("@TeamName1", comboBoxEditTeam1.Text);
+                    var team2 = sqlCommand.Parameters.AddWithValue("@TeamName2", comboBoxEditTeam2.Text);
+                    var matchDate = sqlCommand.Parameters.AddWithValue("@MatchDate", EditMatchDatePicker.Text);
+
+                    sqlCommand.CommandText =
+                    $@"UPDATE [dbo].[MatchInfo]
+                    SET
+                    [TeamName1] = {team1.ParameterName},
+                    [TeamName2] = {team2.ParameterName},
+                    [MatchDate] = {matchDate.ParameterName}
+                    WHERE [ID] = {id.ParameterName}";
+                    sqlCommand.ExecuteNonQuery();
+                }
+                Close();
             }
         }
     }

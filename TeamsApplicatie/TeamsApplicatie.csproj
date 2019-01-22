@@ -90,6 +90,9 @@
     <Compile Include="EditTeamsForm.xaml.cs">
       <DependentUpon>EditTeamsForm.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EnterResultsForm.xaml.cs">
+      <DependentUpon>EnterResultsForm.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MatchCalendarForm.xaml.cs">
       <DependentUpon>MatchCalendarForm.xaml</DependentUpon>
     </Compile>
@@ -126,6 +129,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="EditTeamsForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EnterResultsForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
