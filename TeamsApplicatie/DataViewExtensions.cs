@@ -9,12 +9,12 @@ namespace TeamsApplicatie
 {
     public static class DataViewExtensions
     {
-        public static List<string> ToStringList(this DataView view)
+        public static List<int> ToStringList(this DataView view)
         {
-            var list = new List<string>();
+            var list = new List<int>();
             foreach (DataRowView item in view)
             {
-                list.Add(item.Row[0].ToString());
+                list.Add((int) item.Row[0]);
             }
             return list;
         }

@@ -33,14 +33,25 @@ namespace TeamsApplicatie
         {
             using (var connection = DatabaseHelper.OpenDefaultConnection())
             {
-                var querystring = "SELECT TeamName FROM TeamData";
+                var querystring = "SELECT id, TeamName FROM TeamData";
 
                 var cmd = new SqlCommand(querystring, connection);
                 var dataAdapter = new SqlDataAdapter(cmd);
                 _teams = new DataSet();
                 dataAdapter.Fill(_teams, "TeamData");
-                comboBoxTeam1.DataContext = _teams.Tables[0].DefaultView;
-                comboBoxTeam1.DisplayMemberPath = _teams.Tables[0].Columns["TeamName"].ToString();
+                //comboBoxTeam1.DataContext = _teams.Tables[0].DefaultView;
+                comboBoxTeam1.ItemsSource = new[]
+                {
+                    new Team
+                        { Id = 1,
+                          TeamName = "Ajax"
+                        },
+                    new Team
+                    {
+                        Id = 2,
+                        TeamName = "PVC"
+                    }
+                };
             }
         }
 
@@ -48,17 +59,28 @@ namespace TeamsApplicatie
         {
             using (var connection = DatabaseHelper.OpenDefaultConnection())
             {
-                var querystring = "SELECT TeamName FROM TeamData";
+                var querystring = "SELECT id, TeamName FROM TeamData";
 
                 var cmd = new SqlCommand(querystring, connection);
                 var dataAdapter = new SqlDataAdapter(cmd);
                 _teams = new DataSet();
                 dataAdapter.Fill(_teams, "TeamData");
-                comboBoxTeam2.DataContext = _teams.Tables[0].DefaultView;
-                comboBoxTeam2.DisplayMemberPath = _teams.Tables[0].Columns["TeamName"].ToString();
+                comboBoxTeam2.ItemsSource = new[]
+                {
+                    new Team
+                        { Id = 1,
+                          TeamName = "Ajax"
+                        },
+                    new Team
+                    {
+                        Id = 2,
+                        TeamName = "PVC"
+                    }
+                };
+
             }
         }
-
+        
         private void Add_Click(object sender, RoutedEventArgs e)
         {
             if (comboBoxTeam1.Text != string.Empty && MatchDatePicker.Text != string.Empty &&
@@ -67,18 +89,25 @@ namespace TeamsApplicatie
                 using (var connection = DatabaseHelper.OpenDefaultConnection())
                 using (var sqlCommand = connection.CreateCommand())
                 {
-                    var team1 = sqlCommand.Parameters.AddWithValue("@TeamName1", comboBoxTeam1.Text);
-                    var team2 = sqlCommand.Parameters.AddWithValue("@TeamName2", comboBoxTeam2.Text);
+                    var team1 = sqlCommand.Parameters.AddWithValue("@Team1ID", comboBoxTeam1.SelectedValue);
+                    var team2 = sqlCommand.Parameters.AddWithValue("@Team2ID", comboBoxTeam2.SelectedIndex);
                     var matchDate = sqlCommand.Parameters.AddWithValue("@MatchDate", MatchDatePicker.Text);
 
                     sqlCommand.CommandText =
                         $@"INSERT INTO [dbo].[MatchInfo]
-                    ([TeamName1], [TeamName2], [MatchDate])
+                    ([Team1ID], [Team2ID], [MatchDate])
                     VALUES ({team1}, {team2}, {matchDate})";
                     sqlCommand.ExecuteNonQuery();
                 }
                 Close();
             }
+
         }
+    }
+
+    public class Team
+    {
+        public int Id { get; set; }
+        public string TeamName { get; set; }
     }
 }

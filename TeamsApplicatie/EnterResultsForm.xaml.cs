@@ -44,7 +44,15 @@ namespace TeamsApplicatie
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            
+            try
+            {
+                EnterResults();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }
         }
 
         private void cancel_Click(object sender, RoutedEventArgs e)
@@ -126,6 +134,30 @@ namespace TeamsApplicatie
                 MessageBox.Show("Please enter only numbers.");
                 textboxDoelpuntenTeam2.Text = textboxDoelpuntenTeam2.Text.Remove(textboxDoelpuntenTeam2.Text.Length - 1);
             }
+        }
+
+        private void EnterResults()
+        {
+            if (textboxDoelpuntenTeam1.Text != string.Empty && textboxDoelpuntenTeam2.Text != string.Empty)
+            {
+                using (var connection = DatabaseHelper.OpenDefaultConnection())
+                using (var sqlCommand = connection.CreateCommand())
+                {
+                    var team1DoelpuntenParameter = sqlCommand.Parameters.AddWithValue("@TeamGoals", textboxDoelpuntenTeam1.Text);
+                    var team2DoelpuntenParameter = sqlCommand.Parameters.AddWithValue("@TeamGoals", textboxDoelpuntenTeam2.Text);
+
+                    sqlCommand.CommandText =
+                        $@"INSERT INTO [dbo].[TeamData]
+                    ([TeamGoals])
+                    VALUES ({team1DoelpuntenParameter.ParameterName})";
+                    sqlCommand.ExecuteNonQuery();
+                }
+
+                MessageBox.Show("Success!", "", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.Close();
+            }
+            else
+                MessageBox.Show("Veld mag niet leeg zijn!", "Velden moeten gevuld zijn", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }
