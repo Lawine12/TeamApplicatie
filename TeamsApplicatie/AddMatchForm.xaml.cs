@@ -1,5 +1,7 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -39,19 +41,26 @@ namespace TeamsApplicatie
                 var dataAdapter = new SqlDataAdapter(cmd);
                 _teams = new DataSet();
                 dataAdapter.Fill(_teams, "TeamData");
-                //comboBoxTeam1.DataContext = _teams.Tables[0].DefaultView;
-                comboBoxTeam1.ItemsSource = new[]
+                comboBoxTeam1.DataContext = _teams.Tables[0].DefaultView;
+
+                var list = new List<Team>();
+
+                foreach (DataRow team in _teams.Tables[0].Rows)
                 {
-                    new Team
-                        { Id = 1,
-                          TeamName = "Ajax"
-                        },
-                    new Team
-                    {
-                        Id = 2,
-                        TeamName = "PVC"
-                    }
-                };
+                    var id = team.Field<int>("id");
+                    var teamName = team.Field<string>("TeamName");
+
+                    list.Add(new Team{Id = id, TeamName = teamName});
+                }
+                /*
+                var list =
+                    _teams.Tables[0].Rows
+                        .Cast<DataRow>()
+                        .Select(x => new Team {Id = x.Field<int>("Id"), TeamName = x.Field<string>("TeamName")})
+                        .ToList();
+                        */
+
+                comboBoxTeam1.ItemsSource = list;
             }
         }
 
@@ -65,19 +74,17 @@ namespace TeamsApplicatie
                 var dataAdapter = new SqlDataAdapter(cmd);
                 _teams = new DataSet();
                 dataAdapter.Fill(_teams, "TeamData");
-                comboBoxTeam2.ItemsSource = new[]
-                {
-                    new Team
-                        { Id = 1,
-                          TeamName = "Ajax"
-                        },
-                    new Team
-                    {
-                        Id = 2,
-                        TeamName = "PVC"
-                    }
-                };
+                var list = new List<Team>();
 
+                foreach (DataRow team in _teams.Tables[0].Rows)
+                {
+                    var id = team.Field<int>("id");
+                    var teamName = team.Field<string>("TeamName");
+
+                    list.Add(new Team { Id = id, TeamName = teamName });
+                }
+
+                comboBoxTeam2.ItemsSource = list;
             }
         }
         
@@ -90,7 +97,7 @@ namespace TeamsApplicatie
                 using (var sqlCommand = connection.CreateCommand())
                 {
                     var team1 = sqlCommand.Parameters.AddWithValue("@Team1ID", comboBoxTeam1.SelectedValue);
-                    var team2 = sqlCommand.Parameters.AddWithValue("@Team2ID", comboBoxTeam2.SelectedIndex);
+                    var team2 = sqlCommand.Parameters.AddWithValue("@Team2ID", comboBoxTeam2.SelectedValue);
                     var matchDate = sqlCommand.Parameters.AddWithValue("@MatchDate", MatchDatePicker.Text);
 
                     sqlCommand.CommandText =

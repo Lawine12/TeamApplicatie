@@ -49,11 +49,6 @@ namespace TeamsApplicatie
 
         }
 
-        private void ComboBoxEditTeam2_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
         private void LoadData()
         {
             var matchData = GetDataTable();

@@ -59,7 +59,15 @@ namespace TeamsApplicatie
             matchDataGrid.SelectionMode = DataGridSelectionMode.Single;
             matchDataGrid.IsReadOnly = true;
 
-            string querystring = "SELECT * FROM dbo.MatchInfo";
+            string querystring = @"SELECT MatchInfo.Id,
+            Team1.TeamName,
+            Team2.TeamName,
+            MatchInfo.MatchDate,
+            MatchInfo.TotalGoalsTeam1,
+            MatchInfo.TotalGoalsTeam2
+                FROM dbo.MatchInfo
+                INNER JOIN TeamData Team1 ON MatchInfo.Team1ID = Team1.Id
+            INNER JOIN TeamData Team2 ON MatchInfo.Team2ID = Team2.Id";
 
             using (var connection = DatabaseHelper.OpenDefaultConnection())
             {
