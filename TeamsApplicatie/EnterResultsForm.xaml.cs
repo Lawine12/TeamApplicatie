@@ -98,7 +98,7 @@ namespace TeamsApplicatie
                 var dataAdapter = new SqlDataAdapter(cmd);
                 _teams = new DataSet();
                 dataAdapter.Fill(_teams, "TeamData");
-                textNameTeam1.Text = (string)row["TeamName1"];
+                textNameTeam1.Text = (string)row["TeamName"];
             }
         }
 

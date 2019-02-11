@@ -55,8 +55,8 @@ namespace TeamsApplicatie
             if (matchData.Rows.Count == 1)
             {
                 var row = _matchData.Rows[0];
-                comboBoxEditTeam1.SelectedItem = (string)row["TeamName1"];
-                comboBoxEditTeam2.SelectedItem = (string)row["TeamName2"];
+                comboBoxEditTeam1.SelectedItem = comboBoxEditTeam1.ItemsSource.Cast<Team>().FirstOrDefault(x => x.Id == (int)row["Team1ID"]);
+                comboBoxEditTeam2.SelectedItem = comboBoxEditTeam2.ItemsSource.Cast<Team>().FirstOrDefault(x => x.Id == (int)row["Team2ID"]);
                 EditMatchDatePicker.Text = row["MatchDate"].ToString();
             }
         }
@@ -64,7 +64,14 @@ namespace TeamsApplicatie
         private DataTable GetDataTable()
         {
             _matchData = new DataTable();
-            var queryString = "SELECT * FROM MatchInfo WHERE Id=@id";
+            var queryString = @"SELECT MatchInfo.Id,
+            Team1ID,
+            Team2ID,
+            MatchDate,
+            TotalGoalsTeam1,
+            TotalGoalsTeam2
+                FROM dbo.MatchInfo
+            WHERE MatchInfo.Id = @id";
             using (var connection = DatabaseHelper.OpenDefaultConnection())
             using (var cmd = new SqlCommand(queryString, connection))
             {
@@ -79,13 +86,24 @@ namespace TeamsApplicatie
         {
             using (var connection = DatabaseHelper.OpenDefaultConnection())
             {
-                var querystring = "SELECT TeamName FROM TeamData";
+                var querystring = "SELECT id, TeamName FROM TeamData";
 
                 var cmd = new SqlCommand(querystring, connection);
                 var dataAdapter = new SqlDataAdapter(cmd);
                 _teams = new DataSet();
                 dataAdapter.Fill(_teams, "TeamData");
-                comboBoxEditTeam1.ItemsSource = _teams.Tables[0].DefaultView.ToStringList();
+                comboBoxEditTeam1.DataContext = _teams.Tables[0].DefaultView;
+                var list = new List<Team>();
+
+                foreach (DataRow team in _teams.Tables[0].Rows)
+                {
+                    var id = team.Field<int>("id");
+                    var teamName = team.Field<string>("TeamName");
+
+                    list.Add(new Team { Id = id, TeamName = teamName });
+                }
+
+                comboBoxEditTeam1.ItemsSource = list;
             }
         }
 
@@ -93,13 +111,23 @@ namespace TeamsApplicatie
         {
             using (var connection = DatabaseHelper.OpenDefaultConnection())
             {
-                var querystring = "SELECT TeamName FROM TeamData";
+                var querystring = "SELECT id, TeamName FROM TeamData";
 
                 var cmd = new SqlCommand(querystring, connection);
                 var dataAdapter = new SqlDataAdapter(cmd);
                 _teams = new DataSet();
                 dataAdapter.Fill(_teams, "TeamData");
-                comboBoxEditTeam2.ItemsSource = _teams.Tables[0].DefaultView.ToStringList();
+                var list = new List<Team>();
+
+                foreach (DataRow team in _teams.Tables[0].Rows)
+                {
+                    var id = team.Field<int>("id");
+                    var teamName = team.Field<string>("TeamName");
+
+                    list.Add(new Team { Id = id, TeamName = teamName });
+                }
+
+                comboBoxEditTeam2.ItemsSource = list;
             }
         }
 
@@ -112,17 +140,17 @@ namespace TeamsApplicatie
                 using (var sqlCommand = connection.CreateCommand())
                 {
                     var id = sqlCommand.Parameters.AddWithValue("@id", _id);
-                    var team1 = sqlCommand.Parameters.AddWithValue("@TeamName1", comboBoxEditTeam1.Text);
-                    var team2 = sqlCommand.Parameters.AddWithValue("@TeamName2", comboBoxEditTeam2.Text);
+                    var team1 = sqlCommand.Parameters.AddWithValue("@Team1ID", comboBoxEditTeam1.SelectedValue);
+                    var team2 = sqlCommand.Parameters.AddWithValue("@Team2ID", comboBoxEditTeam2.SelectedValue);
                     var matchDate = sqlCommand.Parameters.AddWithValue("@MatchDate", EditMatchDatePicker.Text);
 
                     sqlCommand.CommandText =
                     $@"UPDATE [dbo].[MatchInfo]
                     SET
-                    [TeamName1] = {team1.ParameterName},
-                    [TeamName2] = {team2.ParameterName},
-                    [MatchDate] = {matchDate.ParameterName}
-                    WHERE [ID] = {id.ParameterName}";
+                    [Team1ID] = {team1},
+                    [Team2ID] = {team2},
+                    [MatchDate] = {matchDate}
+                    WHERE [ID] = {id}";
                     sqlCommand.ExecuteNonQuery();
                 }
                 Close();

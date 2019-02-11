@@ -42,7 +42,6 @@ namespace TeamsApplicatie
                 _teams = new DataSet();
                 dataAdapter.Fill(_teams, "TeamData");
                 comboBoxTeam1.DataContext = _teams.Tables[0].DefaultView;
-
                 var list = new List<Team>();
 
                 foreach (DataRow team in _teams.Tables[0].Rows)
@@ -52,14 +51,6 @@ namespace TeamsApplicatie
 
                     list.Add(new Team{Id = id, TeamName = teamName});
                 }
-                /*
-                var list =
-                    _teams.Tables[0].Rows
-                        .Cast<DataRow>()
-                        .Select(x => new Team {Id = x.Field<int>("Id"), TeamName = x.Field<string>("TeamName")})
-                        .ToList();
-                        */
-
                 comboBoxTeam1.ItemsSource = list;
             }
         }
