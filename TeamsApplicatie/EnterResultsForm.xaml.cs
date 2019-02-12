@@ -37,8 +37,6 @@ namespace TeamsApplicatie
         public EnterResultsForm(string id) : this()
         {
             _id = id;
-            loadCombo1();
-            loadCombo2();
             LoadData();
         }
 
@@ -66,16 +64,27 @@ namespace TeamsApplicatie
             if (matchData.Rows.Count == 1)
             {
                 var row = matchData.Rows[0];
-                textNameTeam1.Text = (string)row["TeamName1"];
-                textNameTeam2.Text = (string)row["TeamName2"];
+                textNameTeam1.Text = row["TeamName"] as string;
+                textNameTeam2.Text = row["TeamName"] as string;
                 ResultsDatePicker.Text = row["MatchDate"].ToString();
+                textboxDoelpuntenTeam1.Text = row["TotalGoalsTeam1"].ToString();
+                textboxDoelpuntenTeam2.Text = row["TotalGoalsTeam2"].ToString();
             }
         }
 
         private DataTable GetDataTable()
         {
-            var matchData = new DataTable();
-            var queryString = "SELECT * FROM MatchInfo WHERE Id=@id";
+           var matchData = new DataTable();
+            var queryString = @"SELECT MatchInfo.Id,
+			Team1.TeamName,
+			team2.TeamName,
+            MatchDate,
+            TotalGoalsTeam1,
+            TotalGoalsTeam2
+                FROM dbo.MatchInfo
+				INNER JOIN TeamData team1 ON team1.Id = MatchInfo.Team1ID
+				INNER JOIN TeamData team2 ON team2.Id = MatchInfo.Team2ID
+            WHERE MatchInfo.Id = @id";
             using (var connection = DatabaseHelper.OpenDefaultConnection())
             using (var cmd = new SqlCommand(queryString, connection))
             {
@@ -84,38 +93,6 @@ namespace TeamsApplicatie
                 sqlAdapter.Fill(matchData);
             }
             return matchData;
-        }
-
-        public void loadCombo1()
-        {
-            using (var connection = DatabaseHelper.OpenDefaultConnection())
-            {
-                var querystring = "SELECT TeamName FROM TeamData";
-
-                var matchData = GetDataTable();
-                var row = matchData.Rows[0];
-                var cmd = new SqlCommand(querystring, connection);
-                var dataAdapter = new SqlDataAdapter(cmd);
-                _teams = new DataSet();
-                dataAdapter.Fill(_teams, "TeamData");
-                textNameTeam1.Text = (string)row["TeamName"];
-            }
-        }
-
-        public void loadCombo2()
-        {
-            using (var connection = DatabaseHelper.OpenDefaultConnection())
-            {
-                var querystring = "SELECT TeamName FROM TeamData";
-
-                var matchData = GetDataTable();
-                var row = matchData.Rows[0];
-                var cmd = new SqlCommand(querystring, connection);
-                var dataAdapter = new SqlDataAdapter(cmd);
-                _teams = new DataSet();
-                dataAdapter.Fill(_teams, "TeamData");
-                textNameTeam2.Text = (string)row["TeamName1"];
-            }
         }
 
         private void TextBoxDoelpuntenTeam1_TextChanged(object sender, TextChangedEventArgs e)
@@ -143,13 +120,16 @@ namespace TeamsApplicatie
                 using (var connection = DatabaseHelper.OpenDefaultConnection())
                 using (var sqlCommand = connection.CreateCommand())
                 {
-                    var team1DoelpuntenParameter = sqlCommand.Parameters.AddWithValue("@TeamGoals", textboxDoelpuntenTeam1.Text);
-                    var team2DoelpuntenParameter = sqlCommand.Parameters.AddWithValue("@TeamGoals", textboxDoelpuntenTeam2.Text);
+                    var id = sqlCommand.Parameters.AddWithValue("@id", _id);
+                    var team1DoelpuntenParameter = sqlCommand.Parameters.AddWithValue("@TotalGoalsTeam1", textboxDoelpuntenTeam1.Text);
+                    var team2DoelpuntenParameter = sqlCommand.Parameters.AddWithValue("@TotalGoalsTeam2", textboxDoelpuntenTeam2.Text);
 
                     sqlCommand.CommandText =
-                        $@"INSERT INTO [dbo].[TeamData]
-                    ([TeamGoals])
-                    VALUES ({team1DoelpuntenParameter.ParameterName})";
+                    $@"UPDATE [dbo].[MatchInfo]
+                    SET
+                    [TotalGoalsTeam1] = {team1DoelpuntenParameter.ParameterName},
+                    [TotalGoalsTeam2] = {team2DoelpuntenParameter.ParameterName}
+                    WHERE Id = @id";
                     sqlCommand.ExecuteNonQuery();
                 }
 
