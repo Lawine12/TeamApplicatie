@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +22,12 @@ namespace TeamsApplicatie
     /// </summary>
     public partial class ViewResultsForm : Window
     {
+        private DataTable _matchData;
+
         public ViewResultsForm()
         {
             InitializeComponent();
+            LoadMatchData();
         }
 
         private void cancel_Click(object sender, RoutedEventArgs e)
@@ -33,6 +38,33 @@ namespace TeamsApplicatie
         private void resultDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void LoadMatchData()
+        {
+            resultDataGrid.CanUserAddRows = false;
+            resultDataGrid.SelectionMode = DataGridSelectionMode.Single;
+            resultDataGrid.IsReadOnly = true;
+
+            string querystring = @"SELECT MatchInfo.Id,
+            Team1.TeamName,
+            Team2.TeamName,
+            MatchInfo.MatchDate,
+            MatchInfo.TotalGoalsTeam1,
+            MatchInfo.TotalGoalsTeam2
+                FROM dbo.MatchInfo
+                INNER JOIN TeamData Team1 ON MatchInfo.Team1ID = Team1.Id
+            INNER JOIN TeamData Team2 ON MatchInfo.Team2ID = Team2.Id";
+
+            using (var connection = DatabaseHelper.OpenDefaultConnection())
+            {
+                var cmd = new SqlCommand(querystring, connection);
+                var dataAdapter = new SqlDataAdapter(cmd);
+                _matchData = new DataTable();
+                dataAdapter.Fill(_matchData);
+                resultDataGrid.DataContext = _matchData;
+                resultDataGrid.ItemsSource = _matchData.DefaultView;
+            }
         }
     }
 }
