@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -39,9 +40,9 @@ namespace TeamsApplicatie
             }
         }
 
-        private void LoadData()
+        private async Task LoadData()
         {
-            var playerData = GetDataTable();
+            var playerData = await GetDataTable();
             if (playerData.Rows.Count == 1)
             {
                 var row = _playerInformation.Rows[0];
@@ -54,11 +55,11 @@ namespace TeamsApplicatie
             }
         }
 
-        private DataTable GetDataTable()
+        private async Task<DataTable> GetDataTable()
         {
             _playerInformation = new DataTable();
             var queryString = "SELECT * FROM Players WHERE Id=@id";
-            using (var connection = DatabaseHelper.OpenDefaultConnection())
+            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             using (var cmd = new SqlCommand(queryString, connection))
             {
                 cmd.Parameters.AddWithValue("@id", _id);
@@ -78,11 +79,11 @@ namespace TeamsApplicatie
             Close();
         }
 
-        private void EditPlayer(string _Id)
+        private async Task EditPlayer(string _Id)
         {
             if (textBoxFirstName.Text != string.Empty && textBoxLastName.Text != string.Empty && textBoxAdress.Text != string.Empty && textBoxCity.Text != string.Empty && textBoxAge.Text != string.Empty && textBoxPosition.Text != string.Empty)
             {
-                using (var connection = DatabaseHelper.OpenDefaultConnection())
+                using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
                 using (var sqlCommand = connection.CreateCommand())
                 {
                     var teamId = sqlCommand.Parameters.AddWithValue("@TeamId", _id);

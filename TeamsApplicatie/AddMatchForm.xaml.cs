@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -31,9 +32,9 @@ namespace TeamsApplicatie
 
         }
 
-        public void loadCombo1()
+        public async Task loadCombo1()
         {
-            using (var connection = DatabaseHelper.OpenDefaultConnection())
+            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             {
                 var querystring = "SELECT id, TeamName FROM TeamData";
 
@@ -55,9 +56,9 @@ namespace TeamsApplicatie
             }
         }
 
-        public void loadCombo2()
+        public async Task loadCombo2()
         {
-            using (var connection = DatabaseHelper.OpenDefaultConnection())
+            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             {
                 var querystring = "SELECT id, TeamName FROM TeamData";
 
@@ -78,13 +79,13 @@ namespace TeamsApplicatie
                 comboBoxTeam2.ItemsSource = list;
             }
         }
-        
-        private void Add_Click(object sender, RoutedEventArgs e)
+
+        public async void Add_Click(object sender, RoutedEventArgs e)
         {
             if (comboBoxTeam1.Text != string.Empty && MatchDatePicker.Text != string.Empty &&
                 comboBoxTeam2.Text != string.Empty)
             {
-                using (var connection = DatabaseHelper.OpenDefaultConnection())
+                using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
                 using (var sqlCommand = connection.CreateCommand())
                 {
                     var team1 = sqlCommand.Parameters.AddWithValue("@Team1ID", comboBoxTeam1.SelectedValue);

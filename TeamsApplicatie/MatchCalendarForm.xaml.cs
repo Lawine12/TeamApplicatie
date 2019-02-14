@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -53,7 +54,7 @@ namespace TeamsApplicatie
             buttonEnterResults.IsEnabled = true;
         }
 
-        private void LoadMatchData()
+        private async Task LoadMatchData()
         {
             matchDataGrid.CanUserAddRows = false;
             matchDataGrid.SelectionMode = DataGridSelectionMode.Single;
@@ -67,7 +68,7 @@ namespace TeamsApplicatie
                 INNER JOIN TeamData Team1 ON MatchInfo.Team1ID = Team1.Id
             INNER JOIN TeamData Team2 ON MatchInfo.Team2ID = Team2.Id";
 
-            using (var connection = DatabaseHelper.OpenDefaultConnection())
+            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             {
                 var cmd = new SqlCommand(querystring, connection);
                 var dataAdapter = new SqlDataAdapter(cmd);
@@ -78,7 +79,7 @@ namespace TeamsApplicatie
             }
         }
 
-        private void DeleteMatch()
+        private async Task DeleteMatch()
         {
             Object selectedRow = matchDataGrid.SelectedItem;
             if (selectedRow != null)
@@ -101,7 +102,7 @@ namespace TeamsApplicatie
                 }
 
                 var queryString = "SELECT * FROM dbo.MatchInfo";
-                using (var connection = DatabaseHelper.OpenDefaultConnection())
+                using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
                 {
                     var cmd = new SqlCommand(queryString, connection);
                     var dataAdapter = new SqlDataAdapter(cmd);

@@ -34,7 +34,7 @@ namespace TeamsApplicatie
         public EditMatchForm(string id) : this()
         {
             _id = id;
-            loadCombo1();
+            loadCombo1Async();
             loadCombo2();
             LoadData();
         }
@@ -49,9 +49,9 @@ namespace TeamsApplicatie
 
         }
 
-        private void LoadData()
+        private async void LoadData()
         {
-            var matchData = GetDataTable();
+            var matchData = await GetDataTableAsync();
             if (matchData.Rows.Count == 1)
             {
                 var row = _matchData.Rows[0];
@@ -61,7 +61,7 @@ namespace TeamsApplicatie
             }
         }
 
-        private DataTable GetDataTable()
+        private async Task<DataTable> GetDataTableAsync()
         {
             _matchData = new DataTable();
             var queryString = @"SELECT MatchInfo.Id,
@@ -72,7 +72,7 @@ namespace TeamsApplicatie
             TotalGoalsTeam2
                 FROM dbo.MatchInfo
             WHERE MatchInfo.Id = @id";
-            using (var connection = DatabaseHelper.OpenDefaultConnection())
+            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             using (var cmd = new SqlCommand(queryString, connection))
             {
                 cmd.Parameters.AddWithValue("@id", _id);
@@ -82,9 +82,9 @@ namespace TeamsApplicatie
             return _matchData;
         }
 
-        public void loadCombo1()
+        public async Task loadCombo1Async()
         {
-            using (var connection = DatabaseHelper.OpenDefaultConnection())
+            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             {
                 var querystring = "SELECT id, TeamName FROM TeamData";
 
@@ -107,9 +107,9 @@ namespace TeamsApplicatie
             }
         }
 
-        public void loadCombo2()
+        public async Task loadCombo2()
         {
-            using (var connection = DatabaseHelper.OpenDefaultConnection())
+            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             {
                 var querystring = "SELECT id, TeamName FROM TeamData";
 
@@ -131,12 +131,12 @@ namespace TeamsApplicatie
             }
         }
 
-        private void Save_Click(object sender, RoutedEventArgs e)
+        public async void Save_Click(object sender, RoutedEventArgs e)
         {
             if (comboBoxEditTeam1.Text != string.Empty && EditMatchDatePicker.Text != string.Empty &&
                 comboBoxEditTeam2.Text != string.Empty)
             {
-                using (var connection = DatabaseHelper.OpenDefaultConnection())
+                using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
                 using (var sqlCommand = connection.CreateCommand())
                 {
                     var id = sqlCommand.Parameters.AddWithValue("@id", _id);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -90,7 +91,7 @@ namespace TeamsApplicatie
         }
 
         //Delete Team
-        private void DeleteTeam()
+        private async Task DeleteTeam()
         {
             Object selectedRow = teamDataGrid.SelectedItem;
             if (selectedRow != null)
@@ -113,7 +114,7 @@ namespace TeamsApplicatie
                 }
 
                 var queryString = "SELECT * FROM dbo.TeamData";
-                using (var connection = DatabaseHelper.OpenDefaultConnection())
+                using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
                 {
                     var cmd = new SqlCommand(queryString, connection);
                     var dataAdapter = new SqlDataAdapter(cmd);
@@ -124,7 +125,7 @@ namespace TeamsApplicatie
             }
         }
 
-        private void LoadTeamData()
+        private async Task LoadTeamData()
         {
             teamDataGrid.CanUserAddRows = false;
             teamDataGrid.SelectionMode = DataGridSelectionMode.Single;
@@ -132,7 +133,7 @@ namespace TeamsApplicatie
 
             string querystring = "SELECT * FROM dbo.TeamData";
 
-            using (var connection = DatabaseHelper.OpenDefaultConnection())
+            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             {
                 var cmd = new SqlCommand(querystring, connection);
                 var dataAdapter = new SqlDataAdapter(cmd);

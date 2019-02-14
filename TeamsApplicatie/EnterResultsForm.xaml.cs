@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -47,9 +48,9 @@ namespace TeamsApplicatie
             Close();
         }
 
-        private void LoadData()
+        private async Task LoadData()
         {
-            var matchData = GetDataTable();
+            var matchData = await GetDataTable();
             if (matchData.Rows.Count == 1)
             {
                 var row = matchData.Rows[0];
@@ -61,7 +62,7 @@ namespace TeamsApplicatie
             }
         }
 
-        private DataTable GetDataTable()
+        private async Task<DataTable> GetDataTable()
         {
            var matchData = new DataTable();
             var queryString = @"SELECT MatchInfo.Id,
@@ -74,7 +75,7 @@ namespace TeamsApplicatie
 				INNER JOIN TeamData team1 ON team1.Id = MatchInfo.Team1ID
 				INNER JOIN TeamData team2 ON team2.Id = MatchInfo.Team2ID
             WHERE MatchInfo.Id = @id";
-            using (var connection = DatabaseHelper.OpenDefaultConnection())
+            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             using (var cmd = new SqlCommand(queryString, connection))
             {
                 cmd.Parameters.AddWithValue("@id", _id);
@@ -102,11 +103,11 @@ namespace TeamsApplicatie
             }
         }
 
-        private void EnterResults()
+        private async Task EnterResults()
         {
             if (textboxDoelpuntenTeam1.Text != string.Empty && textboxDoelpuntenTeam2.Text != string.Empty)
             {
-                using (var connection = DatabaseHelper.OpenDefaultConnection())
+                using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
                 using (var sqlCommand = connection.CreateCommand())
                 {
                     var id = sqlCommand.Parameters.AddWithValue("@id", _id);

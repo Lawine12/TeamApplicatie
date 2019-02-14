@@ -1,5 +1,8 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.SqlClient;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -25,9 +28,9 @@ namespace TeamsApplicatie
             LoadData();
         }
 
-        private void LoadData()
+        private async Task LoadData()
         {
-            var teamsData = GetDataTable();
+            var teamsData = await GetDataTable();
             if (teamsData.Rows.Count == 1)
             {
                 var row = _teamsInformation.Rows[0];
@@ -38,11 +41,11 @@ namespace TeamsApplicatie
             }
         }
 
-        private void SaveTeam()
+        private async Task SaveTeam()
         {
             if (textboxTeamName.Text != string.Empty && textboxTeamCoach.Text != string.Empty)
             {
-                using (var connection = DatabaseHelper.OpenDefaultConnection())
+                using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
                 using (var sqlCommand = connection.CreateCommand())
                 {
                     var id = sqlCommand.Parameters.AddWithValue("@id", _id);
@@ -58,7 +61,7 @@ namespace TeamsApplicatie
                     [TeamGoals] = {teamGoalsParameter.ParameterName}
                     WHERE [ID] = {id.ParameterName}
                     ";
-                    sqlCommand.ExecuteNonQuery();
+                    await sqlCommand.ExecuteNonQueryAsync();
                 }
 
                 MessageBox.Show("Success!", "", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -68,11 +71,11 @@ namespace TeamsApplicatie
                 MessageBox.Show("Veld mag niet leeg zijn!", "Velden moeten gevuld zijn", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private DataTable GetDataTable()
+        private async Task<DataTable> GetDataTable()
         {
             _teamsInformation = new DataTable();
             var queryString = "SELECT * FROM TeamData WHERE Id=@id";
-            using (var connection = DatabaseHelper.OpenDefaultConnection())
+            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             using (var cmd = new SqlCommand(queryString, connection))
             {
                 cmd.Parameters.AddWithValue("@id", _id);
@@ -101,9 +104,9 @@ namespace TeamsApplicatie
             }
         }
 
-        private void Save_Click(object sender, RoutedEventArgs e)
+        private async void Save_Click(object sender, RoutedEventArgs e)
         {
-            SaveTeam();
+            await SaveTeam();
         }
     }
 }

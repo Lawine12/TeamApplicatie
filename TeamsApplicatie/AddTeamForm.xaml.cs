@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -50,22 +51,22 @@ namespace TeamsApplicatie
             Close();
         }
 
-        private void AddaTeam()
+        public async void AddaTeam()
         {
             if (textBoxTeamName.Text != string.Empty && textBoxTeamCoach.Text != string.Empty)
             {
-                using (var connection = DatabaseHelper.OpenDefaultConnection())
+                using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
                 using (var sqlCommand = connection.CreateCommand())
                 {
                     var teamNameParameter = sqlCommand.Parameters.AddWithValue("@teamName", textBoxTeamName.Text);
                     var teamCoachParameter = sqlCommand.Parameters.AddWithValue("@teamCoach", textBoxTeamCoach.Text);
-                    var pointsParameter = sqlCommand.Parameters.AddWithValue("@TeamGoals", textBoxPoints.Text);
+                    var pointsParameter = sqlCommand.Parameters.AddWithValue("@Points", textBoxPoints.Text);
 
                     sqlCommand.CommandText =
                         $@"INSERT INTO [dbo].[TeamData]
-                    ([TeamName], [TeamCoach], [TeamGoals])
+                    ([TeamName], [TeamCoach], [Points])
                     VALUES ({teamNameParameter.ParameterName}, {teamCoachParameter}, {pointsParameter})";
-                    sqlCommand.ExecuteNonQuery();
+                    await sqlCommand.ExecuteNonQueryAsync();
                 }
 
                 MessageBox.Show("Success!", "", MessageBoxButton.OK, MessageBoxImage.Information);

@@ -40,7 +40,7 @@ namespace TeamsApplicatie
 
         }
 
-        private void LoadMatchData()
+        private async Task LoadMatchData()
         {
             resultDataGrid.CanUserAddRows = false;
             resultDataGrid.SelectionMode = DataGridSelectionMode.Single;
@@ -56,7 +56,7 @@ namespace TeamsApplicatie
                 INNER JOIN TeamData Team1 ON MatchInfo.Team1ID = Team1.Id
             INNER JOIN TeamData Team2 ON MatchInfo.Team2ID = Team2.Id";
 
-            using (var connection = DatabaseHelper.OpenDefaultConnection())
+            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             {
                 var cmd = new SqlCommand(querystring, connection);
                 var dataAdapter = new SqlDataAdapter(cmd);

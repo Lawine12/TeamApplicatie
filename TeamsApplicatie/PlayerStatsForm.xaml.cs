@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace TeamsApplicatie
@@ -40,9 +41,9 @@ namespace TeamsApplicatie
             }
         }
 
-        private void LoadData()
+        private async Task LoadData()
         {
-            var playerData = GetPlayerDataTable();
+            var playerData = await GetPlayerDataTable();
             var teamData = GetTeamDataTable();
             if (playerData.Rows.Count == 1)
             {
@@ -58,11 +59,11 @@ namespace TeamsApplicatie
             }
         }
 
-        private DataTable GetPlayerDataTable()
+        private async Task<DataTable> GetPlayerDataTable()
         {
             _playerInformation = new DataTable();
             var queryString = "SELECT * FROM Players WHERE Id=@id";
-            using (var connection = DatabaseHelper.OpenDefaultConnection())
+            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             using (var cmd = new SqlCommand(queryString, connection))
             {
                 cmd.Parameters.AddWithValue("@id", _id);
@@ -72,11 +73,11 @@ namespace TeamsApplicatie
             return _playerInformation;
         }
 
-        private DataTable GetTeamDataTable()
+        private async Task<DataTable> GetTeamDataTable()
         {
             _teamInformation = new DataTable();
             var queryString = "SELECT * FROM TeamData WHERE Id=@id";
-            using (var connection = DatabaseHelper.OpenDefaultConnection())
+            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             using (var cmd = new SqlCommand(queryString, connection))
             {
                 cmd.Parameters.AddWithValue("@id", _id);
