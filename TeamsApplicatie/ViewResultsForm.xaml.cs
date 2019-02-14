@@ -14,6 +14,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace TeamsApplicatie
 {
@@ -28,6 +31,30 @@ namespace TeamsApplicatie
         {
             InitializeComponent();
             LoadMatchData();
+            SerializeDataTable("test.xml");
+        }
+
+        private void SerializeDataTable(string filename)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(DataSet));
+            DataSet set = new DataSet();
+            DataTable table = new DataTable("MatchInfo");
+            DataColumn t1 = new DataColumn("Team1ID");
+            DataColumn t2 = new DataColumn("Team2ID");
+            table.Columns.Add(t1);
+            table.Columns.Add(t2);
+            set.Tables.Add(table);
+            DataRow row;
+            for (int i = 0; i < 20; i++)
+            {
+                row = table.NewRow();
+                row[0] = " " + i;
+                table.Rows.Add(row);
+            }
+
+            TextWriter writer = new StreamWriter(filename);
+            serializer.Serialize(writer, set);
+            writer.Close();
         }
 
         private void cancel_Click(object sender, RoutedEventArgs e)
@@ -40,7 +67,7 @@ namespace TeamsApplicatie
 
         }
 
-        private async Task LoadMatchData()
+        private async void LoadMatchData()
         {
             resultDataGrid.CanUserAddRows = false;
             resultDataGrid.SelectionMode = DataGridSelectionMode.Single;
