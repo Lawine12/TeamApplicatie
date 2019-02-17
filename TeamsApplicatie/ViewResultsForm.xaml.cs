@@ -26,35 +26,36 @@ namespace TeamsApplicatie
     public partial class ViewResultsForm : Window
     {
         private DataTable _matchData;
+        private DataSet _matchInfo;
 
         public ViewResultsForm()
         {
             InitializeComponent();
             LoadMatchData();
-            SerializeDataTable("test.xml");
+            SerializeDataTableAsync("Match Information.xml", _matchInfo);
         }
 
-        private void SerializeDataTable(string filename)
+        private async Task SerializeDataTableAsync(string filename, DataSet matchInfo)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(DataSet));
-            DataSet set = new DataSet();
-            DataTable table = new DataTable("MatchInfo");
-            DataColumn t1 = new DataColumn("Team1ID");
-            DataColumn t2 = new DataColumn("Team2ID");
-            table.Columns.Add(t1);
-            table.Columns.Add(t2);
-            set.Tables.Add(table);
-            DataRow row;
-            for (int i = 0; i < 20; i++)
-            {
-                row = table.NewRow();
-                row[0] = " " + i;
-                table.Rows.Add(row);
-            }
+            string querystring = @"SELECT MatchInfo.Id,
+            Team1.TeamName,
+            Team2.TeamName,
+            MatchInfo.MatchDate,
+            MatchInfo.TotalGoalsTeam1,
+            MatchInfo.TotalGoalsTeam2
+                FROM dbo.MatchInfo
+                INNER JOIN TeamData Team1 ON MatchInfo.Team1ID = Team1.Id
+            INNER JOIN TeamData Team2 ON MatchInfo.Team2ID = Team2.Id";
 
-            TextWriter writer = new StreamWriter(filename);
-            serializer.Serialize(writer, set);
-            writer.Close();
+            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
+            {
+                var cmd = new SqlCommand(querystring, connection);
+                var dataAdapter = new SqlDataAdapter(cmd);
+                _matchInfo = new DataSet();
+                dataAdapter.Fill(_matchInfo);
+                TextWriter writer = new StreamWriter(filename);
+                _matchInfo.WriteXml(writer);
+            }
         }
 
         private void cancel_Click(object sender, RoutedEventArgs e)
