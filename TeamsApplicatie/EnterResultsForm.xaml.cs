@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,6 +16,7 @@ namespace TeamsApplicatie
         private readonly string _id;
         private DataSet _teams;
         private DataSet _doelpunten;
+        private DataSet _matchInfo;
 
         public EnterResultsForm()
         {
@@ -22,6 +24,29 @@ namespace TeamsApplicatie
             textNameTeam1.IsEnabled = false;
             textNameTeam2.IsEnabled = false;
             ResultsDatePicker.IsEnabled = false;
+        }
+
+        private async Task SerializeDataTableAsync(string filename, DataSet matchInfo)
+        {
+            string querystring = @"SELECT MatchInfo.Id,
+            Team1.TeamName,
+            Team2.TeamName,
+            MatchInfo.MatchDate,
+            MatchInfo.TotalGoalsTeam1,
+            MatchInfo.TotalGoalsTeam2
+                FROM dbo.MatchInfo
+                INNER JOIN TeamData Team1 ON MatchInfo.Team1ID = Team1.Id
+            INNER JOIN TeamData Team2 ON MatchInfo.Team2ID = Team2.Id";
+
+            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
+            {
+                var cmd = new SqlCommand(querystring, connection);
+                var dataAdapter = new SqlDataAdapter(cmd);
+                _matchInfo = new DataSet();
+                dataAdapter.Fill(_matchInfo);
+                TextWriter writer = new StreamWriter(filename);
+                _matchInfo.WriteXml(writer);
+            }
         }
 
         public EnterResultsForm(string id) : this()
@@ -35,6 +60,7 @@ namespace TeamsApplicatie
             try
             {
                 EnterResults();
+                SerializeDataTableAsync("Match Information.xml", _matchInfo);
             }
             catch (Exception ex)
             {
@@ -48,17 +74,18 @@ namespace TeamsApplicatie
             Close();
         }
 
-        private async Task LoadData()
+        private async void LoadData()
         {
             var matchData = await GetDataTable();
             if (matchData.Rows.Count == 1)
             {
                 var row = matchData.Rows[0];
-                textNameTeam1.Text = row["TeamName"] as string;
-                textNameTeam2.Text = row["TeamName"] as string;
+                textNameTeam1.Text = row[1] as string;
+                textNameTeam2.Text = row[2] as string;
                 ResultsDatePicker.Text = row["MatchDate"].ToString();
                 textboxDoelpuntenTeam1.Text = row["TotalGoalsTeam1"].ToString();
                 textboxDoelpuntenTeam2.Text = row["TotalGoalsTeam2"].ToString();
+                
             }
         }
 
@@ -67,7 +94,7 @@ namespace TeamsApplicatie
            var matchData = new DataTable();
             var queryString = @"SELECT MatchInfo.Id,
 			Team1.TeamName,
-			team2.TeamName,
+			Team2.TeamName,
             MatchDate,
             TotalGoalsTeam1,
             TotalGoalsTeam2
@@ -125,6 +152,9 @@ namespace TeamsApplicatie
 
                 MessageBox.Show("Success!", "", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.Close();
+                var resultsview = new ResultsUpdateForm(buttonSave);
+                resultsview.Show();
+                LoadData();
             }
             else
                 MessageBox.Show("Veld mag niet leeg zijn!", "Velden moeten gevuld zijn", MessageBoxButton.OK, MessageBoxImage.Information);

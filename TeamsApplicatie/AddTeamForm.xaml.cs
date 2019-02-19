@@ -11,7 +11,6 @@ namespace TeamsApplicatie
         {
             InitializeComponent();
             textBoxTeamName.Focus();
-            textBoxPoints.Text = "0";
         }
 
         private void TextBox_TeamName(object sender, TextChangedEventArgs e)
@@ -22,15 +21,6 @@ namespace TeamsApplicatie
         private void TextBox_TeamCoach(object sender, TextChangedEventArgs e)
         {
 
-        }
-
-        private void textBoxPoints_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (System.Text.RegularExpressions.Regex.IsMatch(textBoxPoints.Text, "[^0-9]"))
-            {
-                MessageBox.Show("Please enter only numbers.");
-                textBoxPoints.Text = textBoxPoints.Text.Remove(textBoxPoints.Text.Length - 1);
-            }
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
@@ -60,12 +50,11 @@ namespace TeamsApplicatie
                 {
                     var teamNameParameter = sqlCommand.Parameters.AddWithValue("@teamName", textBoxTeamName.Text);
                     var teamCoachParameter = sqlCommand.Parameters.AddWithValue("@teamCoach", textBoxTeamCoach.Text);
-                    var pointsParameter = sqlCommand.Parameters.AddWithValue("@Points", textBoxPoints.Text);
 
                     sqlCommand.CommandText =
                         $@"INSERT INTO [dbo].[TeamData]
-                    ([TeamName], [TeamCoach], [Points])
-                    VALUES ({teamNameParameter.ParameterName}, {teamCoachParameter}, {pointsParameter})";
+                    ([TeamName], [TeamCoach])
+                    VALUES ({teamNameParameter.ParameterName}, {teamCoachParameter})";
                     await sqlCommand.ExecuteNonQueryAsync();
                 }
 

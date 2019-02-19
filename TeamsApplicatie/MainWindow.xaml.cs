@@ -26,7 +26,7 @@ namespace TeamsApplicatie
         {
             var matchResults = new ViewResultsForm();
             matchResults.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            matchResults.ShowDialog();
+            matchResults.Show();
         }
 
         private void WedstrijdKalender_Click(object sender, RoutedEventArgs e)
