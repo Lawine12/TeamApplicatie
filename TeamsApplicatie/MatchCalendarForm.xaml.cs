@@ -61,6 +61,8 @@ namespace TeamsApplicatie
             matchDataGrid.IsReadOnly = true;
 
             string querystring = @"SELECT MatchInfo.Id,
+			Team1.Id,
+			Team2.id,
             Team1.TeamName,
             Team2.TeamName,
             MatchInfo.MatchDate
@@ -128,10 +130,12 @@ namespace TeamsApplicatie
         private void enterResults_Click(object sender, RoutedEventArgs e)
         {
             Object selectedRow = matchDataGrid.SelectedItem;
-            int id = Convert.ToInt32((matchDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)
+            int id1 = Convert.ToInt32((matchDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)
+                .Text);
+            int id2 = Convert.ToInt32((matchDataGrid.SelectedCells[2].Column.GetCellContent(selectedRow) as TextBlock)
                 .Text);
 
-            var enterResults = new EnterResultsForm(id.ToString());
+            var enterResults = new EnterResultsForm(id1.ToString(), id2.ToString());
             enterResults.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             enterResults.ShowDialog();
             LoadMatchData();

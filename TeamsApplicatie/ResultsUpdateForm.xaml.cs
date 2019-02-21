@@ -1,18 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace TeamsApplicatie
 {
@@ -23,12 +12,9 @@ namespace TeamsApplicatie
     {
         private DataTable _matchData;
         private DataSet _matchInfo;
-        private Button buttonSave;
 
-        public ResultsUpdateForm(Button buttonSave)
+        public ResultsUpdateForm()
         {
-            this.buttonSave = buttonSave;
-            buttonSave.Click += ButtonSave_Click;
             InitializeComponent();
             LoadMatchData();
         }
@@ -43,10 +29,6 @@ namespace TeamsApplicatie
 
         }
 
-        void ButtonSave_Click(object sender, RoutedEventArgs e)
-        {
-            LoadMatchData();
-        }
         private async void LoadMatchData()
         {
             resultDataGrid.CanUserAddRows = false;

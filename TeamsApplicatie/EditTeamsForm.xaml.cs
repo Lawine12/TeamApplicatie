@@ -36,7 +36,6 @@ namespace TeamsApplicatie
                 var row = _teamsInformation.Rows[0];
                 textboxTeamName.Text = (string)row["TeamName"];
                 textboxTeamCoach.Text = (string)row["TeamCoach"];
-                textboxPoints.Text = row["TeamGoals"].ToString();
 
             }
         }
@@ -51,14 +50,12 @@ namespace TeamsApplicatie
                     var id = sqlCommand.Parameters.AddWithValue("@id", _id);
                     var teamNameParameter = sqlCommand.Parameters.AddWithValue("@teamname", textboxTeamName.Text);
                     var teamCoachParameter = sqlCommand.Parameters.AddWithValue("@teamCoach", textboxTeamCoach.Text);
-                    var teamGoalsParameter = sqlCommand.Parameters.AddWithValue("@TeamGoals", textboxPoints.Text);
 
                     sqlCommand.CommandText =
                         $@"UPDATE [dbo].[TeamData]
                     SET
                     [TeamName] = {teamNameParameter.ParameterName},
-                    [TeamCoach] = {teamCoachParameter.ParameterName},
-                    [TeamGoals] = {teamGoalsParameter.ParameterName}
+                    [TeamCoach] = {teamCoachParameter.ParameterName}
                     WHERE [ID] = {id.ParameterName}
                     ";
                     await sqlCommand.ExecuteNonQueryAsync();
@@ -93,15 +90,6 @@ namespace TeamsApplicatie
         private void textboxTeamCoach_TextChanged(object sender, TextChangedEventArgs e)
         {
 
-        }
-
-        private void textboxPoints_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (System.Text.RegularExpressions.Regex.IsMatch(textboxPoints.Text, "[^0-9]"))
-            {
-                MessageBox.Show("Please enter only numbers.");
-                textboxPoints.Text = textboxPoints.Text.Remove(textboxPoints.Text.Length - 1);
-            }
         }
 
         private async void Save_Click(object sender, RoutedEventArgs e)

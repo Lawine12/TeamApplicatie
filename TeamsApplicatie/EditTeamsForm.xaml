@@ -12,8 +12,6 @@
             <TextBox x:Name="textboxTeamName" Margin="180,0"/>
             <Label Margin="350,0">Team Coach</Label>
             <TextBox x:Name="textboxTeamCoach" Margin="180,0" TextChanged="textboxTeamCoach_TextChanged" />
-            <Label Margin="350,0">Team Points</Label>
-            <TextBox x:Name="textboxPoints" Margin="180,0" TextChanged="textboxPoints_TextChanged" />
         </StackPanel>
         <Grid>
         <Button Content="Cancel" Click="cancel_Click" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>

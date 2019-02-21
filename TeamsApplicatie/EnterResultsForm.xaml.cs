@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
@@ -14,9 +15,12 @@ namespace TeamsApplicatie
     public partial class EnterResultsForm : Window
     {
         private readonly string _id;
+        private readonly string _idTeam1;
         private DataSet _teams;
         private DataSet _doelpunten;
         private DataSet _matchInfo;
+        private DataSet _playersTeam1;
+        private DataSet _playersTeam2;
 
         public EnterResultsForm()
         {
@@ -49,10 +53,15 @@ namespace TeamsApplicatie
             }
         }
 
-        public EnterResultsForm(string id) : this()
+        public EnterResultsForm(string id1, string id2) : this()
         {
-            _id = id;
+            _id = id1;
+            _idTeam1 = id2;
             LoadData();
+            loadCombo1();
+            loadCombo2();
+            textboxDoelpuntenTeam1.IsEnabled = false;
+            textboxDoelpuntenTeam2.IsEnabled = false;
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
@@ -72,6 +81,58 @@ namespace TeamsApplicatie
         private void cancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        public async Task loadCombo1()
+        {
+            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
+            {
+                var querystring = "SELECT id, [Last Name] FROM Players WHERE TeamId = @Id";
+
+                var cmd = new SqlCommand(querystring, connection);
+                cmd.Parameters.AddWithValue("@id", _id);
+
+                var dataAdapter = new SqlDataAdapter(cmd);
+                _playersTeam1 = new DataSet();
+                dataAdapter.Fill(_playersTeam1, "Players");
+                comboBoxPlayersTeam1.DataContext = _playersTeam1.Tables[0].DefaultView;
+                var list = new List<Player>();
+
+                foreach (DataRow player in _playersTeam1.Tables[0].Rows)
+                {
+                    var id = player.Field<int>("id");
+                    var playerName = player.Field<string>("[Last Name]");
+
+                    list.Add(new Player { Id = id, PlayerName = playerName });
+                }
+                comboBoxPlayersTeam1.ItemsSource = list;
+            }
+        }
+
+        public async Task loadCombo2()
+        {
+            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
+            {
+                var querystring = "SELECT id, [Last Name] FROM Players WHERE TeamId = @Id";
+
+                var cmd = new SqlCommand(querystring, connection);
+                cmd.Parameters.AddWithValue("@id", _idTeam1);
+
+                var dataAdapter = new SqlDataAdapter(cmd);
+                _playersTeam2 = new DataSet();
+                dataAdapter.Fill(_playersTeam2, "Players");
+                comboBoxPlayersTeam2.DataContext = _playersTeam2.Tables[0].DefaultView;
+                var list = new List<Player>();
+
+                foreach (DataRow player in _playersTeam2.Tables[0].Rows)
+                {
+                    var id = player.Field<int>("id");
+                    var playerName = player.Field<string>("[Last Name]");
+
+                    list.Add(new Player { Id = id, PlayerName = playerName });
+                }
+                comboBoxPlayersTeam2.ItemsSource = list;
+            }
         }
 
         private async void LoadData()
@@ -152,12 +213,15 @@ namespace TeamsApplicatie
 
                 MessageBox.Show("Success!", "", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.Close();
-                var resultsview = new ResultsUpdateForm(buttonSave);
-                resultsview.Show();
-                LoadData();
             }
             else
                 MessageBox.Show("Veld mag niet leeg zijn!", "Velden moeten gevuld zijn", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        public class Player
+        {
+            public int Id { get; set; }
+            public string PlayerName { get; set; }
         }
     }
 }
