@@ -11,24 +11,26 @@
         <StackPanel Margin="20,160,20,112">
             <TextBlock Height="20" Width="120" x:Name="textNameTeam1"/>
             <ComboBox Name="comboBoxPlayersTeam2" ItemsSource="{Binding}" DisplayMemberPath="[Last Name]" SelectedValuePath="Id" Height="18" Margin="0,0,0,0"/>
+            <Button x:Name="buttonDoelpuntTeam1toevoegen" Content="Doelpunt toevoegen" Margin="10" Click="ButtonDoelpuntTeam1toevoegen_Click"/>
             <TextBlock Text="Doelpunten" Margin="0,0,0,0"/>
             <TextBox Name="textboxDoelpuntenTeam1" Height="20" TextWrapping="Wrap" Width="120" TextChanged="TextBoxDoelpuntenTeam1_TextChanged"/>
-            
+
 
         </StackPanel>
         <StackPanel Margin="0,106,0,188">
             <TextBlock Height="25" VerticalAlignment="Top" Margin="10" Width="103" Name="ResultsDatePicker"/>
             <Label Content="Tegen" Width="49"/>
         </StackPanel>
-        <StackPanel Height="100" Margin="20">
+        <StackPanel Margin="20,160,20,112">
             <TextBlock Height="20" Width="120" Name="textNameTeam2"/>
             <ComboBox Name="comboBoxPlayersTeam1" ItemsSource="{Binding}" DisplayMemberPath="[Last Name]" SelectedValuePath="Id" Height="18" Width="120" Margin="0,0,0,0"/>
+            <Button x:Name="buttonDoelpuntTeam2toevoegen" Content="Doelpunt toevoegen" Margin="10" Click="ButtonDoelpuntTeam2toevoegen_Click"/>
             <TextBlock Text="Doelpunten" Margin="0,0,0,0"/>
             <TextBox Name="textboxDoelpuntenTeam2" Height="20" TextWrapping="Wrap" Width="120" TextChanged="TextBoxDoelpuntenTeam2_TextChanged"/>
         </StackPanel>
         <Button Content="Cancel" Click="cancel_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,5,5,5" RenderTransformOrigin="0.473,-1.263">
         </Button>
-        
+
 
 
     </DockPanel>

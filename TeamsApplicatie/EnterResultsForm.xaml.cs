@@ -223,5 +223,19 @@ namespace TeamsApplicatie
             public int Id { get; set; }
             public string PlayerName { get; set; }
         }
+
+        private void ButtonDoelpuntTeam1toevoegen_Click(object sender, RoutedEventArgs e)
+        {
+            int doelpunten = Int16.Parse(textboxDoelpuntenTeam1.Text);
+
+            textboxDoelpuntenTeam1.Text = (doelpunten + 1).ToString();
+        }
+
+        private void ButtonDoelpuntTeam2toevoegen_Click(object sender, RoutedEventArgs e)
+        {
+            int doelpunten = Int16.Parse(textboxDoelpuntenTeam2.Text);
+
+            textboxDoelpuntenTeam2.Text = (doelpunten + 1).ToString();
+        }
     }
 }
