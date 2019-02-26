@@ -135,7 +135,7 @@ namespace TeamsApplicatie
             Object selectedRow = playerDataGrid.SelectedItem;
             if (selectedRow != null)
             {
-                string id = (playerDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock).Text;
+                int id = Convert.ToInt32((playerDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock).Text);
                 var playerStats = new PlayerStatsForm(id);
                 playerStats.ShowDialog();
                 playerStats.WindowStartupLocation = WindowStartupLocation.CenterScreen;

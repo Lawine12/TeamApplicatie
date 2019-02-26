@@ -11,7 +11,7 @@ namespace TeamsApplicatie
     /// </summary>
     public partial class PlayerStatsForm : Window
     {
-        private readonly string _id;
+        private readonly int _id;
         private DataTable _playerInformation;
         private DataTable _teamInformation;
 
@@ -27,7 +27,7 @@ namespace TeamsApplicatie
             textboxCurrentTeam.IsEnabled = false;
         }
 
-        public PlayerStatsForm(string id) : this()
+        public PlayerStatsForm(int id) : this()
         {
             _id = id;
             try
@@ -76,7 +76,7 @@ namespace TeamsApplicatie
         private async Task<DataTable> GetTeamDataTable()
         {
             _teamInformation = new DataTable();
-            var queryString = "SELECT * FROM TeamData WHERE Id=@id";
+            var queryString = "SELECT TeamData.* FROM TeamData LEFT JOIN Players ON Players.TeamId = TeamData.Id WHERE Players.Id=@id";
             using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             using (var cmd = new SqlCommand(queryString, connection))
             {
