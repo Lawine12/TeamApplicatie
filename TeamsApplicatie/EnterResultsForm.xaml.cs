@@ -146,13 +146,13 @@ namespace TeamsApplicatie
                 ResultsDatePicker.Text = row["MatchDate"].ToString();
                 textboxDoelpuntenTeam1.Text = row["TotalGoalsTeam1"].ToString();
                 textboxDoelpuntenTeam2.Text = row["TotalGoalsTeam2"].ToString();
-                
+
             }
         }
 
         private async Task<DataTable> GetDataTable()
         {
-           var matchData = new DataTable();
+            var matchData = new DataTable();
             var queryString = @"SELECT MatchInfo.Id,
 			Team1.TeamName,
 			Team2.TeamName,
@@ -218,6 +218,24 @@ namespace TeamsApplicatie
                 MessageBox.Show("Veld mag niet leeg zijn!", "Velden moeten gevuld zijn", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+        private async Task AddPlayerPoints1()
+        {
+            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
+            using (var sqlCommand = connection.CreateCommand())
+            {
+                var id = sqlCommand.Parameters.AddWithValue("@id", _id);
+
+                sqlCommand.CommandText =
+                    $@"UPDATE [dbo].[Players]
+                    SET
+                    PlayerGoals = PlayerGoals + 1
+                    WHERE Id = @id";
+                sqlCommand.ExecuteNonQuery();
+            }
+
+            MessageBox.Show("Added a Goal for this player! Don't forget to press the Save to save!", "", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
         public class Player
         {
             public int Id { get; set; }
@@ -229,6 +247,8 @@ namespace TeamsApplicatie
             int doelpunten = Int16.Parse(textboxDoelpuntenTeam1.Text);
 
             textboxDoelpuntenTeam1.Text = (doelpunten + 1).ToString();
+
+            AddPlayerPoints1();
         }
 
         private void ButtonDoelpuntTeam2toevoegen_Click(object sender, RoutedEventArgs e)

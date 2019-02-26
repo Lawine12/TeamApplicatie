@@ -44,7 +44,7 @@ namespace TeamsApplicatie
         private async Task LoadData()
         {
             var playerData = await GetPlayerDataTable();
-            var teamData = GetTeamDataTable();
+            var teamData = await GetTeamDataTable();
             if (playerData.Rows.Count == 1)
             {
                 var teamRow = _teamInformation.Rows[0];
