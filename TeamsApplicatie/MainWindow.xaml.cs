@@ -4,6 +4,9 @@ namespace TeamsApplicatie
 {
     public partial class MainWindow : Window
     {
+        private ResultsUpdateForm _ResultsUpdateForm;
+        private MatchCalendarForm _MatchCalendarForm;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -15,6 +18,13 @@ namespace TeamsApplicatie
             var teamOverview = new TeamOverviewForm();
             teamOverview.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             teamOverview.ShowDialog();
+        }
+
+        private void ShowResults()
+        {
+            if (_ResultsUpdateForm == null)
+                _ResultsUpdateForm = new ResultsUpdateForm();
+            _ResultsUpdateForm.Show();
         }
 
         private void exit_Click(object sender, RoutedEventArgs e)
@@ -33,7 +43,13 @@ namespace TeamsApplicatie
         {
             var kalender = new MatchCalendarForm();
             kalender.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            kalender.DataChanged += () => { _ResultsUpdateForm?.LoadMatchData(); };
             kalender.ShowDialog();
+        }
+
+        private void UitslagenUpdated_Click(object sender, RoutedEventArgs e)
+        {
+            ShowResults();
         }
     }
 }

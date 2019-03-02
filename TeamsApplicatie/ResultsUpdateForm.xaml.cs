@@ -29,7 +29,7 @@ namespace TeamsApplicatie
 
         }
 
-        private async void LoadMatchData()
+        public async void LoadMatchData()
         {
             resultDataGrid.CanUserAddRows = false;
             resultDataGrid.SelectionMode = DataGridSelectionMode.Single;

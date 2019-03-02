@@ -96,11 +96,21 @@ namespace TeamsApplicatie
             Object selectedRow = teamDataGrid.SelectedItem;
             if (selectedRow != null)
             {
-                string team = (teamDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock).Text;
+                int id = Convert.ToInt32((teamDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock).Text);
 
                 if (MessageBox.Show("Weet u het zeker?", "", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
                 {
                     var itemSource = teamDataGrid.ItemsSource as DataView;
+
+                    using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
+                    using (var sqlCommand = connection.CreateCommand())
+                    {
+                        sqlCommand.Parameters.AddWithValue("@id", id);
+
+                        sqlCommand.CommandText =
+                            $@"DELETE FROM TeamData WHERE Id = @Id";
+                        sqlCommand.ExecuteNonQuery();
+                    }
 
                     itemSource.Delete(teamDataGrid.SelectedIndex);
                     teamDataGrid.ItemsSource = itemSource;

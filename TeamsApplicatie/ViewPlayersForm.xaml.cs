@@ -81,7 +81,7 @@ namespace TeamsApplicatie
             Object selectedRow = playerDataGrid.SelectedItem;
             if (selectedRow != null)
             {
-                string player = (playerDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock).Text;
+                string id = (playerDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock).Text;
 
                 if (MessageBox.Show("Weet u het zeker?", "", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
                 {
@@ -92,6 +92,17 @@ namespace TeamsApplicatie
                     buttonDeletePlayer.IsEnabled = false;
                     buttonEditPlayer.IsEnabled = false;
                     buttonPlayerStats.IsEnabled = false;
+
+                    using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
+                    using (var sqlCommand = connection.CreateCommand())
+                    {
+                        sqlCommand.Parameters.AddWithValue("@id", id);
+
+                        sqlCommand.CommandText =
+                            $@"DELETE FROM Players WHERE Id = @Id";
+                        sqlCommand.ExecuteNonQuery();
+                    }
+
                 }
                 else
                 {

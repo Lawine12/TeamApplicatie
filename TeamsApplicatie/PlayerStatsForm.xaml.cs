@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace TeamsApplicatie
 {
@@ -14,10 +15,12 @@ namespace TeamsApplicatie
         private readonly int _id;
         private DataTable _playerInformation;
         private DataTable _teamInformation;
+        private DataTable _playerStats;
 
         public PlayerStatsForm()
         {
             InitializeComponent();
+            
             textboxPlayerFirstName.IsEnabled = false;
             textboxPlayerLastName.IsEnabled = false;
             textboxPlayerAdress.IsEnabled = false;
@@ -33,6 +36,7 @@ namespace TeamsApplicatie
             try
             {
                 LoadData();
+                LoadTeamData(id);
             }
             catch (Exception ex)
             {
@@ -85,6 +89,42 @@ namespace TeamsApplicatie
                 sqlAdapter.Fill(_teamInformation);
             }
             return _teamInformation;
+        }
+
+        private async Task LoadTeamData(int id)
+        {
+            Object selectedRow = playerStatsDatagrid.SelectedItem;
+            
+            string querystring = @"SELECT MatchInfo.Id,
+            Team1.TeamName,
+            Team2.TeamName,
+            MatchInfo.MatchDate,
+			Player1.PlayerGoals
+                FROM dbo.MatchInfo
+            INNER JOIN TeamData Team1 ON MatchInfo.Team1ID = Team1.Id
+            INNER JOIN TeamData Team2 ON MatchInfo.Team2ID = Team2.Id
+			INNER JOIN Players player1 ON Team1.Id = player1.TeamId OR Team2.Id = player1.TeamId
+			WHERE player1.PlayerGoals > 0  AND player1.Id = @id";
+
+            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
+            {
+                var cmd = new SqlCommand(querystring, connection);
+                cmd.Parameters.AddWithValue("@id", id);
+                var dataAdapter = new SqlDataAdapter(cmd);
+                _playerStats = new DataTable();
+                dataAdapter.Fill(_playerStats);
+                playerStatsDatagrid.DataContext = _playerStats;
+                playerStatsDatagrid.ItemsSource = _playerStats.DefaultView;
+            }
+
+            playerStatsDatagrid.CanUserAddRows = false;
+            playerStatsDatagrid.SelectionMode = DataGridSelectionMode.Single;
+            playerStatsDatagrid.IsReadOnly = true;
+        }
+
+        private void PlayerStatsDatagrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

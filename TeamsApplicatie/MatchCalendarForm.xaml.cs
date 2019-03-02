@@ -14,14 +14,21 @@ namespace TeamsApplicatie
     {
         private DataTable _matchData;
 
+        public delegate void DataChangedHandler();
+        public event DataChangedHandler DataChanged = null;
 
         public MatchCalendarForm()
         {
             InitializeComponent();
-            LoadMatchData();
+            LoadMatchDataAsync();
             buttonEditMatch.IsEnabled = false;
             buttonDeleteMatch.IsEnabled = false;
             buttonEnterResults.IsEnabled = false;
+        }
+
+        protected virtual void OnDataChanged()
+        {
+            DataChanged?.Invoke();
         }
 
         private void cancel_Click(object sender, RoutedEventArgs e)
@@ -29,12 +36,17 @@ namespace TeamsApplicatie
             Close();
         }
 
-        private void addMatch_Click(object sender, RoutedEventArgs e)
+        private async void addMatch_Click(object sender, RoutedEventArgs e)
+        {
+            await AddMatchAsync().ConfigureAwait(true);
+        }
+
+        private async Task AddMatchAsync()
         {
             var addMatch = new AddMatchForm();
             addMatch.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             addMatch.ShowDialog();
-            LoadMatchData();
+            await LoadMatchDataAsync().ConfigureAwait(true);
         }
 
         private void editMatch_Click(object sender, RoutedEventArgs e)
@@ -54,7 +66,7 @@ namespace TeamsApplicatie
             buttonEnterResults.IsEnabled = true;
         }
 
-        private async Task LoadMatchData()
+        private async Task LoadMatchDataAsync()
         {
             matchDataGrid.CanUserAddRows = false;
             matchDataGrid.SelectionMode = DataGridSelectionMode.Single;
@@ -79,6 +91,7 @@ namespace TeamsApplicatie
                 matchDataGrid.DataContext = _matchData;
                 matchDataGrid.ItemsSource = _matchData.DefaultView;
             }
+            OnDataChanged();
         }
 
         private async Task DeleteMatch()
@@ -86,17 +99,29 @@ namespace TeamsApplicatie
             Object selectedRow = matchDataGrid.SelectedItem;
             if (selectedRow != null)
             {
-                string team = (matchDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock).Text;
+                int id = Convert.ToInt32((matchDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)
+                    .Text);
 
                 if (MessageBox.Show("Weet u het zeker?", "", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
                 {
                     var itemSource = matchDataGrid.ItemsSource as DataView;
+                    
+                    using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
+                    using (var sqlCommand = connection.CreateCommand())
+                    {
+                        sqlCommand.Parameters.AddWithValue("@id", id);
+
+                        sqlCommand.CommandText =
+                            $@"DELETE FROM MatchInfo WHERE Id = @Id";
+                        sqlCommand.ExecuteNonQuery();
+                    }
 
                     itemSource.Delete(matchDataGrid.SelectedIndex);
                     matchDataGrid.ItemsSource = itemSource;
                     buttonDeleteMatch.IsEnabled = false;
                     buttonEditMatch.IsEnabled = false;
                     buttonEnterResults.IsEnabled = false;
+                    OnDataChanged();
                 }
                 else
                 {
@@ -124,21 +149,23 @@ namespace TeamsApplicatie
             var editMatch = new EditMatchForm(id.ToString());
             editMatch.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             editMatch.ShowDialog();
-            LoadMatchData();
+            LoadMatchDataAsync();
         }
 
         private void enterResults_Click(object sender, RoutedEventArgs e)
         {
             Object selectedRow = matchDataGrid.SelectedItem;
-            int id1 = Convert.ToInt32((matchDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)
+            int matchId = Convert.ToInt32((matchDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)
+                .Text);
+            int id1 = Convert.ToInt32((matchDataGrid.SelectedCells[1].Column.GetCellContent(selectedRow) as TextBlock)
                 .Text);
             int id2 = Convert.ToInt32((matchDataGrid.SelectedCells[2].Column.GetCellContent(selectedRow) as TextBlock)
                 .Text);
 
-            var enterResults = new EnterResultsForm(id1.ToString(), id2.ToString());
+            var enterResults = new EnterResultsForm(id1.ToString(), id2.ToString(), matchId);
             enterResults.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             enterResults.ShowDialog();
-            LoadMatchData();
+            LoadMatchDataAsync();
         }
     }
 }

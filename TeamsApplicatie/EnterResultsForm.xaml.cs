@@ -16,6 +16,7 @@ namespace TeamsApplicatie
     {
         private readonly string _id;
         private readonly string _idTeam1;
+        private readonly int _matchId;
         private DataSet _teams;
         private DataSet _doelpunten;
         private DataSet _matchInfo;
@@ -53,8 +54,9 @@ namespace TeamsApplicatie
             }
         }
 
-        public EnterResultsForm(string id1, string id2) : this()
+        public EnterResultsForm(string id1, string id2, int matchId) : this()
         {
+            _matchId = matchId;
             _id = id1;
             _idTeam1 = id2;
             LoadData();
@@ -90,7 +92,7 @@ namespace TeamsApplicatie
                 var querystring = "SELECT id, [Last Name] FROM Players WHERE TeamId = @Id";
 
                 var cmd = new SqlCommand(querystring, connection);
-                cmd.Parameters.AddWithValue("@id", _id);
+                cmd.Parameters.AddWithValue("@id", _idTeam1);
 
                 var dataAdapter = new SqlDataAdapter(cmd);
                 _playersTeam1 = new DataSet();
@@ -116,7 +118,7 @@ namespace TeamsApplicatie
                 var querystring = "SELECT id, [Last Name] FROM Players WHERE TeamId = @Id";
 
                 var cmd = new SqlCommand(querystring, connection);
-                cmd.Parameters.AddWithValue("@id", _idTeam1);
+                cmd.Parameters.AddWithValue("@id", _id);
 
                 var dataAdapter = new SqlDataAdapter(cmd);
                 _playersTeam2 = new DataSet();
@@ -166,7 +168,7 @@ namespace TeamsApplicatie
             using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             using (var cmd = new SqlCommand(queryString, connection))
             {
-                cmd.Parameters.AddWithValue("@id", _id);
+                cmd.Parameters.AddWithValue("@id", _matchId);
                 var sqlAdapter = new SqlDataAdapter(cmd);
                 sqlAdapter.Fill(matchData);
             }
@@ -193,29 +195,24 @@ namespace TeamsApplicatie
 
         private async Task EnterResults()
         {
-            if (textboxDoelpuntenTeam1.Text != string.Empty && textboxDoelpuntenTeam2.Text != string.Empty)
-            {
                 using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
                 using (var sqlCommand = connection.CreateCommand())
                 {
-                    var id = sqlCommand.Parameters.AddWithValue("@id", _id);
-                    var team1DoelpuntenParameter = sqlCommand.Parameters.AddWithValue("@TotalGoalsTeam1", textboxDoelpuntenTeam1.Text);
-                    var team2DoelpuntenParameter = sqlCommand.Parameters.AddWithValue("@TotalGoalsTeam2", textboxDoelpuntenTeam2.Text);
+                    var id = sqlCommand.Parameters.AddWithValue("@id", _matchId);
+                    var team1DoelpuntenParameter = sqlCommand.Parameters.AddWithValue("@TotalGoalsTeam1", Convert.ToInt16(textboxDoelpuntenTeam1.Text));
+                    var team2DoelpuntenParameter = sqlCommand.Parameters.AddWithValue("@TotalGoalsTeam2", Convert.ToInt16(textboxDoelpuntenTeam2.Text));
 
                     sqlCommand.CommandText =
                     $@"UPDATE [dbo].[MatchInfo]
                     SET
-                    [TotalGoalsTeam1] = {team1DoelpuntenParameter.ParameterName},
-                    [TotalGoalsTeam2] = {team2DoelpuntenParameter.ParameterName}
+                    [TotalGoalsTeam1] = {team1DoelpuntenParameter.Value},
+                    [TotalGoalsTeam2] = {team2DoelpuntenParameter.Value}
                     WHERE Id = @id";
                     sqlCommand.ExecuteNonQuery();
                 }
 
                 MessageBox.Show("Success!", "", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.Close();
-            }
-            else
-                MessageBox.Show("Veld mag niet leeg zijn!", "Velden moeten gevuld zijn", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private async Task AddPlayerPoints1()
@@ -224,6 +221,24 @@ namespace TeamsApplicatie
             using (var sqlCommand = connection.CreateCommand())
             {
                 var id = sqlCommand.Parameters.AddWithValue("@id", _id);
+
+                sqlCommand.CommandText =
+                    $@"UPDATE [dbo].[Players]
+                    SET
+                    PlayerGoals = PlayerGoals + 1
+                    WHERE Id = @id";
+                sqlCommand.ExecuteNonQuery();
+            }
+
+            MessageBox.Show("Added a Goal for this player! Don't forget to press the Save to save!", "", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private async Task AddPlayerPoints2()
+        {
+            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
+            using (var sqlCommand = connection.CreateCommand())
+            {
+                var id = sqlCommand.Parameters.AddWithValue("@id", _idTeam1);
 
                 sqlCommand.CommandText =
                     $@"UPDATE [dbo].[Players]
@@ -256,6 +271,8 @@ namespace TeamsApplicatie
             int doelpunten = Int16.Parse(textboxDoelpuntenTeam2.Text);
 
             textboxDoelpuntenTeam2.Text = (doelpunten + 1).ToString();
+
+            AddPlayerPoints2();
         }
     }
 }
