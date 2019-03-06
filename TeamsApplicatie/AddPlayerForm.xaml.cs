@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Text.RegularExpressions;
 
 namespace TeamsApplicatie
 {
@@ -17,18 +18,16 @@ namespace TeamsApplicatie
 
         private void TextBox_Age(object sender, TextChangedEventArgs e)
         {
-            if (System.Text.RegularExpressions.Regex.IsMatch(textBoxAge.Text, "[^0-9]"))
-            {
-                MessageBox.Show("Please enter only numbers.");
-                textBoxAge.Text = textBoxAge.Text.Remove(textBoxAge.Text.Length - 1);
-            }
+            if (!Regex.IsMatch(textBoxAge.Text, "[^0-9]")) return;
+            MessageBox.Show("Please enter only numbers.");
+            textBoxAge.Text = textBoxAge.Text.Remove(textBoxAge.Text.Length - 1);
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
             try
             { 
-            AddaPlayer(_id);
+            AddaPlayer(_id).ConfigureAwait(true);
             }
             catch (Exception ex)
             {

@@ -8,24 +8,24 @@
         Title="Match Calendar" Height="450" Width="800">
     <DockPanel x:Name="cplForm">
 
-        <Button Content="Cancel" DockPanel.Dock="Bottom" Click="cancel_Click" HorizontalAlignment="Right" Margin="5" RenderTransformOrigin="0.473,-1.263">
+        <Button Content="Cancel" DockPanel.Dock="Bottom" Click="Cancel_Click" HorizontalAlignment="Right" Margin="5" RenderTransformOrigin="0.473,-1.263">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
 
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
-            <Button x:Name="buttonAddMatch" Content="Add Match" Click="addMatch_Click">
+            <Button x:Name="buttonAddMatch" Content="Add Match" Click="AddMatch_Click">
                 <Button.Effect>
                     <DropShadowEffect/>
                 </Button.Effect>
             </Button>
-            <Button x:Name="buttonEditMatch" Content="Edit Match" Click="editMatch_Click">
+            <Button x:Name="buttonEditMatch" Content="Edit Match" Click="EditMatch_Click">
                 <Button.Effect>
                     <DropShadowEffect/>
                 </Button.Effect>
             </Button>
-            <Button x:Name="buttonDeleteMatch" Content="Delete Match" Click="deleteMatch_Click">
+            <Button x:Name="buttonDeleteMatch" Content="Delete Match" Click="DeleteMatch_Click">
                 <Button.Effect>
                     <DropShadowEffect/>
                 </Button.Effect>
@@ -37,7 +37,7 @@
             </Button>
         </StackPanel>
 
-        <DataGrid x:Name="matchDataGrid" DockPanel.Dock="Top" ItemsSource="{Binding}" Background="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}" SelectionChanged="matchDataGrid_SelectionChanged" >
+        <DataGrid x:Name="matchDataGrid" DockPanel.Dock="Top" ItemsSource="{Binding}" Background="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}" SelectionChanged="MatchDataGrid_SelectionChanged" >
             <DataGrid.Effect>
                 <DropShadowEffect/>
             </DataGrid.Effect>

@@ -20,7 +20,16 @@ namespace TeamsApplicatie
         public MatchCalendarForm()
         {
             InitializeComponent();
-            LoadMatchDataAsync();
+            try
+            {
+                LoadMatchDataAsync().ConfigureAwait(true);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }
+
             buttonEditMatch.IsEnabled = false;
             buttonDeleteMatch.IsEnabled = false;
             buttonEnterResults.IsEnabled = false;
@@ -31,14 +40,22 @@ namespace TeamsApplicatie
             DataChanged?.Invoke();
         }
 
-        private void cancel_Click(object sender, RoutedEventArgs e)
+        private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
 
-        private async void addMatch_Click(object sender, RoutedEventArgs e)
+        private async void AddMatch_Click(object sender, RoutedEventArgs e)
         {
-            await AddMatchAsync().ConfigureAwait(true);
+            try
+            {
+                await AddMatchAsync().ConfigureAwait(true);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }
         }
 
         private async Task AddMatchAsync()
@@ -49,17 +66,25 @@ namespace TeamsApplicatie
             await LoadMatchDataAsync().ConfigureAwait(true);
         }
 
-        private void editMatch_Click(object sender, RoutedEventArgs e)
+        private void EditMatch_Click(object sender, RoutedEventArgs e)
         {
             ViewMatches();
         }
 
-        private void deleteMatch_Click(object sender, RoutedEventArgs e)
+        private void DeleteMatch_Click(object sender, RoutedEventArgs e)
         {
-            DeleteMatch();
+            try
+            {
+                DeleteMatch().ConfigureAwait(true);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }
         }
 
-        private void matchDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void MatchDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             buttonEditMatch.IsEnabled = true;
             buttonDeleteMatch.IsEnabled = true;
@@ -72,7 +97,7 @@ namespace TeamsApplicatie
             matchDataGrid.SelectionMode = DataGridSelectionMode.Single;
             matchDataGrid.IsReadOnly = true;
 
-            string querystring = @"SELECT MatchInfo.Id,
+            var querystring = @"SELECT MatchInfo.Id,
 			Team1.Id,
 			Team2.id,
             Team1.TeamName,
@@ -96,11 +121,10 @@ namespace TeamsApplicatie
 
         private async Task DeleteMatch()
         {
-            Object selectedRow = matchDataGrid.SelectedItem;
+            var selectedRow = matchDataGrid.SelectedItem;
             if (selectedRow != null)
             {
-                int id = Convert.ToInt32((matchDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)
-                    .Text);
+                var id = Convert.ToInt32((matchDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)?.Text);
 
                 if (MessageBox.Show("Weet u het zeker?", "", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
                 {
@@ -116,8 +140,12 @@ namespace TeamsApplicatie
                         sqlCommand.ExecuteNonQuery();
                     }
 
-                    itemSource.Delete(matchDataGrid.SelectedIndex);
-                    matchDataGrid.ItemsSource = itemSource;
+                    if (itemSource != null)
+                    {
+                        itemSource.Delete(matchDataGrid.SelectedIndex);
+                        matchDataGrid.ItemsSource = itemSource;
+                    }
+
                     buttonDeleteMatch.IsEnabled = false;
                     buttonEditMatch.IsEnabled = false;
                     buttonEnterResults.IsEnabled = false;
@@ -142,30 +170,26 @@ namespace TeamsApplicatie
 
         private void ViewMatches()
         {
-            Object selectedRow = matchDataGrid.SelectedItem;
-            int id = Convert.ToInt32((matchDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)
-                .Text);
+            var selectedRow = matchDataGrid.SelectedItem;
+            var id = Convert.ToInt32(((TextBlock) matchDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow))?.Text);
 
             var editMatch = new EditMatchForm(id.ToString());
             editMatch.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             editMatch.ShowDialog();
-            LoadMatchDataAsync();
+            LoadMatchDataAsync().ConfigureAwait(true);
         }
 
         private void enterResults_Click(object sender, RoutedEventArgs e)
         {
-            Object selectedRow = matchDataGrid.SelectedItem;
-            int matchId = Convert.ToInt32((matchDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)
-                .Text);
-            int id1 = Convert.ToInt32((matchDataGrid.SelectedCells[1].Column.GetCellContent(selectedRow) as TextBlock)
-                .Text);
-            int id2 = Convert.ToInt32((matchDataGrid.SelectedCells[2].Column.GetCellContent(selectedRow) as TextBlock)
-                .Text);
+            var selectedRow = matchDataGrid.SelectedItem;
+            var matchId = Convert.ToInt32((matchDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)?.Text);
+            var id1 = Convert.ToInt32((matchDataGrid.SelectedCells[1].Column.GetCellContent(selectedRow) as TextBlock)?.Text);
+            var id2 = Convert.ToInt32((matchDataGrid.SelectedCells[2].Column.GetCellContent(selectedRow) as TextBlock)?.Text);
 
             var enterResults = new EnterResultsForm(id1.ToString(), id2.ToString(), matchId);
             enterResults.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             enterResults.ShowDialog();
-            LoadMatchDataAsync();
+            LoadMatchDataAsync().ConfigureAwait(true);
         }
     }
 }

@@ -25,7 +25,15 @@ namespace TeamsApplicatie
         public EditTeamsForm(string id) : this()
         {
             _id = id;
-            LoadData();
+            try
+            {
+                LoadData().ConfigureAwait(true);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }
         }
 
         private async Task LoadData()
@@ -85,11 +93,6 @@ namespace TeamsApplicatie
         private void cancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
-        }
-
-        private void textboxTeamCoach_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
         }
 
         private async void Save_Click(object sender, RoutedEventArgs e)

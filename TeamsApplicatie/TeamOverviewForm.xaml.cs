@@ -17,44 +17,75 @@ namespace TeamsApplicatie
             buttonDeleteTeam.IsEnabled = false;
             buttonEditTeam.IsEnabled = false;
             buttonViewPlayers.IsEnabled = false;
-            LoadTeamData();
+            try
+            {
+                LoadTeamData().ConfigureAwait(true);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }
         }
 
         //View Players
-        private void buttonViewPlayers_Click(object sender, RoutedEventArgs e)
+        private void ButtonViewPlayers_Click(object sender, RoutedEventArgs e)
         {
             ViewPlayers();
         }
 
         //Add Team
-        private void addTeam_Click(object sender, RoutedEventArgs e)
+        private void AddTeam_Click(object sender, RoutedEventArgs e)
         {
-            AddTeam();
+            try
+            {
+                AddTeam();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }
         }
 
         //Edit Team
-        private void editTeam_Click(object sender, RoutedEventArgs e)
+        private void EditTeam_Click(object sender, RoutedEventArgs e)
         {
-            EditTeam();
+            try
+            {
+                EditTeam();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }
         }
 
         //Delete Team
-        private void deleteTeam_Click(object sender, RoutedEventArgs e)
+        private void DeleteTeam_Click(object sender, RoutedEventArgs e)
         {
-            DeleteTeam();
+            try
+            {
+                DeleteTeam().ConfigureAwait(true);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }
         }
 
-        private void cancel_Click(object sender, RoutedEventArgs e)
+        private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         //View Players
         private void ViewPlayers()
         {
-            Object selectedRow = teamDataGrid.SelectedItem;
-            int id = Convert.ToInt32((teamDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)
-                .Text);
+            var selectedRow = teamDataGrid.SelectedItem;
+            var id = Convert.ToInt32((teamDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)?.Text);
 
             var playerOverview = new ViewPlayersForm(id);
             playerOverview.WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -67,7 +98,7 @@ namespace TeamsApplicatie
             var addTeam = new AddTeam();
             addTeam.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             addTeam.ShowDialog();
-            LoadTeamData();
+            LoadTeamData().ConfigureAwait(true);
             buttonDeleteTeam.IsEnabled = false;
             buttonEditTeam.IsEnabled = false;
             buttonViewPlayers.IsEnabled = false;
@@ -76,27 +107,25 @@ namespace TeamsApplicatie
         //Edit Team
         private void EditTeam()
         {
-            Object selectedRow = teamDataGrid.SelectedItem;
-            if (selectedRow != null)
-            {
-                string id = (teamDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock).Text;
-                var team = teamDataGrid.SelectedCells[1].Item;
-                var editTeam = new EditTeamsForm(id);
-                editTeam.ShowDialog();
-                LoadTeamData();
-                buttonDeleteTeam.IsEnabled = false;
-                buttonEditTeam.IsEnabled = false;
-                buttonViewPlayers.IsEnabled = false;
-            }
+            var selectedRow = teamDataGrid.SelectedItem;
+            if (selectedRow == null) return;
+            var id = (teamDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)?.Text;
+            var team = teamDataGrid.SelectedCells[1].Item;
+            var editTeam = new EditTeamsForm(id);
+            editTeam.ShowDialog();
+            LoadTeamData().ConfigureAwait(true);
+            buttonDeleteTeam.IsEnabled = false;
+            buttonEditTeam.IsEnabled = false;
+            buttonViewPlayers.IsEnabled = false;
         }
 
         //Delete Team
         private async Task DeleteTeam()
         {
-            Object selectedRow = teamDataGrid.SelectedItem;
+            var selectedRow = teamDataGrid.SelectedItem;
             if (selectedRow != null)
             {
-                int id = Convert.ToInt32((teamDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock).Text);
+                var id = Convert.ToInt32((teamDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)?.Text);
 
                 if (MessageBox.Show("Weet u het zeker?", "", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
                 {
@@ -112,8 +141,12 @@ namespace TeamsApplicatie
                         sqlCommand.ExecuteNonQuery();
                     }
 
-                    itemSource.Delete(teamDataGrid.SelectedIndex);
-                    teamDataGrid.ItemsSource = itemSource;
+                    if (itemSource != null)
+                    {
+                        itemSource.Delete(teamDataGrid.SelectedIndex);
+                        teamDataGrid.ItemsSource = itemSource;
+                    }
+
                     buttonDeleteTeam.IsEnabled = false;
                     buttonEditTeam.IsEnabled = false;
                     buttonViewPlayers.IsEnabled = false;
@@ -141,7 +174,7 @@ namespace TeamsApplicatie
             teamDataGrid.SelectionMode = DataGridSelectionMode.Single;
             teamDataGrid.IsReadOnly = true;
 
-            string querystring = "SELECT * FROM dbo.TeamData";
+            var querystring = "SELECT * FROM dbo.TeamData";
 
             using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             {

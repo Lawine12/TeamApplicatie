@@ -9,7 +9,7 @@
     <DockPanel x:Name="cplForm">
         <Button Content="Save" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Save_Click"/>
         <StackPanel Height="100" Margin="20">
-            <ComboBox Height="20" Width="120" DisplayMemberPath="TeamName" SelectedValuePath="Id" SelectionChanged="ComboBox_SelectionChanged" x:Name="comboBoxEditTeam1"/>
+            <ComboBox Height="20" Width="120" DisplayMemberPath="TeamName" SelectedValuePath="Id" x:Name="comboBoxEditTeam1"/>
         </StackPanel>
         <StackPanel Margin="0,106,0,188">
             <DatePicker Height="25" VerticalAlignment="Top" Margin="10" Width="103" Name="EditMatchDatePicker"/>
@@ -18,7 +18,7 @@
         <StackPanel Height="100" Margin="20">
             <ComboBox Height="20" DisplayMemberPath="TeamName" SelectedValuePath="Id" Width="120" Name="comboBoxEditTeam2"/>
         </StackPanel>
-        <Button Content="Cancel" Click="cancel_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,5,5,5" RenderTransformOrigin="0.473,-1.263">
+        <Button Content="Cancel" Click="Cancel_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,5,5,5" RenderTransformOrigin="0.473,-1.263">
         </Button>
 
     </DockPanel>

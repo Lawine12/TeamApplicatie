@@ -8,13 +8,13 @@
         Title="Results Updated" Height="450" Width="800">
     <DockPanel x:Name="ResultUpdateForm">
 
-        <Button Content="Cancel" DockPanel.Dock="Bottom" Click="cancel_Click" HorizontalAlignment="Right" Margin="5" RenderTransformOrigin="0.473,-1.263">
+        <Button Content="Cancel" DockPanel.Dock="Bottom" Click="Cancel_Click" HorizontalAlignment="Right" Margin="5" RenderTransformOrigin="0.473,-1.263">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
 
-        <DataGrid x:Name="resultDataGrid" DockPanel.Dock="Top" ItemsSource="{Binding}" Background="#FFB9B9B9" SelectionChanged="resultDataGrid_SelectionChanged" >
+        <DataGrid x:Name="resultDataGrid" DockPanel.Dock="Top" ItemsSource="{Binding}" Background="#FFB9B9B9" >
             <DataGrid.Effect>
                 <DropShadowEffect/>
             </DataGrid.Effect>

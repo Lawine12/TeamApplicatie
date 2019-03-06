@@ -1,21 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml;
-using System.Xml.Serialization;
 using System.IO;
 
 namespace TeamsApplicatie
@@ -31,13 +19,22 @@ namespace TeamsApplicatie
         public ViewResultsForm()
         {
             InitializeComponent();
-            LoadMatchData();
-            SerializeDataTableAsync("Match Information.xml", _matchInfo);
+            try
+            {
+                LoadMatchData();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }
+
+            SerializeDataTableAsync("Match Information.xml", _matchInfo).ConfigureAwait(true);
         }
 
         private async Task SerializeDataTableAsync(string filename, DataSet matchInfo)
         {
-            string querystring = @"SELECT MatchInfo.Id,
+            var querystring = @"SELECT MatchInfo.Id,
             Team1.TeamName,
             Team2.TeamName,
             MatchInfo.MatchDate,
@@ -58,14 +55,9 @@ namespace TeamsApplicatie
             }
         }
 
-        private void cancel_Click(object sender, RoutedEventArgs e)
+        private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
-        }
-
-        private void resultDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
 
         private async void LoadMatchData()

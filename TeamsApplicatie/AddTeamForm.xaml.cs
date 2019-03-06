@@ -13,16 +13,6 @@ namespace TeamsApplicatie
             textBoxTeamName.Focus();
         }
 
-        private void TextBox_TeamName(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
-        private void TextBox_TeamCoach(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
         private void Add_Click(object sender, RoutedEventArgs e)
         {
             try

@@ -8,7 +8,7 @@
         Title="View Players" Height="450" Width="800">
     <DockPanel x:Name="cplForm">
 
-        <Button Content="Cancel" DockPanel.Dock="Bottom" Click="cancel_Click" HorizontalAlignment="Right" Margin="5" RenderTransformOrigin="0.473,-1.263">
+        <Button Content="Cancel" DockPanel.Dock="Bottom" Click="Cancel_Click" HorizontalAlignment="Right" Margin="5" RenderTransformOrigin="0.473,-1.263">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
@@ -35,6 +35,11 @@
                     <DropShadowEffect/>
                 </Button.Effect>
             </Button>
+            <Button x:Name="buttonPlayerStatsUpdated" Content="Player Stats Updated" Click="playerStatsUpdated_Click">
+                <Button.Effect>
+                    <DropShadowEffect/>
+                </Button.Effect>
+            </Button>
         </StackPanel>
 
         <DataGrid x:Name="playerDataGrid" DockPanel.Dock="Top" ItemsSource="{Binding}" Background="#FFB9B9B9" SelectionChanged="playerDataGrid_SelectionChanged" >
@@ -42,6 +47,7 @@
                 <DropShadowEffect/>
             </DataGrid.Effect>
         </DataGrid>
+        
 
     </DockPanel>
 </Window>

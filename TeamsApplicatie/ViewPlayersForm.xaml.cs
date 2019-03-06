@@ -11,6 +11,9 @@ namespace TeamsApplicatie
     {
         private DataTable _playerData;
         private readonly int _id;
+        private PlayerStatsForm _playerStatsform;
+        private EditPlayerForm _editPlayerForm;
+        
 
         public ViewPlayersForm(int id)
         {
@@ -19,7 +22,22 @@ namespace TeamsApplicatie
             buttonDeletePlayer.IsEnabled = false;
             buttonEditPlayer.IsEnabled = false;
             buttonPlayerStats.IsEnabled = false;
-            LoadData();
+            try
+            {
+                LoadData().ConfigureAwait(true);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }
+        }
+
+        private void ShowResults(int id)
+        {
+            if (_playerStatsform == null)
+                _playerStatsform = new PlayerStatsForm(id);
+            _playerStatsform.Show();
         }
 
         private void playerDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -31,20 +49,44 @@ namespace TeamsApplicatie
 
         private void addPlayer_Click(object sender, RoutedEventArgs e)
         {
-            AddPlayer();
+            try
+            {
+                AddPlayer();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }
         }
 
         private void deletePlayer_Click(object sender, RoutedEventArgs e)
         {
-            DeletePlayer();
+            try
+            {
+                DeletePlayer().ConfigureAwait(true);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }
         }
 
         private void editPlayer_Click(object sender, RoutedEventArgs e)
         {
-            EditPlayer();
+            try
+            {
+                EditPlayer();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }
         }
 
-        private void cancel_Click(object sender, RoutedEventArgs e)
+        private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
@@ -52,43 +94,46 @@ namespace TeamsApplicatie
         //Add Player
         private void AddPlayer()
         {
-            var addPlayer = new AddPlayerForm(_id);
-            addPlayer.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            var addPlayer = new AddPlayerForm(_id)
+            {
+                WindowStartupLocation = WindowStartupLocation.CenterScreen
+            };
             addPlayer.ShowDialog();
-            LoadData();
+            LoadData().ConfigureAwait(true);
         }
 
         //Edit Player
         private void EditPlayer()
         {
-            Object selectedRow = playerDataGrid.SelectedItem;
-            if (selectedRow != null)
-            {
-                string id = (playerDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock).Text;
-                var player = playerDataGrid.SelectedCells[1].Item;
-                var editPlayer = new EditPlayerForm(id);
-                editPlayer.ShowDialog();
-                LoadData();
-                buttonDeletePlayer.IsEnabled = false;
-                buttonEditPlayer.IsEnabled = false;
-                buttonPlayerStats.IsEnabled = false;
-            }
+            var selectedRow = playerDataGrid.SelectedItem;
+            if (selectedRow == null) return;
+            var id = (playerDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)?.Text;
+            var player = playerDataGrid.SelectedCells[1].Item;
+            var editPlayer = new EditPlayerForm(id);
+            editPlayer.ShowDialog();
+            LoadData().ConfigureAwait(true);
+            buttonDeletePlayer.IsEnabled = false;
+            buttonEditPlayer.IsEnabled = false;
+            buttonPlayerStats.IsEnabled = false;
         }
 
         //Delete Player
         private async Task DeletePlayer()
         {
-            Object selectedRow = playerDataGrid.SelectedItem;
+            var selectedRow = playerDataGrid.SelectedItem;
             if (selectedRow != null)
             {
-                string id = (playerDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock).Text;
+                var id = (playerDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)?.Text;
 
                 if (MessageBox.Show("Weet u het zeker?", "", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
                 {
-                    var itemSource = playerDataGrid.ItemsSource as DataView;
 
-                    itemSource.Delete(playerDataGrid.SelectedIndex);
-                    playerDataGrid.ItemsSource = itemSource;
+                    if (playerDataGrid.ItemsSource is DataView itemSource)
+                    {
+                        itemSource.Delete(playerDataGrid.SelectedIndex);
+                        playerDataGrid.ItemsSource = itemSource;
+                    }
+
                     buttonDeletePlayer.IsEnabled = false;
                     buttonEditPlayer.IsEnabled = false;
                     buttonPlayerStats.IsEnabled = false;
@@ -139,18 +184,26 @@ namespace TeamsApplicatie
                 playerDataGrid.DataContext = _playerData;
                 playerDataGrid.ItemsSource = _playerData.DefaultView;
             }
+            
         }
 
         private void playerStats_Click(object sender, RoutedEventArgs e)
         {
-            Object selectedRow = playerDataGrid.SelectedItem;
-            if (selectedRow != null)
-            {
-                int id = Convert.ToInt32((playerDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock).Text);
-                var playerStats = new PlayerStatsForm(id);
-                playerStats.ShowDialog();
-                playerStats.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            }
+            var selectedRow = playerDataGrid.SelectedItem;
+            if (selectedRow == null) return;
+            var id = Convert.ToInt32((playerDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)?.Text);
+            var playerStats = new PlayerStatsForm(id);
+            playerStats.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            playerStats.DataChanged += () => { _playerStatsform?.LoadData(); };
+            playerStats.ShowDialog();
+        }
+
+        private void playerStatsUpdated_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedRow = playerDataGrid.SelectedItem;
+            if (selectedRow == null) return;
+            var id = Convert.ToInt32((playerDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)?.Text);
+            ShowResults(id);
         }
     }
 }

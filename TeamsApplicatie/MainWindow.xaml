@@ -10,10 +10,10 @@
         <Grid.Effect>
             <DropShadowEffect/>
         </Grid.Effect>
-        <Button Content="View Teams" HorizontalAlignment="Left" Margin="23,14,0,0" VerticalAlignment="Top" Width="139" Height="29" Click="teamsbekijken_Click"/>
+        <Button Content="View Teams" HorizontalAlignment="Left" Margin="23,14,0,0" VerticalAlignment="Top" Width="139" Height="29" Click="Teamsbekijken_Click"/>
         <Button Content="Match calendar" HorizontalAlignment="Left" Margin="23,48,0,0" VerticalAlignment="Top" Width="139" Height="29" Click="WedstrijdKalender_Click"/>
         <Button Content="View results" HorizontalAlignment="Left" Margin="23,82,0,0" VerticalAlignment="Top" Width="139" Height="29" Click="UitslagenBekijken_Click"/>
-        <Button Content="Exit" HorizontalAlignment="Left" Margin="155,176,0,0" VerticalAlignment="Top" Width="73" Height="29" Click="exit_Click"/>
+        <Button Content="Exit" HorizontalAlignment="Left" Margin="155,176,0,0" VerticalAlignment="Top" Width="73" Height="29" Click="Exit_Click"/>
         <Button Content="View results Updated" HorizontalAlignment="Left" Margin="23,116,0,0" VerticalAlignment="Top" Width="139" Height="29" Click="UitslagenUpdated_Click"/>
 
     </Grid>

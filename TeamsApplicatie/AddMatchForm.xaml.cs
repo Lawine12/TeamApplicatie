@@ -18,8 +18,8 @@ namespace TeamsApplicatie
         public AddMatchForm()
         {
             InitializeComponent();
-            loadCombo1();
-            loadCombo2();
+            LoadCombo1().ConfigureAwait(true);
+            LoadCombo2().ConfigureAwait(true);
         }
 
         private void cancel_Click(object sender, RoutedEventArgs e)
@@ -27,12 +27,7 @@ namespace TeamsApplicatie
             Close();
         }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        public async Task loadCombo1()
+        public async Task LoadCombo1()
         {
             using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             {
@@ -56,7 +51,7 @@ namespace TeamsApplicatie
             }
         }
 
-        public async Task loadCombo2()
+        public async Task LoadCombo2()
         {
             using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             {
@@ -82,24 +77,22 @@ namespace TeamsApplicatie
 
         public async void Add_Click(object sender, RoutedEventArgs e)
         {
-            if (comboBoxTeam1.Text != string.Empty && MatchDatePicker.Text != string.Empty &&
-                comboBoxTeam2.Text != string.Empty)
+            if (comboBoxTeam1.Text == string.Empty || MatchDatePicker.Text == string.Empty ||
+                comboBoxTeam2.Text == string.Empty) return;
+            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
+            using (var sqlCommand = connection.CreateCommand())
             {
-                using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
-                using (var sqlCommand = connection.CreateCommand())
-                {
-                    var team1 = sqlCommand.Parameters.AddWithValue("@Team1ID", comboBoxTeam1.SelectedValue);
-                    var team2 = sqlCommand.Parameters.AddWithValue("@Team2ID", comboBoxTeam2.SelectedValue);
-                    var matchDate = sqlCommand.Parameters.AddWithValue("@MatchDate", MatchDatePicker.Text);
+                var team1 = sqlCommand.Parameters.AddWithValue("@Team1ID", comboBoxTeam1.SelectedValue);
+                var team2 = sqlCommand.Parameters.AddWithValue("@Team2ID", comboBoxTeam2.SelectedValue);
+                var matchDate = sqlCommand.Parameters.AddWithValue("@MatchDate", MatchDatePicker.Text);
 
-                    sqlCommand.CommandText =
-                        $@"INSERT INTO [dbo].[MatchInfo]
+                sqlCommand.CommandText =
+                    $@"INSERT INTO [dbo].[MatchInfo]
                     ([Team1ID], [Team2ID], [MatchDate])
                     VALUES ({team1}, {team2}, {matchDate})";
-                    sqlCommand.ExecuteNonQuery();
-                }
-                Close();
+                sqlCommand.ExecuteNonQuery();
             }
+            Close();
 
         }
     }

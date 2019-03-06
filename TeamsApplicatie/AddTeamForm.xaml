@@ -9,9 +9,9 @@
     <DockPanel>
         <StackPanel Orientation="Vertical" DockPanel.Dock="Top" Height="317">
             <Label Margin="350,50, 0, 0">Team name</Label>
-            <TextBox x:Name="textBoxTeamName" Margin="180,0" TextChanged="TextBox_TeamName"/>
+            <TextBox x:Name="textBoxTeamName" Margin="180,0"/>
             <Label Margin="350, 0, 0, 0">Team Coach</Label>
-            <TextBox x:Name="textBoxTeamCoach" Margin="180,0" TextChanged="TextBox_TeamCoach"/>
+            <TextBox x:Name="textBoxTeamCoach" Margin="180,0"/>
         </StackPanel>
         <Grid>
             <Button Content="Cancel" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="Cancel_Click"/>

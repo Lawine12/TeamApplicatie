@@ -22,7 +22,7 @@ namespace TeamsApplicatie
             _id = id;
             try
             { 
-            LoadData();
+            LoadData().ConfigureAwait(true);
             }
             catch (Exception ex)
             {
@@ -33,11 +33,9 @@ namespace TeamsApplicatie
 
         private void TextBox_Age(object sender, TextChangedEventArgs e)
         {
-            if (System.Text.RegularExpressions.Regex.IsMatch(textBoxAge.Text, "[^0-9]"))
-            {
-                MessageBox.Show("Please enter only numbers.");
-                textBoxAge.Text = textBoxAge.Text.Remove(textBoxAge.Text.Length - 1);
-            }
+            if (!System.Text.RegularExpressions.Regex.IsMatch(textBoxAge.Text, "[^0-9]")) return;
+            MessageBox.Show("Please enter only numbers.");
+            textBoxAge.Text = textBoxAge.Text.Remove(textBoxAge.Text.Length - 1);
         }
 
         private async Task LoadData()
@@ -71,7 +69,7 @@ namespace TeamsApplicatie
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            EditPlayer(_id);
+            EditPlayer(_id).ConfigureAwait(true);
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)

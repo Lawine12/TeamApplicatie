@@ -33,7 +33,7 @@ namespace TeamsApplicatie
 
         private async Task SerializeDataTableAsync(string filename, DataSet matchInfo)
         {
-            string querystring = @"SELECT MatchInfo.Id,
+            var querystring = @"SELECT MatchInfo.Id,
             Team1.TeamName,
             Team2.TeamName,
             MatchInfo.MatchDate,
@@ -59,9 +59,18 @@ namespace TeamsApplicatie
             _matchId = matchId;
             _id = id1;
             _idTeam1 = id2;
-            LoadData();
-            loadCombo1();
-            loadCombo2();
+            try
+            {
+                LoadData();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }
+
+            LoadCombo1().ConfigureAwait(true);
+            LoadCombo2().ConfigureAwait(true);
             textboxDoelpuntenTeam1.IsEnabled = false;
             textboxDoelpuntenTeam2.IsEnabled = false;
         }
@@ -70,8 +79,8 @@ namespace TeamsApplicatie
         {
             try
             {
-                EnterResults();
-                SerializeDataTableAsync("Match Information.xml", _matchInfo);
+                EnterResults().ConfigureAwait(true);
+                SerializeDataTableAsync("Match Information.xml", _matchInfo).ConfigureAwait(true);
             }
             catch (Exception ex)
             {
@@ -80,12 +89,12 @@ namespace TeamsApplicatie
             }
         }
 
-        private void cancel_Click(object sender, RoutedEventArgs e)
+        private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
 
-        public async Task loadCombo1()
+        public async Task LoadCombo1()
         {
             using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             {
@@ -111,7 +120,7 @@ namespace TeamsApplicatie
             }
         }
 
-        public async Task loadCombo2()
+        public async Task LoadCombo2()
         {
             using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             {
@@ -140,16 +149,13 @@ namespace TeamsApplicatie
         private async void LoadData()
         {
             var matchData = await GetDataTable();
-            if (matchData.Rows.Count == 1)
-            {
-                var row = matchData.Rows[0];
-                textNameTeam1.Text = row[1] as string;
-                textNameTeam2.Text = row[2] as string;
-                ResultsDatePicker.Text = row["MatchDate"].ToString();
-                textboxDoelpuntenTeam1.Text = row["TotalGoalsTeam1"].ToString();
-                textboxDoelpuntenTeam2.Text = row["TotalGoalsTeam2"].ToString();
-
-            }
+            if (matchData.Rows.Count != 1) return;
+            var row = matchData.Rows[0];
+            textNameTeam1.Text = row[1] as string;
+            textNameTeam2.Text = row[2] as string;
+            ResultsDatePicker.Text = row["MatchDate"].ToString();
+            textboxDoelpuntenTeam1.Text = row["TotalGoalsTeam1"].ToString();
+            textboxDoelpuntenTeam2.Text = row["TotalGoalsTeam2"].ToString();
         }
 
         private async Task<DataTable> GetDataTable()
@@ -177,20 +183,16 @@ namespace TeamsApplicatie
 
         private void TextBoxDoelpuntenTeam1_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (System.Text.RegularExpressions.Regex.IsMatch(textboxDoelpuntenTeam1.Text, "[^0-9]"))
-            {
-                MessageBox.Show("Please enter only numbers.");
-                textboxDoelpuntenTeam1.Text = textboxDoelpuntenTeam1.Text.Remove(textboxDoelpuntenTeam1.Text.Length - 1);
-            }
+            if (!System.Text.RegularExpressions.Regex.IsMatch(textboxDoelpuntenTeam1.Text, "[^0-9]")) return;
+            MessageBox.Show("Please enter only numbers.");
+            textboxDoelpuntenTeam1.Text = textboxDoelpuntenTeam1.Text.Remove(textboxDoelpuntenTeam1.Text.Length - 1);
         }
 
         private void TextBoxDoelpuntenTeam2_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (System.Text.RegularExpressions.Regex.IsMatch(textboxDoelpuntenTeam2.Text, "[^0-9]"))
-            {
-                MessageBox.Show("Please enter only numbers.");
-                textboxDoelpuntenTeam2.Text = textboxDoelpuntenTeam2.Text.Remove(textboxDoelpuntenTeam2.Text.Length - 1);
-            }
+            if (!System.Text.RegularExpressions.Regex.IsMatch(textboxDoelpuntenTeam2.Text, "[^0-9]")) return;
+            MessageBox.Show("Please enter only numbers.");
+            textboxDoelpuntenTeam2.Text = textboxDoelpuntenTeam2.Text.Remove(textboxDoelpuntenTeam2.Text.Length - 1);
         }
 
         private async Task EnterResults()
@@ -259,20 +261,36 @@ namespace TeamsApplicatie
 
         private void ButtonDoelpuntTeam1toevoegen_Click(object sender, RoutedEventArgs e)
         {
-            int doelpunten = Int16.Parse(textboxDoelpuntenTeam1.Text);
+            int doelpunten = short.Parse(textboxDoelpuntenTeam1.Text);
 
             textboxDoelpuntenTeam1.Text = (doelpunten + 1).ToString();
 
-            AddPlayerPoints1();
+            try
+            {
+                AddPlayerPoints1().ConfigureAwait(true);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }
         }
 
         private void ButtonDoelpuntTeam2toevoegen_Click(object sender, RoutedEventArgs e)
         {
-            int doelpunten = Int16.Parse(textboxDoelpuntenTeam2.Text);
+            int doelpunten = short.Parse(textboxDoelpuntenTeam2.Text);
 
             textboxDoelpuntenTeam2.Text = (doelpunten + 1).ToString();
 
-            AddPlayerPoints2();
+            try
+            {
+                AddPlayerPoints2().ConfigureAwait(true);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,17 +17,21 @@ namespace TeamsApplicatie
         public ResultsUpdateForm()
         {
             InitializeComponent();
-            LoadMatchData();
+
+            try
+            {
+                LoadMatchData();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }
         }
 
-        private void cancel_Click(object sender, RoutedEventArgs e)
+        private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
-        }
-
-        private void resultDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
 
         public async void LoadMatchData()

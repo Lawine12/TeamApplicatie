@@ -4,8 +4,8 @@ namespace TeamsApplicatie
 {
     public partial class MainWindow : Window
     {
-        private ResultsUpdateForm _ResultsUpdateForm;
-        private MatchCalendarForm _MatchCalendarForm;
+        private ResultsUpdateForm _resultsUpdateForm;
+        private MatchCalendarForm _matchCalendarForm;
 
         public MainWindow()
         {
@@ -13,37 +13,34 @@ namespace TeamsApplicatie
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
 
-        private void teamsbekijken_Click(object sender, RoutedEventArgs e)
+        private void Teamsbekijken_Click(object sender, RoutedEventArgs e)
         {
-            var teamOverview = new TeamOverviewForm();
-            teamOverview.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            var teamOverview = new TeamOverviewForm {WindowStartupLocation = WindowStartupLocation.CenterScreen};
             teamOverview.ShowDialog();
         }
 
         private void ShowResults()
         {
-            if (_ResultsUpdateForm == null)
-                _ResultsUpdateForm = new ResultsUpdateForm();
-            _ResultsUpdateForm.Show();
+            if (_resultsUpdateForm == null)
+                _resultsUpdateForm = new ResultsUpdateForm();
+            _resultsUpdateForm.Show();
         }
 
-        private void exit_Click(object sender, RoutedEventArgs e)
+        private void Exit_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
 
         private void UitslagenBekijken_Click(object sender, RoutedEventArgs e)
         {
-            var matchResults = new ViewResultsForm();
-            matchResults.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            var matchResults = new ViewResultsForm {WindowStartupLocation = WindowStartupLocation.CenterScreen};
             matchResults.Show();
         }
 
         private void WedstrijdKalender_Click(object sender, RoutedEventArgs e)
         {
-            var kalender = new MatchCalendarForm();
-            kalender.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            kalender.DataChanged += () => { _ResultsUpdateForm?.LoadMatchData(); };
+            var kalender = new MatchCalendarForm {WindowStartupLocation = WindowStartupLocation.CenterScreen};
+            kalender.DataChanged += () => { _resultsUpdateForm?.LoadMatchData(); };
             kalender.ShowDialog();
         }
 

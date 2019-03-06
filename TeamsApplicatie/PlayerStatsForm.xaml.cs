@@ -16,6 +16,8 @@ namespace TeamsApplicatie
         private DataTable _playerInformation;
         private DataTable _teamInformation;
         private DataTable _playerStats;
+        public delegate void DataChangedHandler();
+        public event DataChangedHandler DataChanged = null;
 
         public PlayerStatsForm()
         {
@@ -35,8 +37,8 @@ namespace TeamsApplicatie
             _id = id;
             try
             {
-                LoadData();
-                LoadTeamData(id);
+                LoadData().ConfigureAwait(true);
+                LoadTeamData(id).ConfigureAwait(true);
             }
             catch (Exception ex)
             {
@@ -45,7 +47,12 @@ namespace TeamsApplicatie
             }
         }
 
-        private async Task LoadData()
+        protected virtual void OnDataChanged()
+        {
+            DataChanged?.Invoke();
+        }
+
+        public async Task LoadData()
         {
             var playerData = await GetPlayerDataTable();
             var teamData = await GetTeamDataTable();
@@ -60,6 +67,7 @@ namespace TeamsApplicatie
                 textboxPlayerAge.Text = playerRow["Age"].ToString();
                 textboxPlayerPosition.Text = (string)playerRow["Position"];
                 textboxCurrentTeam.Text = (string) teamRow["TeamName"];
+                OnDataChanged();
             }
         }
 
@@ -88,14 +96,15 @@ namespace TeamsApplicatie
                 var sqlAdapter = new SqlDataAdapter(cmd);
                 sqlAdapter.Fill(_teamInformation);
             }
+            OnDataChanged();
             return _teamInformation;
         }
 
-        private async Task LoadTeamData(int id)
+        public async Task LoadTeamData(int id)
         {
-            Object selectedRow = playerStatsDatagrid.SelectedItem;
+            var selectedRow = playerStatsDatagrid.SelectedItem;
             
-            string querystring = @"SELECT MatchInfo.Id,
+            var querystring = @"SELECT MatchInfo.Id,
             Team1.TeamName,
             Team2.TeamName,
             MatchInfo.MatchDate,
@@ -120,11 +129,7 @@ namespace TeamsApplicatie
             playerStatsDatagrid.CanUserAddRows = false;
             playerStatsDatagrid.SelectionMode = DataGridSelectionMode.Single;
             playerStatsDatagrid.IsReadOnly = true;
-        }
-
-        private void PlayerStatsDatagrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
+            OnDataChanged();
         }
     }
 }

@@ -28,7 +28,7 @@
             <TextBlock Text="Doelpunten" Margin="0,0,0,0"/>
             <TextBox Name="textboxDoelpuntenTeam2" Height="20" TextWrapping="Wrap" Width="120" TextChanged="TextBoxDoelpuntenTeam2_TextChanged"/>
         </StackPanel>
-        <Button Content="Cancel" Click="cancel_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,5,5,5" RenderTransformOrigin="0.473,-1.263">
+        <Button Content="Cancel" Click="Cancel_Click" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,5,5,5" RenderTransformOrigin="0.473,-1.263">
         </Button>
 
 
