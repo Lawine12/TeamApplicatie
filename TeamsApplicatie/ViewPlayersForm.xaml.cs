@@ -33,13 +33,6 @@ namespace TeamsApplicatie
             }
         }
 
-        private void ShowResults(int id)
-        {
-            if (_playerStatsform == null)
-                _playerStatsform = new PlayerStatsForm(id);
-            _playerStatsform.Show();
-        }
-
         private void playerDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             buttonEditPlayer.IsEnabled = true;
@@ -73,11 +66,11 @@ namespace TeamsApplicatie
             }
         }
 
-        private void editPlayer_Click(object sender, RoutedEventArgs e)
+        private async void editPlayer_ClickAsync(object sender, RoutedEventArgs e)
         {
             try
             {
-                EditPlayer();
+                await EditPlayer();
             }
             catch (Exception ex)
             {
@@ -103,7 +96,7 @@ namespace TeamsApplicatie
         }
 
         //Edit Player
-        private void EditPlayer()
+        private async Task EditPlayer()
         {
             var selectedRow = playerDataGrid.SelectedItem;
             if (selectedRow == null) return;
@@ -111,7 +104,8 @@ namespace TeamsApplicatie
             var player = playerDataGrid.SelectedCells[1].Item;
             var editPlayer = new EditPlayerForm(id);
             editPlayer.ShowDialog();
-            LoadData().ConfigureAwait(true);
+            await LoadData().ConfigureAwait(true);
+            if (_playerStatsform != null) await _playerStatsform.LoadData();
             buttonDeletePlayer.IsEnabled = false;
             buttonEditPlayer.IsEnabled = false;
             buttonPlayerStats.IsEnabled = false;
@@ -195,15 +189,7 @@ namespace TeamsApplicatie
             var playerStats = new PlayerStatsForm(id);
             playerStats.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             playerStats.DataChanged += () => { _playerStatsform?.LoadData(); };
-            playerStats.ShowDialog();
-        }
-
-        private void playerStatsUpdated_Click(object sender, RoutedEventArgs e)
-        {
-            var selectedRow = playerDataGrid.SelectedItem;
-            if (selectedRow == null) return;
-            var id = Convert.ToInt32((playerDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)?.Text);
-            ShowResults(id);
+            playerStats.Show();
         }
     }
 }

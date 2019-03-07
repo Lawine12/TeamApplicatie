@@ -67,7 +67,6 @@ namespace TeamsApplicatie
                 textboxPlayerAge.Text = playerRow["Age"].ToString();
                 textboxPlayerPosition.Text = (string)playerRow["Position"];
                 textboxCurrentTeam.Text = (string) teamRow["TeamName"];
-                OnDataChanged();
             }
         }
 
@@ -96,7 +95,6 @@ namespace TeamsApplicatie
                 var sqlAdapter = new SqlDataAdapter(cmd);
                 sqlAdapter.Fill(_teamInformation);
             }
-            OnDataChanged();
             return _teamInformation;
         }
 
