@@ -35,11 +35,11 @@ namespace TeamsApplicatie
         }
 
         //Add Team
-        private void AddTeam_Click(object sender, RoutedEventArgs e)
+        private async void AddTeam_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                AddTeam();
+                await AddTeam();
             }
             catch (Exception ex)
             {
@@ -63,16 +63,19 @@ namespace TeamsApplicatie
         }
 
         //Delete Team
-        private void DeleteTeam_Click(object sender, RoutedEventArgs e)
+        private async void DeleteTeam_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                DeleteTeam().ConfigureAwait(true);
+                await DeleteTeam();
+            }
+            catch (SqlException ex) when(ex.Number == 547)
+            {
+                MessageBox.Show("Can't delete the team when it still has players and/or match data", "", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
-                throw;
+                MessageBox.Show(ex.Message, "", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -90,15 +93,18 @@ namespace TeamsApplicatie
             var playerOverview = new ViewPlayersForm(id);
             playerOverview.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             playerOverview.ShowDialog();
+            buttonDeleteTeam.IsEnabled = false;
+            buttonEditTeam.IsEnabled = false;
+            buttonViewPlayers.IsEnabled = false;
         }
 
         //Add Team
-        private void AddTeam()
+        private async Task AddTeam()
         {
             var addTeam = new AddTeam();
             addTeam.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             addTeam.ShowDialog();
-            LoadTeamData().ConfigureAwait(true);
+            await LoadTeamData();
             buttonDeleteTeam.IsEnabled = false;
             buttonEditTeam.IsEnabled = false;
             buttonViewPlayers.IsEnabled = false;
@@ -151,20 +157,9 @@ namespace TeamsApplicatie
                     buttonEditTeam.IsEnabled = false;
                     buttonViewPlayers.IsEnabled = false;
                 }
-                else
-                {
-                    return;
-                }
-
-                var queryString = "SELECT * FROM dbo.TeamData";
-                using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
-                {
-                    var cmd = new SqlCommand(queryString, connection);
-                    var dataAdapter = new SqlDataAdapter(cmd);
-                    var cmdBuilder = new SqlCommandBuilder(dataAdapter);
-
-                    dataAdapter.Update(_teamData);
-                }
+                buttonDeleteTeam.IsEnabled = false;
+                buttonEditTeam.IsEnabled = false;
+                buttonViewPlayers.IsEnabled = false;
             }
         }
 
@@ -174,7 +169,7 @@ namespace TeamsApplicatie
             teamDataGrid.SelectionMode = DataGridSelectionMode.Single;
             teamDataGrid.IsReadOnly = true;
 
-            var querystring = "SELECT * FROM dbo.TeamData";
+            var querystring = "SELECT Id, TeamName, TeamCoach FROM dbo.TeamData";
 
             using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             {

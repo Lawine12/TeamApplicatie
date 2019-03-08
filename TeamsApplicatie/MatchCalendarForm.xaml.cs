@@ -190,6 +190,9 @@ namespace TeamsApplicatie
             enterResults.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             enterResults.ShowDialog();
             LoadMatchDataAsync().ConfigureAwait(true);
+            buttonDeleteMatch.IsEnabled = false;
+            buttonEditMatch.IsEnabled = false;
+            buttonEnterResults.IsEnabled = false;
         }
     }
 }

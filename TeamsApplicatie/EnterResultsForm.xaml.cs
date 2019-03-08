@@ -225,7 +225,7 @@ namespace TeamsApplicatie
                 var id = sqlCommand.Parameters.AddWithValue("@id", _id);
 
                 sqlCommand.CommandText =
-                    $@"UPDATE [dbo].[Players]
+                    @"UPDATE [dbo].[Players]
                     SET
                     PlayerGoals = PlayerGoals + 1
                     WHERE Id = @id";
@@ -243,7 +243,7 @@ namespace TeamsApplicatie
                 var id = sqlCommand.Parameters.AddWithValue("@id", _idTeam1);
 
                 sqlCommand.CommandText =
-                    $@"UPDATE [dbo].[Players]
+                    @"UPDATE [dbo].[Players]
                     SET
                     PlayerGoals = PlayerGoals + 1
                     WHERE Id = @id";

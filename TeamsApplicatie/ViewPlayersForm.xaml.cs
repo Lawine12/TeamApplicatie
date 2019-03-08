@@ -186,10 +186,9 @@ namespace TeamsApplicatie
             var selectedRow = playerDataGrid.SelectedItem;
             if (selectedRow == null) return;
             var id = Convert.ToInt32((playerDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)?.Text);
-            var playerStats = new PlayerStatsForm(id);
-            playerStats.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            playerStats.DataChanged += () => { _playerStatsform?.LoadData(); };
-            playerStats.Show();
+            _playerStatsform = new PlayerStatsForm(id);
+            _playerStatsform.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            _playerStatsform.Show();
         }
     }
 }
