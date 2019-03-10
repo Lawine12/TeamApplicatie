@@ -71,7 +71,7 @@ namespace TeamsApplicatie
             }
             catch (SqlException ex) when(ex.Number == 547)
             {
-                MessageBox.Show("Can't delete the team when it still has players and/or match data", "", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Het team bevat nog spelers en/of er zijn nog geplande wedstrijden met dit team", "", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (Exception ex)
             {

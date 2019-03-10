@@ -129,5 +129,10 @@ namespace TeamsApplicatie
             playerStatsDatagrid.IsReadOnly = true;
             OnDataChanged();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
