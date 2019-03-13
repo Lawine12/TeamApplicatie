@@ -31,14 +31,14 @@ namespace TeamsApplicatie
             textboxPlayerPosition.IsEnabled = false;
             textboxCurrentTeam.IsEnabled = false;
         }
-
+        //TODO: functie uit de contructor halen en eventueel 1 functie van maken.ivm speler goals worden nu niet geupdate.
         public PlayerStatsForm(int id) : this()
         {
             _id = id;
             try
             {
                 LoadData().ConfigureAwait(true);
-                LoadTeamData(id).ConfigureAwait(true);
+                LoadTeamData(_id).ConfigureAwait(true);
             }
             catch (Exception ex)
             {

@@ -14,8 +14,8 @@ namespace TeamsApplicatie
     /// </summary>
     public partial class EnterResultsForm : Window
     {
-        private readonly string _id;
         private readonly string _idTeam1;
+        private readonly string _idTeam2;
         private readonly int _matchId;
         private DataSet _teams;
         private DataSet _doelpunten;
@@ -54,11 +54,16 @@ namespace TeamsApplicatie
             }
         }
 
-        public EnterResultsForm(string id1, string id2, int matchId) : this()
+        private EnterResultsForm(string id1, string id2, int matchId) : this()
         {
             _matchId = matchId;
-            _id = id1;
-            _idTeam1 = id2;
+            _idTeam1 = id1;
+            _idTeam2 = id2;
+           
+        }
+
+        private async Task LoadAllData()
+        {
             try
             {
                 LoadData();
@@ -69,10 +74,17 @@ namespace TeamsApplicatie
                 throw;
             }
 
-            LoadCombo1().ConfigureAwait(true);
-            LoadCombo2().ConfigureAwait(true);
+            await LoadCombo1();
+            await LoadCombo2();
             textboxDoelpuntenTeam1.IsEnabled = false;
             textboxDoelpuntenTeam2.IsEnabled = false;
+        }
+
+        public static async Task<EnterResultsForm> CreateAsync(string id1, string id2, int matchId)
+        {
+            var form = new EnterResultsForm(id1, id2, matchId);
+            await form.LoadAllData();
+            return form;
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
@@ -98,7 +110,7 @@ namespace TeamsApplicatie
         {
             using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             {
-                var querystring = "SELECT id, [Last Name] FROM Players WHERE TeamId = @Id";
+                var querystring = "SELECT id, [Last Name] as LastName FROM Players WHERE TeamId = @Id";
 
                 var cmd = new SqlCommand(querystring, connection);
                 cmd.Parameters.AddWithValue("@id", _idTeam1);
@@ -106,13 +118,13 @@ namespace TeamsApplicatie
                 var dataAdapter = new SqlDataAdapter(cmd);
                 _playersTeam1 = new DataSet();
                 dataAdapter.Fill(_playersTeam1, "Players");
-                comboBoxPlayersTeam1.DataContext = _playersTeam1.Tables[0].DefaultView;
+                //comboBoxPlayersTeam1.DataContext = _playersTeam1.Tables[0].DefaultView;
                 var list = new List<Player>();
 
                 foreach (DataRow player in _playersTeam1.Tables[0].Rows)
                 {
                     var id = player.Field<int>("id");
-                    var playerName = player.Field<string>("[Last Name]");
+                    var playerName = player.Field<string>("LastName");
 
                     list.Add(new Player { Id = id, PlayerName = playerName });
                 }
@@ -124,21 +136,21 @@ namespace TeamsApplicatie
         {
             using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             {
-                var querystring = "SELECT id, [Last Name] FROM Players WHERE TeamId = @Id";
+                var querystring = "SELECT id, [Last Name] as LastName FROM Players WHERE TeamId = @Id";
 
                 var cmd = new SqlCommand(querystring, connection);
-                cmd.Parameters.AddWithValue("@id", _id);
+                cmd.Parameters.AddWithValue("@id", _idTeam2);
 
                 var dataAdapter = new SqlDataAdapter(cmd);
                 _playersTeam2 = new DataSet();
                 dataAdapter.Fill(_playersTeam2, "Players");
-                comboBoxPlayersTeam2.DataContext = _playersTeam2.Tables[0].DefaultView;
+                //comboBoxPlayersTeam2.DataContext = _playersTeam2.Tables[0].DefaultView;
                 var list = new List<Player>();
 
                 foreach (DataRow player in _playersTeam2.Tables[0].Rows)
                 {
                     var id = player.Field<int>("id");
-                    var playerName = player.Field<string>("[Last Name]");
+                    var playerName = player.Field<string>("LastName");
 
                     list.Add(new Player { Id = id, PlayerName = playerName });
                 }
@@ -222,7 +234,7 @@ namespace TeamsApplicatie
             using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
             using (var sqlCommand = connection.CreateCommand())
             {
-                var id = sqlCommand.Parameters.AddWithValue("@id", _id);
+                var id = sqlCommand.Parameters.AddWithValue("@id", comboBoxPlayersTeam1.SelectedValue);
 
                 sqlCommand.CommandText =
                     @"UPDATE [dbo].[Players]

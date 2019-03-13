@@ -179,17 +179,17 @@ namespace TeamsApplicatie
             LoadMatchDataAsync().ConfigureAwait(true);
         }
 
-        private void enterResults_Click(object sender, RoutedEventArgs e)
+        private async void enterResults_Click(object sender, RoutedEventArgs e)
         {
             var selectedRow = matchDataGrid.SelectedItem;
             var matchId = Convert.ToInt32((matchDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)?.Text);
             var id1 = Convert.ToInt32((matchDataGrid.SelectedCells[1].Column.GetCellContent(selectedRow) as TextBlock)?.Text);
             var id2 = Convert.ToInt32((matchDataGrid.SelectedCells[2].Column.GetCellContent(selectedRow) as TextBlock)?.Text);
 
-            var enterResults = new EnterResultsForm(id1.ToString(), id2.ToString(), matchId);
+            var enterResults = await EnterResultsForm.CreateAsync(id1.ToString(), id2.ToString(), matchId);
             enterResults.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             enterResults.ShowDialog();
-            LoadMatchDataAsync().ConfigureAwait(true);
+            await LoadMatchDataAsync();
             buttonDeleteMatch.IsEnabled = false;
             buttonEditMatch.IsEnabled = false;
             buttonEnterResults.IsEnabled = false;
