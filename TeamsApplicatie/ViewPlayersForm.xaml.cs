@@ -15,22 +15,37 @@ namespace TeamsApplicatie
         private EditPlayerForm _editPlayerForm;
         
 
-        public ViewPlayersForm(int id)
+        public ViewPlayersForm()
+        {
+            InitializeComponent();
+        }
+
+        private ViewPlayersForm(int id) : this()
         {
             _id = id;
-            InitializeComponent();
+        }
+
+        private async Task LoadPlayers()
+        {
             buttonDeletePlayer.IsEnabled = false;
             buttonEditPlayer.IsEnabled = false;
             buttonPlayerStats.IsEnabled = false;
             try
             {
-                LoadData().ConfigureAwait(true);
+                await LoadData();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
                 throw;
             }
+        }
+
+        public static async Task<ViewPlayersForm> CreateAsync(int id)
+        {
+            var form = new ViewPlayersForm(id);
+            await form.LoadPlayers();
+            return form;
         }
 
         private void playerDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -40,11 +55,11 @@ namespace TeamsApplicatie
             buttonPlayerStats.IsEnabled = true;
         }
 
-        private void addPlayer_Click(object sender, RoutedEventArgs e)
+        private async void addPlayer_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                AddPlayer();
+                await AddPlayerAsync();
             }
             catch (Exception ex)
             {
@@ -53,11 +68,11 @@ namespace TeamsApplicatie
             }
         }
 
-        private void deletePlayer_Click(object sender, RoutedEventArgs e)
+        private async void deletePlayer_ClickAsync(object sender, RoutedEventArgs e)
         {
             try
             {
-                DeletePlayer().ConfigureAwait(true);
+                await DeletePlayer();
             }
             catch (Exception ex)
             {
@@ -85,14 +100,14 @@ namespace TeamsApplicatie
         }
 
         //Add Player
-        private void AddPlayer()
+        private async Task AddPlayerAsync()
         {
             var addPlayer = new AddPlayerForm(_id)
             {
                 WindowStartupLocation = WindowStartupLocation.CenterScreen
             };
             addPlayer.ShowDialog();
-            LoadData().ConfigureAwait(true);
+            await LoadData();
         }
 
         //Edit Player
@@ -102,9 +117,9 @@ namespace TeamsApplicatie
             if (selectedRow == null) return;
             var id = (playerDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)?.Text;
             var player = playerDataGrid.SelectedCells[1].Item;
-            var editPlayer = new EditPlayerForm(id);
+            var editPlayer = await EditPlayerForm.CreateAsync(id);
             editPlayer.ShowDialog();
-            await LoadData().ConfigureAwait(true);
+            await LoadData();
             if (_playerStatsform != null) await _playerStatsform.LoadData();
             buttonDeletePlayer.IsEnabled = false;
             buttonEditPlayer.IsEnabled = false;
@@ -181,12 +196,12 @@ namespace TeamsApplicatie
             
         }
 
-        private void playerStats_Click(object sender, RoutedEventArgs e)
+        private async void playerStats_ClickAsync(object sender, RoutedEventArgs e)
         {
             var selectedRow = playerDataGrid.SelectedItem;
             if (selectedRow == null) return;
             var id = Convert.ToInt32((playerDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)?.Text);
-            _playerStatsform = new PlayerStatsForm(id);
+            _playerStatsform = await PlayerStatsForm.CreateAsync(id);
             _playerStatsform.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             _playerStatsform.Show();
         }

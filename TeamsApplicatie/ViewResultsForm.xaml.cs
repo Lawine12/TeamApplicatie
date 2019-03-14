@@ -19,9 +19,14 @@ namespace TeamsApplicatie
         public ViewResultsForm()
         {
             InitializeComponent();
+            
+        }
+
+        private async Task LoadResultsAsync()
+        {
             try
             {
-                LoadMatchData();
+                await LoadMatchData();
             }
             catch (Exception ex)
             {
@@ -29,7 +34,14 @@ namespace TeamsApplicatie
                 throw;
             }
 
-            SerializeDataTableAsync("Match Information.xml", _matchInfo).ConfigureAwait(true);
+            await SerializeDataTableAsync("Match Information.xml", _matchInfo);
+        }
+
+        public static async Task<ViewResultsForm> CreateAsync()
+        {
+            var form = new ViewResultsForm();
+            await form.LoadResultsAsync();
+            return form;
         }
 
         private async Task SerializeDataTableAsync(string filename, DataSet matchInfo)
@@ -60,7 +72,7 @@ namespace TeamsApplicatie
             Close();
         }
 
-        private async void LoadMatchData()
+        private async Task LoadMatchData()
         {
             resultDataGrid.CanUserAddRows = false;
             resultDataGrid.SelectionMode = DataGridSelectionMode.Single;

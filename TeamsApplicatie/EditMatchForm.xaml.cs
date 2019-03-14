@@ -21,15 +21,19 @@ namespace TeamsApplicatie
         {
             InitializeComponent();
         }
-
-        public EditMatchForm(string id) : this()
+        
+        private EditMatchForm(string id)
         {
             _id = id;
-            LoadCombo1Async().ConfigureAwait(true);
-            LoadCombo2Async().ConfigureAwait(true);
+        }
+
+        private async Task LoadMatchDataAsync()
+        {
+            await LoadCombo1Async();
+            await LoadCombo2Async();
             try
             {
-                LoadData();
+                await LoadData();
             }
             catch (Exception ex)
             {
@@ -38,12 +42,19 @@ namespace TeamsApplicatie
             }
         }
 
+        public static async Task<EditMatchForm> CreateAsync(string id)
+        {
+            var form = new EditMatchForm(id);
+            await form.LoadMatchDataAsync();
+            return form;
+        }
+
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
 
-        private async void LoadData()
+        private async Task LoadData()
         {
             var matchData = await GetDataTableAsync();
             if (matchData.Rows.Count != 1) return;

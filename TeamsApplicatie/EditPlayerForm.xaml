@@ -23,7 +23,7 @@
         </StackPanel>
         <Grid>
             <Button Content="Cancel" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="Cancel_Click"/>
-            <Button Content="Save" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Save_Click"/>
+            <Button Content="Save" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Save_ClickAsync"/>
         </Grid>
     </DockPanel>
 </Window>

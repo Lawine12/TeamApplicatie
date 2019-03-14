@@ -22,18 +22,29 @@ namespace TeamsApplicatie
             textboxTeamName.Focus();
         }
 
-        public EditTeamsForm(string id) : this()
+        private EditTeamsForm(string id) : this()
         {
             _id = id;
+        }
+
+        private async Task LoadTeamsAsync()
+        {
             try
             {
-                LoadData().ConfigureAwait(true);
+                await LoadData();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
                 throw;
             }
+        }
+
+        public static async Task<EditTeamsForm> CreateAsync(string id)
+        {
+            var form = new EditTeamsForm(id);
+            await form.LoadTeamsAsync();
+            return form;
         }
 
         private async Task LoadData()

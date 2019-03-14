@@ -25,12 +25,12 @@
                     <DropShadowEffect/>
                 </Button.Effect>
             </Button>
-            <Button x:Name="buttonDeletePlayer" Content="Delete Player" Click="deletePlayer_Click">
+            <Button x:Name="buttonDeletePlayer" Content="Delete Player" Click="deletePlayer_ClickAsync">
                 <Button.Effect>
                     <DropShadowEffect/>
                 </Button.Effect>
             </Button>
-            <Button x:Name="buttonPlayerStats" Content="Player Stats" Click="playerStats_Click">
+            <Button x:Name="buttonPlayerStats" Content="Player Stats" Click="playerStats_ClickAsync">
                 <Button.Effect>
                     <DropShadowEffect/>
                 </Button.Effect>

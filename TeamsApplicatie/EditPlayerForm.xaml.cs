@@ -17,18 +17,30 @@ namespace TeamsApplicatie
             InitializeComponent();
         }
 
-        public EditPlayerForm(string id) : this()
+
+        private EditPlayerForm(string id) : this()
         {
             _id = id;
+        }
+
+        private async Task LoadPlayersAsync()
+        {
             try
             { 
-            LoadData().ConfigureAwait(true);
+                await LoadData();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
                 throw;
             }
+        }
+
+        public static async Task<EditPlayerForm> CreateAsync(string id)
+        {
+            var form = new EditPlayerForm(id);
+            await form.LoadPlayersAsync();
+            return form;
         }
 
         private void TextBox_Age(object sender, TextChangedEventArgs e)
@@ -67,9 +79,9 @@ namespace TeamsApplicatie
             return _playerInformation;
         }
 
-        private void Save_Click(object sender, RoutedEventArgs e)
+        private async void Save_ClickAsync(object sender, RoutedEventArgs e)
         {
-            EditPlayer(_id).ConfigureAwait(true);
+            await EditPlayer(_id);
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)

@@ -20,12 +20,12 @@
                     <DropShadowEffect/>
                 </Button.Effect>
             </Button>
-            <Button x:Name="buttonEditMatch" Content="Edit Match" Click="EditMatch_Click">
+            <Button x:Name="buttonEditMatch" Content="Edit Match" Click="EditMatch_ClickAsync">
                 <Button.Effect>
                     <DropShadowEffect/>
                 </Button.Effect>
             </Button>
-            <Button x:Name="buttonDeleteMatch" Content="Delete Match" Click="DeleteMatch_Click">
+            <Button x:Name="buttonDeleteMatch" Content="Delete Match" Click="DeleteMatch_ClickAsync">
                 <Button.Effect>
                     <DropShadowEffect/>
                 </Button.Effect>

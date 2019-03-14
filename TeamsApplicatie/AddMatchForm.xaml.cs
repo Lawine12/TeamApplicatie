@@ -18,8 +18,20 @@ namespace TeamsApplicatie
         public AddMatchForm()
         {
             InitializeComponent();
-            LoadCombo1().ConfigureAwait(true);
-            LoadCombo2().ConfigureAwait(true);
+            
+        }
+
+        private async Task LoadComboBoxes()
+        {
+            await LoadCombo1();
+            await LoadCombo2();
+        }
+
+        public static async Task<AddMatchForm> CreateAsync()
+        {
+            var form = new AddMatchForm();
+            await form.LoadComboBoxes();
+            return form;
         }
 
         private void cancel_Click(object sender, RoutedEventArgs e)

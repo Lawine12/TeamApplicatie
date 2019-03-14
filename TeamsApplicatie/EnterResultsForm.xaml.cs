@@ -87,12 +87,12 @@ namespace TeamsApplicatie
             return form;
         }
 
-        private void Save_Click(object sender, RoutedEventArgs e)
+        private async void Save_ClickAsync(object sender, RoutedEventArgs e)
         {
             try
             {
-                EnterResults().ConfigureAwait(true);
-                SerializeDataTableAsync("Match Information.xml", _matchInfo).ConfigureAwait(true);
+                await EnterResults();
+                await SerializeDataTableAsync("Match Information.xml", _matchInfo);
             }
             catch (Exception ex)
             {
@@ -244,7 +244,7 @@ namespace TeamsApplicatie
                 sqlCommand.ExecuteNonQuery();
             }
 
-            MessageBox.Show("Added a Goal for this player! Don't forget to press the Save to save!", "", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Added a Goal for this player! Don't forget to press the Save to save the total scores for both teams!", "", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private async Task AddPlayerPoints2()
@@ -271,7 +271,7 @@ namespace TeamsApplicatie
             public string PlayerName { get; set; }
         }
 
-        private void ButtonDoelpuntTeam1toevoegen_Click(object sender, RoutedEventArgs e)
+        private async void ButtonDoelpuntTeam1toevoegen_ClickAsync(object sender, RoutedEventArgs e)
         {
             int doelpunten = short.Parse(textboxDoelpuntenTeam1.Text);
 
@@ -279,7 +279,7 @@ namespace TeamsApplicatie
 
             try
             {
-                AddPlayerPoints1().ConfigureAwait(true);
+                await AddPlayerPoints1();
             }
             catch (Exception ex)
             {
@@ -288,7 +288,7 @@ namespace TeamsApplicatie
             }
         }
 
-        private void ButtonDoelpuntTeam2toevoegen_Click(object sender, RoutedEventArgs e)
+        private async void ButtonDoelpuntTeam2toevoegen_ClickAsync(object sender, RoutedEventArgs e)
         {
             int doelpunten = short.Parse(textboxDoelpuntenTeam2.Text);
 
@@ -296,7 +296,7 @@ namespace TeamsApplicatie
 
             try
             {
-                AddPlayerPoints2().ConfigureAwait(true);
+                await AddPlayerPoints2();
             }
             catch (Exception ex)
             {

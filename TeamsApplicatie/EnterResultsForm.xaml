@@ -7,11 +7,11 @@
         mc:Ignorable="d"
         Title="EditMatchForm" Height="450" Width="800">
     <DockPanel>
-        <Button Name="buttonSave" Content="Save" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Save_Click"/>
+        <Button Name="buttonSave" Content="Save" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Save_ClickAsync"/>
         <StackPanel Margin="20,160,20,112">
             <TextBlock Height="20" Width="120" x:Name="textNameTeam1"/>
             <ComboBox Name="comboBoxPlayersTeam1" ItemsSource="{Binding}" DisplayMemberPath="PlayerName" SelectedValuePath="Id" Height="24" Margin="0,0,0,0"/>
-            <Button x:Name="buttonDoelpuntTeam1toevoegen" Content="Doelpunt toevoegen" Margin="10" Click="ButtonDoelpuntTeam1toevoegen_Click"/>
+            <Button x:Name="buttonDoelpuntTeam1toevoegen" Content="Doelpunt toevoegen" Margin="10" Click="ButtonDoelpuntTeam1toevoegen_ClickAsync"/>
             <TextBlock Text="Doelpunten" Margin="0,0,0,0"/>
             <TextBox Name="textboxDoelpuntenTeam1" Height="20" TextWrapping="Wrap" Width="120" TextChanged="TextBoxDoelpuntenTeam1_TextChanged"/>
 
@@ -24,7 +24,7 @@
         <StackPanel Margin="20,160,20,112">
             <TextBlock Height="20" Width="120" Name="textNameTeam2"/>
             <ComboBox Name="comboBoxPlayersTeam2" ItemsSource="{Binding}" DisplayMemberPath="PlayerName" SelectedValuePath="Id" Height="24" Width="120" Margin="0,0,0,0"/>
-            <Button x:Name="buttonDoelpuntTeam2toevoegen" Content="Doelpunt toevoegen" Margin="10" Click="ButtonDoelpuntTeam2toevoegen_Click"/>
+            <Button x:Name="buttonDoelpuntTeam2toevoegen" Content="Doelpunt toevoegen" Margin="10" Click="ButtonDoelpuntTeam2toevoegen_ClickAsync"/>
             <TextBlock Text="Doelpunten" Margin="0,0,0,0"/>
             <TextBox Name="textboxDoelpuntenTeam2" Height="20" TextWrapping="Wrap" Width="120" TextChanged="TextBoxDoelpuntenTeam2_TextChanged"/>
         </StackPanel>

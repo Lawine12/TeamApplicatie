@@ -17,9 +17,20 @@ namespace TeamsApplicatie
             buttonDeleteTeam.IsEnabled = false;
             buttonEditTeam.IsEnabled = false;
             buttonViewPlayers.IsEnabled = false;
+        }
+
+        public static async Task<TeamOverviewForm> CreateAsync()
+        {
+            var form = new TeamOverviewForm();
+            await form.LoadTeamDataAsync();
+            return form;
+        }
+
+        private async Task LoadTeamDataAsync()
+        {
             try
             {
-                LoadTeamData().ConfigureAwait(true);
+                await LoadTeamData();
             }
             catch (Exception ex)
             {
@@ -29,9 +40,9 @@ namespace TeamsApplicatie
         }
 
         //View Players
-        private void ButtonViewPlayers_Click(object sender, RoutedEventArgs e)
+        private async void ButtonViewPlayers_ClickAsync(object sender, RoutedEventArgs e)
         {
-            ViewPlayers();
+            await ViewPlayersAsync();
         }
 
         //Add Team
@@ -49,11 +60,11 @@ namespace TeamsApplicatie
         }
 
         //Edit Team
-        private void EditTeam_Click(object sender, RoutedEventArgs e)
+        private async void EditTeam_ClickAsync(object sender, RoutedEventArgs e)
         {
             try
             {
-                EditTeam();
+                await EditTeamAsync();
             }
             catch (Exception ex)
             {
@@ -85,12 +96,12 @@ namespace TeamsApplicatie
         }
 
         //View Players
-        private void ViewPlayers()
+        private async Task ViewPlayersAsync()
         {
             var selectedRow = teamDataGrid.SelectedItem;
             var id = Convert.ToInt32((teamDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)?.Text);
 
-            var playerOverview = new ViewPlayersForm(id);
+            var playerOverview = await ViewPlayersForm.CreateAsync(id);
             playerOverview.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             playerOverview.ShowDialog();
             buttonDeleteTeam.IsEnabled = false;
@@ -111,15 +122,15 @@ namespace TeamsApplicatie
         }
 
         //Edit Team
-        private void EditTeam()
+        private async Task EditTeamAsync()
         {
             var selectedRow = teamDataGrid.SelectedItem;
             if (selectedRow == null) return;
             var id = (teamDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow) as TextBlock)?.Text;
             var team = teamDataGrid.SelectedCells[1].Item;
-            var editTeam = new EditTeamsForm(id);
+            var editTeam = await EditTeamsForm.CreateAsync(id);
             editTeam.ShowDialog();
-            LoadTeamData().ConfigureAwait(true);
+            await LoadTeamData();
             buttonDeleteTeam.IsEnabled = false;
             buttonEditTeam.IsEnabled = false;
             buttonViewPlayers.IsEnabled = false;

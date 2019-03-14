@@ -20,7 +20,7 @@
                     <DropShadowEffect/>
                 </Button.Effect>
             </Button>
-            <Button x:Name="buttonEditTeam" Content="Edit Team" Click="EditTeam_Click">
+            <Button x:Name="buttonEditTeam" Content="Edit Team" Click="EditTeam_ClickAsync">
                 <Button.Effect>
                     <DropShadowEffect/>
                 </Button.Effect>
@@ -30,7 +30,7 @@
                     <DropShadowEffect/>
                 </Button.Effect>
             </Button>
-            <Button x:Name="buttonViewPlayers" Content="View Players" Click="ButtonViewPlayers_Click">
+            <Button x:Name="buttonViewPlayers" Content="View Players" Click="ButtonViewPlayers_ClickAsync">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>

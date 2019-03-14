@@ -20,9 +20,14 @@ namespace TeamsApplicatie
         public MatchCalendarForm()
         {
             InitializeComponent();
+            
+        }
+
+        private async Task LoadMatchData()
+        {
             try
             {
-                LoadMatchDataAsync().ConfigureAwait(true);
+                await LoadMatchDataAsync();
             }
             catch (Exception ex)
             {
@@ -33,6 +38,13 @@ namespace TeamsApplicatie
             buttonEditMatch.IsEnabled = false;
             buttonDeleteMatch.IsEnabled = false;
             buttonEnterResults.IsEnabled = false;
+        }
+
+        public static async Task<MatchCalendarForm> CreateAsync()
+        {
+            var form = new MatchCalendarForm();
+            await form.LoadMatchData();
+            return form;
         }
 
         protected virtual void OnDataChanged()
@@ -49,7 +61,7 @@ namespace TeamsApplicatie
         {
             try
             {
-                await AddMatchAsync().ConfigureAwait(true);
+                await AddMatchAsync();
             }
             catch (Exception ex)
             {
@@ -60,22 +72,22 @@ namespace TeamsApplicatie
 
         private async Task AddMatchAsync()
         {
-            var addMatch = new AddMatchForm();
+            var addMatch = await AddMatchForm.CreateAsync();
             addMatch.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             addMatch.ShowDialog();
-            await LoadMatchDataAsync().ConfigureAwait(true);
+            await LoadMatchDataAsync();
         }
 
-        private void EditMatch_Click(object sender, RoutedEventArgs e)
+        private async void EditMatch_ClickAsync(object sender, RoutedEventArgs e)
         {
-            ViewMatches();
+            await ViewMatchesAsync();
         }
 
-        private void DeleteMatch_Click(object sender, RoutedEventArgs e)
+        private async void DeleteMatch_ClickAsync(object sender, RoutedEventArgs e)
         {
             try
             {
-                DeleteMatch().ConfigureAwait(true);
+                await DeleteMatch();
             }
             catch (Exception ex)
             {
@@ -168,15 +180,15 @@ namespace TeamsApplicatie
             }
         }
 
-        private void ViewMatches()
+        private async Task ViewMatchesAsync()
         {
             var selectedRow = matchDataGrid.SelectedItem;
             var id = Convert.ToInt32(((TextBlock) matchDataGrid.SelectedCells[0].Column.GetCellContent(selectedRow))?.Text);
 
-            var editMatch = new EditMatchForm(id.ToString());
+            var editMatch = await EditMatchForm.CreateAsync(id.ToString());
             editMatch.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             editMatch.ShowDialog();
-            LoadMatchDataAsync().ConfigureAwait(true);
+            await LoadMatchDataAsync();
         }
 
         private async void enterResults_Click(object sender, RoutedEventArgs e)

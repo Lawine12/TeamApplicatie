@@ -24,7 +24,7 @@
             </StackPanel>
             <Grid>
                 <Button Content="Cancel" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="Cancel_Click"/>
-                <Button Content="Add" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Add_Click"/>
+                <Button Content="Add" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Add_ClickAsync"/>
             </Grid>
         </DockPanel>
     </DockPanel>

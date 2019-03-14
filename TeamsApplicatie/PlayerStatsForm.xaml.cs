@@ -21,8 +21,12 @@ namespace TeamsApplicatie
 
         public PlayerStatsForm()
         {
-            InitializeComponent();
-            
+            InitializeComponent();   
+        }
+
+        private PlayerStatsForm(int id) : this()
+        {
+            _id = id;
             textboxPlayerFirstName.IsEnabled = false;
             textboxPlayerLastName.IsEnabled = false;
             textboxPlayerAdress.IsEnabled = false;
@@ -31,20 +35,26 @@ namespace TeamsApplicatie
             textboxPlayerPosition.IsEnabled = false;
             textboxCurrentTeam.IsEnabled = false;
         }
-        //TODO: functie uit de contructor halen en eventueel 1 functie van maken.ivm speler goals worden nu niet geupdate.
-        public PlayerStatsForm(int id) : this()
+
+        private async Task LoadPlayerDataAsync()
         {
-            _id = id;
             try
             {
-                LoadData().ConfigureAwait(true);
-                LoadTeamData(_id).ConfigureAwait(true);
+                await LoadData();
+                await LoadTeamData(_id);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
                 throw;
             }
+        }
+
+        public static async Task<PlayerStatsForm> CreateAsync(int id)
+        {
+            var form = new PlayerStatsForm(id);
+            await form.LoadPlayerDataAsync();
+            return form;
         }
 
         protected virtual void OnDataChanged()

@@ -23,11 +23,11 @@ namespace TeamsApplicatie
             textBoxAge.Text = textBoxAge.Text.Remove(textBoxAge.Text.Length - 1);
         }
 
-        private void Add_Click(object sender, RoutedEventArgs e)
+        private async void Add_ClickAsync(object sender, RoutedEventArgs e)
         {
             try
             { 
-            AddaPlayer(_id).ConfigureAwait(true);
+            await AddaPlayer(_id);
             }
             catch (Exception ex)
             {

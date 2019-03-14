@@ -13,9 +13,12 @@ namespace TeamsApplicatie
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
 
-        private void Teamsbekijken_Click(object sender, RoutedEventArgs e)
+        private async void Teamsbekijken_ClickAsync(object sender, RoutedEventArgs e)
         {
-            var teamOverview = new TeamOverviewForm {WindowStartupLocation = WindowStartupLocation.CenterScreen};
+            var teamOverview = await TeamOverviewForm.CreateAsync();
+            {
+                WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            };
             teamOverview.ShowDialog();
         }
 
@@ -31,15 +34,21 @@ namespace TeamsApplicatie
             Close();
         }
 
-        private void UitslagenBekijken_Click(object sender, RoutedEventArgs e)
+        private async void UitslagenBekijken_ClickAsync(object sender, RoutedEventArgs e)
         {
-            var matchResults = new ViewResultsForm {WindowStartupLocation = WindowStartupLocation.CenterScreen};
+            var matchResults = await ViewResultsForm.CreateAsync();
+            {
+                WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            };
             matchResults.Show();
         }
 
-        private void WedstrijdKalender_Click(object sender, RoutedEventArgs e)
+        private async void WedstrijdKalender_ClickAsync(object sender, RoutedEventArgs e)
         {
-            var kalender = new MatchCalendarForm {WindowStartupLocation = WindowStartupLocation.CenterScreen};
+            var kalender = await MatchCalendarForm.CreateAsync();
+            {
+                WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            };
             kalender.DataChanged += () => { _resultsUpdateForm?.LoadMatchData(); };
             kalender.ShowDialog();
         }
