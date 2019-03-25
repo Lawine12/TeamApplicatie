@@ -80,7 +80,6 @@
       <DependentUpon>AddTeamForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="DatabaseHelper.cs" />
-    <Compile Include="DataViewExtensions.cs" />
     <Compile Include="EditMatchForm.xaml.cs">
       <DependentUpon>EditMatchForm.xaml</DependentUpon>
     </Compile>

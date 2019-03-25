@@ -83,7 +83,7 @@ namespace TeamsApplicatie
                     list.Add(new Team { Id = id, TeamName = teamName });
                 }
 
-                comboBoxTeam2.ItemsSource = list; // .Where(x => x.Id != (int)comboBoxTeam1.SelectedValue);
+                comboBoxTeam2.ItemsSource = list;
             }
         }
 

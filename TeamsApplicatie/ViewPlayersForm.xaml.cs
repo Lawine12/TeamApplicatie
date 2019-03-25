@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
@@ -18,6 +19,12 @@ namespace TeamsApplicatie
         public ViewPlayersForm()
         {
             InitializeComponent();
+            Closing += OnClosing;
+        }
+
+        private void OnClosing(object sender, CancelEventArgs e)
+        {
+            _playerStatsform?.Close();
         }
 
         private ViewPlayersForm(int id) : this()
@@ -168,9 +175,12 @@ namespace TeamsApplicatie
                 {
                     var cmd = new SqlCommand(queryString, connection);
                     var dataAdapter = new SqlDataAdapter(cmd);
-                    var cmdBuilder = new SqlCommandBuilder(dataAdapter);
+                    //var cmdBuilder = new SqlCommandBuilder(dataAdapter);
 
-                    dataAdapter.Update(_playerData);
+                    _playerData = new DataTable();
+                    dataAdapter.Fill(_playerData);
+                    playerDataGrid.DataContext = _playerData;
+                    playerDataGrid.ItemsSource = _playerData.DefaultView;
                 }
             }
         }

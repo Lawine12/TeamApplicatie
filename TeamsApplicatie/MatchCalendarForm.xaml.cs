@@ -168,15 +168,7 @@ namespace TeamsApplicatie
                     return;
                 }
 
-                var queryString = "SELECT * FROM dbo.MatchInfo";
-                using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
-                {
-                    var cmd = new SqlCommand(queryString, connection);
-                    var dataAdapter = new SqlDataAdapter(cmd);
-                    var cmdBuilder = new SqlCommandBuilder(dataAdapter);
-
-                    dataAdapter.Update(_matchData);
-                }
+                await LoadMatchDataAsync();
             }
         }
 

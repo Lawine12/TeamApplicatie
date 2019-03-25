@@ -22,7 +22,7 @@ namespace TeamsApplicatie
             InitializeComponent();
         }
         
-        private EditMatchForm(string id)
+        private EditMatchForm(string id) : this()
         {
             _id = id;
         }

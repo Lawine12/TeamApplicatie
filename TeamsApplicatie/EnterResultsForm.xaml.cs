@@ -59,7 +59,7 @@ namespace TeamsApplicatie
             _matchId = matchId;
             _idTeam1 = id1;
             _idTeam2 = id2;
-           
+
         }
 
         private async Task LoadAllData()
@@ -118,7 +118,6 @@ namespace TeamsApplicatie
                 var dataAdapter = new SqlDataAdapter(cmd);
                 _playersTeam1 = new DataSet();
                 dataAdapter.Fill(_playersTeam1, "Players");
-                //comboBoxPlayersTeam1.DataContext = _playersTeam1.Tables[0].DefaultView;
                 var list = new List<Player>();
 
                 foreach (DataRow player in _playersTeam1.Tables[0].Rows)
@@ -144,7 +143,6 @@ namespace TeamsApplicatie
                 var dataAdapter = new SqlDataAdapter(cmd);
                 _playersTeam2 = new DataSet();
                 dataAdapter.Fill(_playersTeam2, "Players");
-                //comboBoxPlayersTeam2.DataContext = _playersTeam2.Tables[0].DefaultView;
                 var list = new List<Player>();
 
                 foreach (DataRow player in _playersTeam2.Tables[0].Rows)
@@ -209,60 +207,79 @@ namespace TeamsApplicatie
 
         private async Task EnterResults()
         {
-                using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
-                using (var sqlCommand = connection.CreateCommand())
-                {
-                    var id = sqlCommand.Parameters.AddWithValue("@id", _matchId);
-                    var team1DoelpuntenParameter = sqlCommand.Parameters.AddWithValue("@TotalGoalsTeam1", Convert.ToInt16(textboxDoelpuntenTeam1.Text));
-                    var team2DoelpuntenParameter = sqlCommand.Parameters.AddWithValue("@TotalGoalsTeam2", Convert.ToInt16(textboxDoelpuntenTeam2.Text));
+            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
+            using (var sqlCommand = connection.CreateCommand())
+            {
+                var id = sqlCommand.Parameters.AddWithValue("@id", _matchId);
+                var team1DoelpuntenParameter = sqlCommand.Parameters.AddWithValue("@TotalGoalsTeam1", Convert.ToInt16(textboxDoelpuntenTeam1.Text));
+                var team2DoelpuntenParameter = sqlCommand.Parameters.AddWithValue("@TotalGoalsTeam2", Convert.ToInt16(textboxDoelpuntenTeam2.Text));
 
-                    sqlCommand.CommandText =
-                    $@"UPDATE [dbo].[MatchInfo]
+                sqlCommand.CommandText =
+                $@"UPDATE [dbo].[MatchInfo]
                     SET
                     [TotalGoalsTeam1] = {team1DoelpuntenParameter.Value},
                     [TotalGoalsTeam2] = {team2DoelpuntenParameter.Value}
                     WHERE Id = @id";
-                    sqlCommand.ExecuteNonQuery();
-                }
+                sqlCommand.ExecuteNonQuery();
+            }
 
-                MessageBox.Show("Success!", "", MessageBoxButton.OK, MessageBoxImage.Information);
-                this.Close();
+            MessageBox.Show("Success!", "", MessageBoxButton.OK, MessageBoxImage.Information);
+            this.Close();
         }
 
         private async Task AddPlayerPoints1()
         {
-            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
-            using (var sqlCommand = connection.CreateCommand())
+            if (comboBoxPlayersTeam1.SelectedValue != null)
             {
-                var id = sqlCommand.Parameters.AddWithValue("@id", comboBoxPlayersTeam1.SelectedValue);
+                int doelpunten = short.Parse(textboxDoelpuntenTeam1.Text);
 
-                sqlCommand.CommandText =
-                    @"UPDATE [dbo].[Players]
+                textboxDoelpuntenTeam1.Text = (doelpunten + 1).ToString();
+
+                using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
+                using (var sqlCommand = connection.CreateCommand())
+                {
+                    var id = sqlCommand.Parameters.AddWithValue("@id", comboBoxPlayersTeam1.SelectedValue);
+
+                    sqlCommand.CommandText =
+                        @"UPDATE [dbo].[Players]
                     SET
                     PlayerGoals = PlayerGoals + 1
                     WHERE Id = @id";
-                sqlCommand.ExecuteNonQuery();
+                    sqlCommand.ExecuteNonQuery();
+                }
+                MessageBox.Show("Added a Goal for this player! Don't forget to press the Save to save the total scores for both teams!", "", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+            else
+                MessageBox.Show("Selecteer AUB een speler", "", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            MessageBox.Show("Added a Goal for this player! Don't forget to press the Save to save the total scores for both teams!", "", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private async Task AddPlayerPoints2()
         {
-            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
-            using (var sqlCommand = connection.CreateCommand())
+            if (comboBoxPlayersTeam2.SelectedValue != null)
             {
-                var id = sqlCommand.Parameters.AddWithValue("@id", _idTeam1);
+                int doelpunten = short.Parse(textboxDoelpuntenTeam2.Text);
 
-                sqlCommand.CommandText =
-                    @"UPDATE [dbo].[Players]
+                textboxDoelpuntenTeam2.Text = (doelpunten + 1).ToString();
+
+                using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
+                using (var sqlCommand = connection.CreateCommand())
+                {
+
+                    var id = sqlCommand.Parameters.AddWithValue("@id", comboBoxPlayersTeam2.SelectedValue);
+
+                    sqlCommand.CommandText =
+                        @"UPDATE [dbo].[Players]
                     SET
                     PlayerGoals = PlayerGoals + 1
                     WHERE Id = @id";
-                sqlCommand.ExecuteNonQuery();
+                    sqlCommand.ExecuteNonQuery();
+                }
+                MessageBox.Show("Added a Goal for this player! Don't forget to press the Save to save!", "", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+            else
+                MessageBox.Show("Selecteer AUB een speler", "", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            MessageBox.Show("Added a Goal for this player! Don't forget to press the Save to save!", "", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public class Player
@@ -273,10 +290,6 @@ namespace TeamsApplicatie
 
         private async void ButtonDoelpuntTeam1toevoegen_ClickAsync(object sender, RoutedEventArgs e)
         {
-            int doelpunten = short.Parse(textboxDoelpuntenTeam1.Text);
-
-            textboxDoelpuntenTeam1.Text = (doelpunten + 1).ToString();
-
             try
             {
                 await AddPlayerPoints1();
@@ -290,10 +303,6 @@ namespace TeamsApplicatie
 
         private async void ButtonDoelpuntTeam2toevoegen_ClickAsync(object sender, RoutedEventArgs e)
         {
-            int doelpunten = short.Parse(textboxDoelpuntenTeam2.Text);
-
-            textboxDoelpuntenTeam2.Text = (doelpunten + 1).ToString();
-
             try
             {
                 await AddPlayerPoints2();
