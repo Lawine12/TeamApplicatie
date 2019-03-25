@@ -13,5 +13,17 @@ namespace TeamsApplicatie
     /// </summary>
     public partial class App : Application
     {
+        private async void OnApplicationStartup(object sender, StartupEventArgs e)
+        {
+            try
+            {
+                var win = await TeamOverviewForm.CreateAsync();
+                win.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error on startup", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 }

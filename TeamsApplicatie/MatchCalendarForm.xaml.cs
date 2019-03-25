@@ -12,15 +12,13 @@ namespace TeamsApplicatie
     /// </summary>
     public partial class MatchCalendarForm : Window
     {
+        private readonly INotifyDataReload _dataReloadNotifier;
         private DataTable _matchData;
 
-        public delegate void DataChangedHandler();
-        public event DataChangedHandler DataChanged = null;
-
-        public MatchCalendarForm()
+        public MatchCalendarForm(INotifyDataReload dataReloadNotifier)
         {
+            _dataReloadNotifier = dataReloadNotifier ?? throw new ArgumentNullException(nameof(dataReloadNotifier));
             InitializeComponent();
-            
         }
 
         private async Task LoadMatchData()
@@ -40,16 +38,23 @@ namespace TeamsApplicatie
             buttonEnterResults.IsEnabled = false;
         }
 
-        public static async Task<MatchCalendarForm> CreateAsync()
+        public static async Task<MatchCalendarForm> CreateAsync(INotifyDataReload dataReloadNotifier)
         {
-            var form = new MatchCalendarForm();
+            var form = new MatchCalendarForm(dataReloadNotifier);
             await form.LoadMatchData();
             return form;
         }
 
-        protected virtual void OnDataChanged()
+        protected virtual async void OnDataChanged()
         {
-            DataChanged?.Invoke();
+            try
+            {
+                await _dataReloadNotifier.ReloadData();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)

@@ -14,28 +14,46 @@
             </Button.Effect>
         </Button>
 
-        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
-            <Button x:Name="buttonAddTeam" Content="Add Team" Click="AddTeam_Click">
-                <Button.Effect>
-                    <DropShadowEffect/>
-                </Button.Effect>
-            </Button>
-            <Button x:Name="buttonEditTeam" Content="Edit Team" Click="EditTeam_ClickAsync">
-                <Button.Effect>
-                    <DropShadowEffect/>
-                </Button.Effect>
-            </Button>
-            <Button x:Name="buttonDeleteTeam" Content="Delete Team" Click="DeleteTeam_Click">
-                <Button.Effect>
-                    <DropShadowEffect/>
-                </Button.Effect>
-            </Button>
-            <Button x:Name="buttonViewPlayers" Content="View Players" Click="ButtonViewPlayers_ClickAsync">
-            <Button.Effect>
-                <DropShadowEffect/>
-            </Button.Effect>
-            </Button>
-        </StackPanel>
+        <Grid DockPanel.Dock="Bottom">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
+                <Button x:Name="buttonAddTeam" Content="Add Team" Click="AddTeam_Click">
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
+                </Button>
+                <Button x:Name="buttonEditTeam" Content="Edit Team" Click="EditTeam_ClickAsync">
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
+                </Button>
+                <Button x:Name="buttonDeleteTeam" Content="Delete Team" Click="DeleteTeam_Click">
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
+                </Button>
+                <Button x:Name="buttonViewPlayers" Content="View Players" Click="ButtonViewPlayers_ClickAsync">
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
+                </Button>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="buttonEditResults" Content="Edit Results" Click="ButtonEditResults_ClickAsync">
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
+                </Button>
+                <Button x:Name="buttonViewResults" Content="View Results" Click="ButtonViewResults_ClickAsync">
+                    <Button.Effect>
+                        <DropShadowEffect/>
+                    </Button.Effect>
+                </Button>
+            </StackPanel>
+        </Grid>
+        
+
+
 
         <DataGrid x:Name="teamDataGrid" DockPanel.Dock="Top" ItemsSource="{Binding}" Background="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}" SelectionChanged="teamDataGrid_SelectionChanged" >
             <DataGrid.Effect>

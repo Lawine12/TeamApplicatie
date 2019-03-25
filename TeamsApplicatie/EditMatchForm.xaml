@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TeamsApplicatie"
         mc:Ignorable="d"
-        Title="EditMatchForm" Height="450" Width="800">
+        Title="Edit Match" Height="450" Width="800">
     <DockPanel x:Name="cplForm">
         <Button Content="Save" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Save_Click"/>
         <StackPanel Height="100" Margin="20">

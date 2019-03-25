@@ -7,16 +7,15 @@ using System.Windows.Controls;
 
 namespace TeamsApplicatie
 {
-    public partial class TeamOverviewForm : Window
+    public partial class TeamOverviewForm : Window, INotifyDataReload
     {
         private DataTable _teamData;
+        private ResultsUpdateForm _resultsUpdateForm;
 
         public TeamOverviewForm()
         {
             InitializeComponent();
-            buttonDeleteTeam.IsEnabled = false;
-            buttonEditTeam.IsEnabled = false;
-            buttonViewPlayers.IsEnabled = false;
+            UpdateButtonState();
         }
 
         public static async Task<TeamOverviewForm> CreateAsync()
@@ -104,9 +103,7 @@ namespace TeamsApplicatie
             var playerOverview = await ViewPlayersForm.CreateAsync(id);
             playerOverview.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             playerOverview.ShowDialog();
-            buttonDeleteTeam.IsEnabled = false;
-            buttonEditTeam.IsEnabled = false;
-            buttonViewPlayers.IsEnabled = false;
+            UpdateButtonState();
         }
 
         //Add Team
@@ -116,9 +113,7 @@ namespace TeamsApplicatie
             addTeam.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             addTeam.ShowDialog();
             await LoadTeamData();
-            buttonDeleteTeam.IsEnabled = false;
-            buttonEditTeam.IsEnabled = false;
-            buttonViewPlayers.IsEnabled = false;
+            UpdateButtonState();
         }
 
         //Edit Team
@@ -131,9 +126,7 @@ namespace TeamsApplicatie
             var editTeam = await EditTeamsForm.CreateAsync(id);
             editTeam.ShowDialog();
             await LoadTeamData();
-            buttonDeleteTeam.IsEnabled = false;
-            buttonEditTeam.IsEnabled = false;
-            buttonViewPlayers.IsEnabled = false;
+            UpdateButtonState();
         }
 
         //Delete Team
@@ -163,15 +156,16 @@ namespace TeamsApplicatie
                         itemSource.Delete(teamDataGrid.SelectedIndex);
                         teamDataGrid.ItemsSource = itemSource;
                     }
-
-                    buttonDeleteTeam.IsEnabled = false;
-                    buttonEditTeam.IsEnabled = false;
-                    buttonViewPlayers.IsEnabled = false;
                 }
-                buttonDeleteTeam.IsEnabled = false;
-                buttonEditTeam.IsEnabled = false;
-                buttonViewPlayers.IsEnabled = false;
+                UpdateButtonState();
             }
+        }
+
+        private void UpdateButtonState()
+        {
+            buttonDeleteTeam.IsEnabled = teamDataGrid.SelectedItem != null;
+            buttonEditTeam.IsEnabled = teamDataGrid.SelectedItem != null;
+            buttonViewPlayers.IsEnabled = teamDataGrid.SelectedItem != null;
         }
 
         private async Task LoadTeamData()
@@ -195,9 +189,56 @@ namespace TeamsApplicatie
 
         private void teamDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            buttonEditTeam.IsEnabled = true;
-            buttonDeleteTeam.IsEnabled = true;
-            buttonViewPlayers.IsEnabled = true;
+            UpdateButtonState();
+        }
+
+        private async void ButtonViewResults_ClickAsync(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_resultsUpdateForm == null)
+                {
+                    _resultsUpdateForm = await ResultsUpdateForm.CreateAsync();
+                    _resultsUpdateForm.Closed += OnResultsFormClosed;
+                }
+                _resultsUpdateForm.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void OnResultsFormClosed(object sender, EventArgs e)
+        {
+            if (_resultsUpdateForm != null)
+            {
+                _resultsUpdateForm.Closed -= OnResultsFormClosed;
+            }
+
+            _resultsUpdateForm = null;
+        }
+
+
+        private async void ButtonEditResults_ClickAsync(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var form = await MatchCalendarForm.CreateAsync(this);
+                form.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public async Task ReloadData()
+        {
+            if (_resultsUpdateForm != null)
+            {
+                await _resultsUpdateForm.LoadMatchData();
+            }
         }
     }
 }

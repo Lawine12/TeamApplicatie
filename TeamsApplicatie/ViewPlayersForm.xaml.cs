@@ -34,9 +34,7 @@ namespace TeamsApplicatie
 
         private async Task LoadPlayers()
         {
-            buttonDeletePlayer.IsEnabled = false;
-            buttonEditPlayer.IsEnabled = false;
-            buttonPlayerStats.IsEnabled = false;
+            UpdateButtonState();
             try
             {
                 await LoadData();
@@ -57,9 +55,14 @@ namespace TeamsApplicatie
 
         private void playerDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            buttonEditPlayer.IsEnabled = true;
-            buttonDeletePlayer.IsEnabled = true;
-            buttonPlayerStats.IsEnabled = true;
+            UpdateButtonState();
+        }
+
+        private void UpdateButtonState()
+        {
+            buttonEditPlayer.IsEnabled = playerDataGrid.SelectedItem != null;
+            buttonDeletePlayer.IsEnabled = playerDataGrid.SelectedItem != null;
+            buttonPlayerStats.IsEnabled = playerDataGrid.SelectedItem != null;
         }
 
         private async void addPlayer_Click(object sender, RoutedEventArgs e)
@@ -128,9 +131,7 @@ namespace TeamsApplicatie
             editPlayer.ShowDialog();
             await LoadData();
             if (_playerStatsform != null) await _playerStatsform.LoadData();
-            buttonDeletePlayer.IsEnabled = false;
-            buttonEditPlayer.IsEnabled = false;
-            buttonPlayerStats.IsEnabled = false;
+            UpdateButtonState();
         }
 
         //Delete Player
@@ -150,9 +151,7 @@ namespace TeamsApplicatie
                         playerDataGrid.ItemsSource = itemSource;
                     }
 
-                    buttonDeletePlayer.IsEnabled = false;
-                    buttonEditPlayer.IsEnabled = false;
-                    buttonPlayerStats.IsEnabled = false;
+                    UpdateButtonState();
 
                     using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
                     using (var sqlCommand = connection.CreateCommand())

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TeamsApplicatie"
         mc:Ignorable="d"
-        Title="PlayerStatsForm" Height="450" Width="800">
+        Title="Player Information" Height="450" Width="800">
     <Grid>
         <Label Content="First Name: " HorizontalAlignment="Left" Margin="58,50,0,0" VerticalAlignment="Top"/>
         <TextBox Name="textboxPlayerFirstName" HorizontalAlignment="Left" Height="23" Margin="168,53,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
