@@ -17,8 +17,6 @@ namespace TeamsApplicatie
         private readonly string _idTeam1;
         private readonly string _idTeam2;
         private readonly int _matchId;
-        private DataSet _teams;
-        private DataSet _doelpunten;
         private DataSet _matchInfo;
         private DataSet _playersTeam1;
         private DataSet _playersTeam2;
@@ -49,8 +47,10 @@ namespace TeamsApplicatie
                 var dataAdapter = new SqlDataAdapter(cmd);
                 _matchInfo = new DataSet();
                 dataAdapter.Fill(_matchInfo);
-                TextWriter writer = new StreamWriter(filename);
-                _matchInfo.WriteXml(writer);
+                using (TextWriter writer = new StreamWriter(filename))
+                {
+                    _matchInfo.WriteXml(writer);
+                }
             }
         }
 

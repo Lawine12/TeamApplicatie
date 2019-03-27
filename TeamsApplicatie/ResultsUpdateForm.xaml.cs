@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,7 +13,6 @@ namespace TeamsApplicatie
     public partial class ResultsUpdateForm : Window
     {
         private DataTable _matchData;
-        private DataSet _matchInfo;
 
         private ResultsUpdateForm()
         {
@@ -66,31 +64,6 @@ namespace TeamsApplicatie
                 resultDataGrid.DataContext = _matchData;
                 resultDataGrid.ItemsSource = _matchData.DefaultView;
             }
-            await SerializeDataTableAsync("Match Information.xml");
         }
-
-        public static async Task SerializeDataTableAsync(string filename)
-        {
-            var querystring = @"SELECT MatchInfo.Id,
-            Team1.TeamName,
-            Team2.TeamName,
-            MatchInfo.MatchDate,
-            MatchInfo.TotalGoalsTeam1,
-            MatchInfo.TotalGoalsTeam2
-                FROM dbo.MatchInfo
-                INNER JOIN TeamData Team1 ON MatchInfo.Team1ID = Team1.Id
-            INNER JOIN TeamData Team2 ON MatchInfo.Team2ID = Team2.Id";
-
-            using (var connection = await DatabaseHelper.OpenDefaultConnectionAsync())
-            {
-                var cmd = new SqlCommand(querystring, connection);
-                var dataAdapter = new SqlDataAdapter(cmd);
-                var matchInfo = new DataSet();
-                dataAdapter.Fill(matchInfo);
-                TextWriter writer = new StreamWriter(filename);
-                matchInfo.WriteXml(writer);
-            }
-        }
-
     }
 }

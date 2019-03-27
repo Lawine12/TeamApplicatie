@@ -34,7 +34,7 @@ namespace TeamsApplicatie
                 throw;
             }
 
-            await SerializeDataTableAsync("Match Information.xml", _matchInfo);
+            //await SerializeDataTableAsync("Match Information.xml", _matchInfo);
         }
 
         public static async Task<ViewResultsForm> CreateAsync()

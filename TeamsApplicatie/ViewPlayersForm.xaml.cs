@@ -13,7 +13,6 @@ namespace TeamsApplicatie
         private DataTable _playerData;
         private readonly int _id;
         private PlayerStatsForm _playerStatsform;
-        private EditPlayerForm _editPlayerForm;
         
 
         public ViewPlayersForm()
